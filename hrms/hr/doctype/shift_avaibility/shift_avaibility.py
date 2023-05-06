@@ -21,9 +21,9 @@ class ShiftAvaibility(Document):
 				],
 			)
 		for av_date in av_dates:
-			if self.from_date in range(av_date['from_date'], av_date['to_date']):
+			if self.from_date >= av_date['from_date'] and self.from_date <= av_date['to_date']):
 				frappe.throw(__('From Date conflicts with an existing avaibility shift type'))
-			if self.to_date in range(av_date['from_date'], av_date['to_date']):
+			if self.to_date >= av_date['from_date'] and self.from_date <= av_date['to_date']):
 				frappe.throw(__('To Date conflicts with an existing avaibility shift type'))
 
 	def delete_shifts_on_unchecked_days(self):
