@@ -15,12 +15,18 @@ class ShiftAvaibility(Document):
 				'employee': self.employee,
                 'from_date': ['between', [self.from_date, self.to_date]],
 			}):
-			frappe.throw(_('Shift Avaibility already exists for this From Date'))
+			frappe.throw(_('Shift Avaibility already exists for this To Date'))
 		if frappe.db.exists('Shift Avaibility', {
 				'employee': self.employee,
                 'to_date': ['between', [self.from_date, self.to_date]],
 			}):
-			frappe.throw(_('Shift Avaibility already exists for this To Date'))
+			frappe.throw(_('Shift Avaibility already exists for this From Date'))
+		if frappe.db.exists('Shift Avaibility', {
+				'employee': self.employee,
+                'from_date': ['<=', self.from_date],
+                'to_date': ['=>', self.to_date],
+			}):
+			frappe.throw(_('Shift Avaibility already exists in this period'))
 
 	def delete_shifts_on_unchecked_days(self):
 		if not self.monday:
