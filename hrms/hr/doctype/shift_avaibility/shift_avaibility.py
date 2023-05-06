@@ -6,8 +6,8 @@ from frappe.model.document import Document
 
 class ShiftAvaibility(Document):
 	def validate(self):
-		validate_dates()
-		delete_shifts_on_unchecked_days()
+		self.validate_dates()
+		self.delete_shifts_on_unchecked_days()
 	
 	def validate_dates(self):
 		av_dates = frappe.get_all(
