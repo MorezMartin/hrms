@@ -24,6 +24,7 @@ class ShiftRequest(Document, PWANotificationsMixin):
 		self.validate_overlapping_shift_requests()
 		self.validate_approver()
 		self.validate_default_shift()
+		self.validate_shift_avaibility()
 
 	def on_update(self):
 		share_doc_with_approver(self, self.approver)
@@ -74,6 +75,10 @@ class ShiftRequest(Document, PWANotificationsMixin):
 
 	def on_discard(self):
 		self.db_set("status", "Cancelled")
+
+	def validate_shift_avaibility(self):
+		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility'):
+			hrms.hr.doctype.shift_avaibility.check_avaibility(self)
 
 	def validate_default_shift(self):
 		default_shift = frappe.get_value("Employee", self.employee, "default_shift")

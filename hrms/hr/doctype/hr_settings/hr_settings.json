@@ -11,6 +11,7 @@
   "employee_settings_section",
   "emp_created_by",
   "standard_working_hours",
+  "check_shift_avaibility",
   "column_break_lrow",
   "retirement_age",
   "reminders_section",
@@ -384,6 +385,12 @@
    "fieldname": "employee_exit_settings_section",
    "fieldtype": "Section Break",
    "label": "Employee Exit Settings"
+  },
+  {
+   "default": "0",
+   "fieldname": "check_shift_avaibility",
+   "fieldtype": "Check",
+   "label": "Check for Shift Avaibility"
   }
  ],
  "icon": "settings",
