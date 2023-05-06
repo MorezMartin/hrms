@@ -55,4 +55,4 @@ class ShiftAvaibility(Document):
 			frappe.db.commit
 
 def check_avaibility(shift):
-	pass
+    frappe.throw(_('error'))

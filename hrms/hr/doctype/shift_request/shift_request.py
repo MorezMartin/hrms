@@ -10,6 +10,7 @@ from frappe.utils import get_link_to_form, getdate
 
 from hrms.hr.doctype.shift_assignment.shift_assignment import has_overlapping_timings
 from hrms.hr.utils import share_doc_with_approver, validate_active_employee
+from hrms.hr.doctype.shift_avaibility import check_avaibility
 
 
 class OverlappingShiftRequestError(frappe.ValidationError):
@@ -61,7 +62,7 @@ class ShiftRequest(Document):
 
 	def validate_shift_avaibility(self):
 		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility'):
-            hrms.hr.doctype.shift_avaibility.check_avaibility(self)
+			check_avaibility(self)
 
 	def validate_default_shift(self):
 		default_shift = frappe.get_value("Employee", self.employee, "default_shift")
