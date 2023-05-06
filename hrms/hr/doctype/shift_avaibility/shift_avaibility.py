@@ -53,3 +53,6 @@ class ShiftAvaibility(Document):
 		if not self.monday:
 			self.sunday_avaibility = []
 			frappe.db.commit
+
+def check_avaibility(shift):
+	pass

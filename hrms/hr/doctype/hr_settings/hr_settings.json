@@ -9,6 +9,7 @@
   "employee_settings",
   "emp_created_by",
   "standard_working_hours",
+  "check_shift_avaibility",
   "column_break_9",
   "retirement_age",
   "reminders_section",
@@ -251,13 +252,19 @@
   {
    "fieldname": "column_break_34",
    "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "check_shift_avaibility",
+   "fieldtype": "Check",
+   "label": "Check for Shift Avaibility"
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-10-04 17:29:45.926918",
+ "modified": "2023-05-06 22:57:50.588485",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",
@@ -275,5 +282,6 @@
  ],
  "sort_field": "modified",
  "sort_order": "ASC",
+ "states": [],
  "track_changes": 1
 }
