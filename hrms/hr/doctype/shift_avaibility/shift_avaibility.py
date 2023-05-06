@@ -8,23 +8,18 @@ class ShiftAvaibility(Document):
 	def validate(self):
 		self.validate_dates()
 		self.delete_shifts_on_unchecked_days()
-	
+
 	def validate_dates(self):
-		av_dates = frappe.get_all(
-			'Shift Avaibility', 
-			filters={
-				'employee': self.employee
-				},
-			fields=[
-				'from_date',
-				'to_date',
-				],
-			)
-		for av_date in av_dates:
-			if self.from_date >= av_date['from_date'] and self.from_date <= av_date['to_date']):
-				frappe.throw(__('From Date conflicts with an existing avaibility shift type'))
-			if self.to_date >= av_date['from_date'] and self.from_date <= av_date['to_date']):
-				frappe.throw(__('To Date conflicts with an existing avaibility shift type'))
+		if frappe.db.exists('Shift Avaibility', {
+				'employee': self.employee,
+				'from_date' ['between', [self.from_date, self.to_date]],
+			}):
+			frappe.throw(__('Shift Avaibility already exists for this From Date'))
+		if frappe.db.exists('Shift Avaibility', {
+				'employee': self.employee,
+				'to_date' ['between', [self.from_date, self.to_date]],
+			}):
+			frappe.throw(__('Shift Avaibility already exists for this To Date'))
 
 	def delete_shifts_on_unchecked_days(self):
 		if not self.monday:
