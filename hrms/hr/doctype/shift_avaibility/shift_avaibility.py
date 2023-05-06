@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 
 class ShiftAvaibility(Document):
@@ -12,14 +13,14 @@ class ShiftAvaibility(Document):
 	def validate_dates(self):
 		if frappe.db.exists('Shift Avaibility', {
 				'employee': self.employee,
-				'from_date' ['between', [self.from_date, self.to_date]],
+                'from_date': ['between', [self.from_date, self.to_date]],
 			}):
-			frappe.throw(__('Shift Avaibility already exists for this From Date'))
+			frappe.throw(_('Shift Avaibility already exists for this From Date'))
 		if frappe.db.exists('Shift Avaibility', {
 				'employee': self.employee,
-				'to_date' ['between', [self.from_date, self.to_date]],
+                'to_date': ['between', [self.from_date, self.to_date]],
 			}):
-			frappe.throw(__('Shift Avaibility already exists for this To Date'))
+			frappe.throw(_('Shift Avaibility already exists for this To Date'))
 
 	def delete_shifts_on_unchecked_days(self):
 		if not self.monday:
