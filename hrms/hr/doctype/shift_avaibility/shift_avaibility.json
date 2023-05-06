@@ -206,9 +206,10 @@
   }
  ],
  "index_web_pages_for_search": 1,
+ "is_calendar_and_gantt": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-05-06 14:34:40.403112",
+ "modified": "2023-05-06 18:51:35.941751",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Shift Avaibility",
