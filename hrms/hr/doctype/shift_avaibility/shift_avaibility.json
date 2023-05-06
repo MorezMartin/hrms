@@ -1,0 +1,241 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{employee_name}-{from_date}_{to_date}-{####}",
+ "creation": "2023-05-05 15:51:24.785311",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_informations",
+  "employee",
+  "column_break_kajo2",
+  "employee_name",
+  "avaibility_section",
+  "from_date",
+  "column_break_fwtg4",
+  "to_date",
+  "avaibility_days_and_shifts_section",
+  "monday",
+  "monday_avaibility",
+  "tuesday",
+  "tuesday_avaibility",
+  "wednesday",
+  "wednesday_avaibility",
+  "column_break_of39w",
+  "thursday",
+  "thursday_avaibility",
+  "friday",
+  "friday_avaibility",
+  "column_break_eo8dj",
+  "saturday",
+  "saturday_avaibility",
+  "sunday",
+  "sunday_avaibility",
+  "column_break_52hb4",
+  "other_informations",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee_informations",
+   "fieldtype": "Section Break",
+   "label": "Employee informations"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "column_break_kajo2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name"
+  },
+  {
+   "fieldname": "avaibility_section",
+   "fieldtype": "Section Break",
+   "label": "Avaibility"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_fwtg4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "avaibility_days_and_shifts_section",
+   "fieldtype": "Section Break",
+   "label": "Avaibility days and shifts"
+  },
+  {
+   "default": "0",
+   "fieldname": "monday",
+   "fieldtype": "Check",
+   "label": "Monday"
+  },
+  {
+   "depends_on": "monday",
+   "fieldname": "monday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Monday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "tuesday",
+   "fieldtype": "Check",
+   "label": "Tuesday"
+  },
+  {
+   "depends_on": "tuesday",
+   "fieldname": "tuesday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Tuesday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "wednesday",
+   "fieldtype": "Check",
+   "label": "Wednesday"
+  },
+  {
+   "depends_on": "wednesday",
+   "fieldname": "wednesday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Wednesday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "fieldname": "column_break_of39w",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "thursday",
+   "fieldtype": "Check",
+   "label": "Thursday"
+  },
+  {
+   "depends_on": "thursday",
+   "fieldname": "thursday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Thursday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "friday",
+   "fieldtype": "Check",
+   "label": "Friday"
+  },
+  {
+   "depends_on": "friday",
+   "fieldname": "friday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Friday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "fieldname": "column_break_eo8dj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "saturday",
+   "fieldtype": "Check",
+   "label": "Saturday"
+  },
+  {
+   "depends_on": "saturday",
+   "fieldname": "saturday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Saturday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "sunday",
+   "fieldtype": "Check",
+   "label": "Sunday"
+  },
+  {
+   "depends_on": "sunday",
+   "fieldname": "sunday_avaibility",
+   "fieldtype": "Table MultiSelect",
+   "label": "Sunday Avaibility",
+   "options": "Avaibility Shift Type"
+  },
+  {
+   "fieldname": "column_break_52hb4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "other_informations",
+   "fieldtype": "Text Editor",
+   "label": "Other informations"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Shift Avaibility",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-05-06 14:34:40.403112",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Shift Avaibility",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "select": 1,
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "employee_name",
+ "track_changes": 1
+}
