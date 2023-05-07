@@ -58,10 +58,11 @@ class ShiftAvaibility(Document):
 def check_avaibility(shift):
 	av_shift = frappe.get_all('Shift Avaibility', {
 	    'employee': shift.employee,
-	    'from_date' ['<=', shift.from_date],
-	    'to_date' ['>=', shift.to_date],
-	    })[0]
+        'from_date': ['<=', shift.from_date],
+        'to_date': ['>=', shift.to_date],
+	    })
 	if av_shift:
+        av_shift = av_shift[0]
 		td = shift[to_date] - [from_date]
 		d = td.days
 		dates = []
