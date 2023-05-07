@@ -63,7 +63,7 @@ def check_avaibility(shift):
 		})
 	if av_shift:
 		av_shift = av_shift[0]
-		td = shift['to_date'] - ['from_date']
+		td = shift.to_date - shift.from_date
 		d = td.days
 		dates = []
 		date = shift.from_date
