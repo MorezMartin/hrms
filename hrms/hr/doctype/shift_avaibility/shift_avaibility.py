@@ -13,22 +13,22 @@ class ShiftAvaibility(Document):
 
 	def validate_dates(self):
 		if frappe.db.exists('Shift Avaibility', {
-	            'name': ['!=', self.name],
+				'name': ['!=', self.name],
 				'employee': self.employee,
-	            'from_date': ['between', [self.from_date, self.to_date]],
+				'from_date': ['between', [self.from_date, self.to_date]],
 			}):
 			frappe.throw(_('Shift Avaibility already exists for this To Date'))
 		if frappe.db.exists('Shift Avaibility', {
-	            'name': ['!=', self.name],
+				'name': ['!=', self.name],
 				'employee': self.employee,
-	            'to_date': ['between', [self.from_date, self.to_date]],
+				'to_date': ['between', [self.from_date, self.to_date]],
 			}):
 			frappe.throw(_('Shift Avaibility already exists for this From Date'))
 		if frappe.db.exists('Shift Avaibility', {
-	            'name': ['!=', self.name],
+				'name': ['!=', self.name],
 				'employee': self.employee,
-	            'from_date': ['<=', self.from_date],
-	            'to_date': ['=>', self.to_date],
+				'from_date': ['<=', self.from_date],
+				'to_date': ['=>', self.to_date],
 			}):
 			frappe.throw(_('Shift Avaibility already exists in this period'))
 
@@ -39,30 +39,30 @@ class ShiftAvaibility(Document):
 		if not self.tuesday:
 			self.tuesday_avaibility = []
 			frappe.db.commit
-		if not self.monday:
+		if not self.wednesday:
 			self.wednesday_avaibility = []
 			frappe.db.commit
-		if not self.monday:
+		if not self.thursday:
 			self.thursday_avaibility = []
 			frappe.db.commit
-		if not self.monday:
+		if not self.friday:
 			self.friday_avaibility = []
 			frappe.db.commit
-		if not self.monday:
+		if not self.saturday:
 			self.saturday_avaibility = []
 			frappe.db.commit
-		if not self.monday:
+		if not self.sunday:
 			self.sunday_avaibility = []
 			frappe.db.commit
 
 def check_avaibility(shift):
 	av_shift = frappe.get_all('Shift Avaibility', {
-	    'employee': shift.employee,
-        'from_date': ['<=', shift.from_date],
-        'to_date': ['>=', shift.to_date],
-	    })
+		'employee': shift.employee,
+		'from_date': ['<=', shift.from_date],
+		'to_date': ['>=', shift.to_date],
+		})
 	if av_shift:
-        av_shift = av_shift[0]
+		av_shift = av_shift[0]
 		td = shift[to_date] - [from_date]
 		d = td.days
 		dates = []
@@ -128,4 +128,4 @@ def check_avaibility(shift):
 			elif date.isoweekday() == 7:
 				frappe.throw(_('Employee not avaible on Sunday'))
 	else:
-	    frappe.throw(_('Employee not avaible for this dates'))
+		frappe.throw(_('Employee not avaible for this dates'))
