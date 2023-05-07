@@ -10,7 +10,7 @@ from frappe.utils import get_link_to_form, getdate
 
 from hrms.hr.doctype.shift_assignment.shift_assignment import has_overlapping_timings
 from hrms.hr.utils import share_doc_with_approver, validate_active_employee
-from hrms.hr.doctype.shift_avaibility import check_avaibility
+from hrms.hr.doctype.shift_avaibility.shift_avaibility import check_avaibility
 
 
 class OverlappingShiftRequestError(frappe.ValidationError):
