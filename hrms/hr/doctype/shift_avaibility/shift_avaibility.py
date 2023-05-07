@@ -4,6 +4,7 @@
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.utils import getdate
 import datetime
 
 class ShiftAvaibility(Document):
@@ -63,7 +64,7 @@ def check_avaibility(shift):
 		})
 	if av_shift:
 		av_shift = av_shift[0]
-		td = shift.to_date - shift.from_date
+		td = getdate(shift.to_date) - getdate(shift.from_date)
 		d = td.days
 		dates = []
 		date = shift.from_date
