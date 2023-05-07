@@ -67,7 +67,7 @@ def check_avaibility(shift):
 		td = getdate(shift.to_date) - getdate(shift.from_date)
 		d = td.days
 		dates = []
-		date = shift.from_date
+		date = getdate(shift.from_date)
 		for i in range(1,d):
 			dates.append(date)
 			date += datetime.timedelta(days=1)
