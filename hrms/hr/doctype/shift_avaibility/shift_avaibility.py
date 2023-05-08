@@ -86,8 +86,11 @@ def check_avaibility(shift):
 			d+=1
 		for date in dates:
 			if date.isoweekday() == 1 and av_shift['monday']:
-				monday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'monday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in monday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'monday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Monday'))
@@ -95,8 +98,11 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Monday'))
 
 			elif date.isoweekday() == 2 and av_shift['tuesday']:
-				tuesday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'tuesday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in tuesday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'tuesday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Tuesday'))
@@ -104,8 +110,11 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Tuesday'))
 
 			elif date.isoweekday() == 3 and av_shift['wednesday']:
-				wednesday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'wednesday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in wednesday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'wednesday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Wednesday'))
@@ -113,8 +122,11 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Wednesday'))
 
 			elif date.isoweekday() == 4 and av_shift['thursday']:
-				thursday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'thursday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in thursday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'thursday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Thursday'))
@@ -122,8 +134,11 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Thursday'))
 
 			elif date.isoweekday() == 5 and av_shift['friday']:
-				friday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'friday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in friday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'friday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Friday'))
@@ -131,8 +146,11 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Friday'))
 
 			elif date.isoweekday() == 6 and av_shift['saturday']:
-				saturday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'saturday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in saturday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'saturday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Saturday'))
@@ -140,8 +158,11 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Saturday'))
 
 			elif date.isoweekday() == 7 and av_shift['sunday']:
-				sunday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'sunday_avaibility'}, ['shift_type']).values()
-				if shift.shift_type in sunday_avaibility:
+				avaibility_list = frappe.get_all('Avaibility Shift Type', {'parent': av_shift['name'], 'parentfield': 'sunday_avaibility'}, ['shift_type'])
+				avaibility = []
+				for av in avaibility_list:
+					avaibility.append(av['shift_type'])
+				if shift.shift_type in avaibility:
 					continue
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Sunday'))
