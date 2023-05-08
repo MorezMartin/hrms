@@ -74,7 +74,8 @@ def check_avaibility(shift):
 			d+=1
 		for date in dates:
 			if date.isoweekday() == 1 and av_shift.monday:
-				if shift.shift_type in av_shift.monday_avaibility:
+				monday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'monday_avaibility'})
+				if shift.shift_type in monday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Monday'))
@@ -82,7 +83,8 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Monday'))
 
 			elif date.isoweekday() == 2 and av_shift.tuesday:
-				if shift.shift_type in av_shift.tuesday_avaibility:
+				tuesday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'tuesday_avaibility'})
+				if shift.shift_type in tuesday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Tuesday'))
@@ -90,7 +92,8 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Tuesday'))
 
 			elif date.isoweekday() == 3 and av_shift.wednesday:
-				if shift.shift_type in av_shift.wednesday_avaibility:
+				wednesday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'wednesday_avaibility'})
+				if shift.shift_type in wednesday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Wednesday'))
@@ -98,7 +101,8 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Wednesday'))
 
 			elif date.isoweekday() == 4 and av_shift.thursday:
-				if shift.shift_type in av_shift.thursday_avaibility:
+				thursday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'thursday_avaibility'})
+				if shift.shift_type in thursday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Thursday'))
@@ -106,7 +110,8 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Thursday'))
 
 			elif date.isoweekday() == 5 and av_shift.friday:
-				if shift.shift_type in av_shift.friday_avaibility:
+				friday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'friday_avaibility'})
+				if shift.shift_type in friday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Friday'))
@@ -114,7 +119,8 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Friday'))
 
 			elif date.isoweekday() == 6 and av_shift.saturday:
-				if shift.shift_type in av_shift.saturday_avaibility:
+				saturday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'saturday_avaibility'})
+				if shift.shift_type in saturday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Saturday'))
@@ -122,7 +128,8 @@ def check_avaibility(shift):
 				frappe.throw(_('Employee not avaible on Saturday'))
 
 			elif date.isoweekday() == 7 and av_shift.sunday:
-				if shift.shift_type in av_shift.sunday_avaibility:
+				sunday_avaibility = frappe.get_all('Avaibility Shift Type', {'parent': av_shift.name, 'parentfield': 'sunday_avaibility'})
+				if shift.shift_type in sunday_avaibility:
 					pass
 				else:
 					frappe.throw(_('Employee Not avaible on this Shift Type on Sunday'))
