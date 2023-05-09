@@ -17,12 +17,14 @@ class ShiftAvaibility(Document):
 				'name': ['!=', self.name],
 				'employee': self.employee,
 				'from_date': ['between', [self.from_date, self.to_date]],
+				'docstatus': ['!=', 2],
 			}):
 			frappe.throw(_('Shift Avaibility already exists for this To Date'))
 		if frappe.db.exists('Shift Avaibility', {
 				'name': ['!=', self.name],
 				'employee': self.employee,
 				'to_date': ['between', [self.from_date, self.to_date]],
+				'docstatus': ['!=', 2],
 			}):
 			frappe.throw(_('Shift Avaibility already exists for this From Date'))
 		if frappe.db.exists('Shift Avaibility', {
@@ -30,6 +32,7 @@ class ShiftAvaibility(Document):
 				'employee': self.employee,
 				'from_date': ['<=', self.from_date],
 				'to_date': ['=>', self.to_date],
+                'docstatus': ['!=', 2],
 			}):
 			frappe.throw(_('Shift Avaibility already exists in this period'))
 
