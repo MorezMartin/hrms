@@ -59,12 +59,12 @@ class ShiftAvaibility(Document):
 			self.sunday_avaibility = []
 			frappe.db.commit
 
-def check_avaibility(shift):
+def check_avaibility(shift, from_date, to_date):
 	av_shift = frappe.get_all('Shift Avaibility',
 			{
 				'employee': shift.employee,
-				'from_date': ['<=', shift.from_date],
-				'to_date': ['>=', shift.to_date],
+				'from_date': ['<=', from_date],
+				'to_date': ['>=', to_date],
 			},
 			[
 				'name', 
@@ -79,10 +79,10 @@ def check_avaibility(shift):
 		)
 	if av_shift:
 		av_shift = av_shift[0]
-		td = getdate(shift.to_date) - getdate(shift.from_date) + datetime.timedelta(days=1)
+		td = getdate(to_date) - getdate(from_date) + datetime.timedelta(days=1)
 		d = td.days
 		dates = []
-		date = getdate(shift.from_date)
+		date = getdate(from_date)
 		for i in range(0,d):
 			dates.append(date)
 			date += datetime.timedelta(days=1)

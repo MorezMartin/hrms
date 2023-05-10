@@ -38,7 +38,7 @@ class ShiftAssignment(Document):
 
 	def validate_shift_avaibility(self):
 		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility'):
-			check_avaibility(self)
+			check_avaibility(self, self.start_date, self.end_date)
 
 	def get_overlapping_dates(self):
 		if not self.name:

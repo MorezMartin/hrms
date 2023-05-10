@@ -62,7 +62,7 @@ class ShiftRequest(Document):
 
 	def validate_shift_avaibility(self):
 		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility'):
-			check_avaibility(self)
+			check_avaibility(self, self.from_date, self.to_date)
 
 	def validate_default_shift(self):
 		default_shift = frappe.get_value("Employee", self.employee, "default_shift")
