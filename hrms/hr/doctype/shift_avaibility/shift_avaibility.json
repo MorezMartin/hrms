@@ -1,7 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:{employee_name}-{from_date}_{to_date}-{####}",
+ "autoname": "format:{employee_name}-{####}",
  "creation": "2023-05-05 15:51:24.785311",
  "default_view": "List",
  "doctype": "DocType",
@@ -209,7 +209,7 @@
  "is_calendar_and_gantt": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-05-06 18:51:35.941751",
+ "modified": "2023-05-10 15:14:10.966930",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Shift Avaibility",
