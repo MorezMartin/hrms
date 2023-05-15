@@ -22,6 +22,7 @@
   "column_break_brkq",
   "start_date",
   "end_date",
+  "sales_order",
   "shift_request",
   "shift_schedule_assignment",
   "amended_from"
@@ -144,6 +145,13 @@
    "fieldtype": "Link",
    "label": "Overtime Type",
    "options": "Overtime Type"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order"
   }
  ],
  "icon": "user-check",

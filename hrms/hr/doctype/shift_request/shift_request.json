@@ -18,6 +18,7 @@
   "approver",
   "from_date",
   "to_date",
+  "sales_order",
   "amended_from"
  ],
  "fields": [
@@ -100,6 +101,12 @@
    "label": "Approver",
    "options": "User",
    "reqd": 1
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order"
   }
  ],
  "icon": "calendar-clock",
