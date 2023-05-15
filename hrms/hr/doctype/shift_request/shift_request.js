@@ -13,5 +13,14 @@ frappe.ui.form.on('Shift Request', {
 			};
 		});
 		frm.set_query("employee", erpnext.queries.employee);
+		frm.set_query("sales_order", function() {
+			return {
+				filters: {
+					"docstatus": ['<', '2'],
+					"delivery_date": ['between', [frm.doc.from_date, frm.doc.to_date]]
+
+				}
+			};
+		});
 	},
 });
