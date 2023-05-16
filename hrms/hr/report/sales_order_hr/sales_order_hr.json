@@ -1,0 +1,58 @@
+{
+ "add_total_row": 1,
+ "columns": [],
+ "creation": "2023-05-16 13:55:01.782759",
+ "disable_prepared_report": 0,
+ "disabled": 0,
+ "docstatus": 0,
+ "doctype": "Report",
+ "filters": [
+  {
+   "fieldname": "start",
+   "fieldtype": "Date",
+   "label": "Start",
+   "mandatory": 1,
+   "wildcard_filter": 0
+  },
+  {
+   "fieldname": "end",
+   "fieldtype": "Date",
+   "label": "End",
+   "mandatory": 1,
+   "wildcard_filter": 0
+  }
+ ],
+ "idx": 0,
+ "is_standard": "Yes",
+ "json": "{}",
+ "modified": "2023-05-16 13:58:40.089717",
+ "modified_by": "Administrator",
+ "module": "HR",
+ "name": "Sales Order HR",
+ "owner": "morez.martin@gmail.com",
+ "prepared_report": 0,
+ "ref_doctype": "Sales Order",
+ "report_name": "Sales Order HR",
+ "report_script": "sos = frappe.db.get_all('Sales Order', ['name', 'delivery_date'], filters =[\n    [ 'delivery_date', 'between', [ filters['start'], filters['end'] ] ],\n    [ 'docstatus', '<', '2'],\n    ])\n\nres = [ \n        {'name': 'Shift Avaibilities'}\n    ]\n\nshift_avs = frappe.db.get_all('Shift Avaibility', {'docstatus': ['=', 1],'from_date': ['<=', filters['end']], 'to_date': ['>=', filters['start']]}, ['name', 'employee'])\nshift_rqs = frappe.db.get_all('Shift Request', {'from_date': ['<=', filters['end']], 'to_date': ['>=', filters['start']]}, ['name', 'employee'])\nemployees = [av['employee'] for av in shift_avs]\nemployees = set(employees)\nemps = []\nfor emp in employees:\n    emps.append({'name': frappe.db.get_value('Employee', emp, 'employee_name'), 'employee': emp, 'indent': 1})\n    for shift_av in shift_avs:\n        if shift_av['employee'] == emp:\n            emps.append({'employee': shift_av['employee'], 'shift_avaibilities': shift_av['name'], 'indent': 2})\n    for shift_rq in shift_rqs:\n        if shift_rq['employee'] == emp:\n            emps.append({'employee': shift_rq['employee'], 'shift_requests': shift_rq['name'], 'indent': 2})\n\n\nres = res + emps\n\nneeds = []\n\n\n\nfor so in sos:\n    items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])\n    res.append({'name': 'Sales Order', 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': 3})\n    for item in items:\n        needs.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),\n\navaibilities = [{'shift_requests': '2 SR', 'indent': 1},\n                {'shift_requests': '2 SR', 'indent': 1},\n                {'shift_requests': '2 SR', 'indent': 1},\n                {'shift_requests': '2 SR', 'indent': 1},\n                {'shift_requests': '2 SR', 'indent': 1},\n                {'shift_requests': '2 SR', 'indent': 1},\n                {'shift_requests': '2 SR', 'indent': 1},]\n\nif len(needs) > len(avaibilities):\n    data = needs\nelse:\n    data = avaibilities\n\nfor n, a in zip(needs, avaibilities):\n    for k,v in a.items():\n        n.update({k : v})\nb = min(len(avaibilities), len(needs))\na = b - abs(len(avaibilities) - len(needs))\n\nfor i in range(a, b):\n    needs.append(data[i])\n    \n\nres = res + needs\n\ncolumns = [\n    {'fieldname' : 'name', 'label': 'Name', 'fieldtype': 'Data'},\n    {'fieldname' : 'sales_order', 'label': 'Sales Order', 'fieldtype': 'Link', 'options': 'Sales Order'},\n    {'fieldname' : 'delivery_date', 'label': 'Delivery Date', 'fieldtype': 'Datetime'},\n    {'fieldname' : 'human_needs', 'label': 'Human Needs', 'fieldtype': 'Data'},\n    {'fieldname' : 'qty_needed', 'label': 'Quantity Needed', 'fieldtype': 'Data'},\n    {'fieldname' : 'uom', 'label': 'UoM', 'fieldtype': 'Data'},\n    {'fieldname' : 'description', 'label': 'Description', 'fieldtype': 'Text Editor'},\n    {'fieldname' : 'employee', 'label': 'Employee', 'fieldtype': 'Link', 'options': 'Employee'},\n    {'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},\n    {'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},\n    {'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Data'},\n    {'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Data'},\n]\n\nresult = res\ndata = columns, result\n\n\nresults = [\n\t\t{\n\t\t\t'col 1': 'Documents',\n\t\t\t'col 2': '2M',\n\t\t\t'indent': 0,\n\t\t},\n\t\t{\n\t\t\t'col 1': 'Docs',\n\t\t\t'col 2': '3M',\n\t\t\t'indent': 1,\n\t\t},\n\t\t{\n\t\t\t'col 1': 'Docs',\n\t\t\t'col 2': '3M',\n\t\t\t'indent': 0,\n\t\t},\n\t\t{\n\t\t\t'col 1': 'Docs',\n\t\t\t'col 2': '3M',\n\t\t\t'indent': 1,\n\t\t},\n]",
+ "report_type": "Script Report",
+ "roles": [
+  {
+   "role": "Stock User"
+  },
+  {
+   "role": "Sales User"
+  },
+  {
+   "role": "Accounts User"
+  },
+  {
+   "role": "Sales Manager"
+  },
+  {
+   "role": "Maintenance User"
+  },
+  {
+   "role": "Employee Self Service"
+  }
+ ]
+}
