@@ -32,32 +32,32 @@ def get_avaibilities(filters=None):
 			'Shift Avaibility',
 			{
 				'docstatus': ['=', 1],
-				'from_date': ['<=', filters['end']],
-				'to_date': ['>=', filters['start']],
+				'from_date': ['<=', filters.end],
+				'to_date': ['>=', filters.start],
 				},
 			['name', 'employee'],
 			)
 	shift_rqs = frappe.db.get_all(
 			'Shift Request',
 			{
-				'from_date': ['<=', filters['end']],
-				'to_date': ['>=', filters['start']],
+				'from_date': ['<=', filters.end],
+				'to_date': ['>=', filters.start],
 				},
 			['name', 'employee']
 			)
 	shift_ass = frappe.db.get_all(
 			'Shift Assignment',
 			{
-				'start': ['<=', filters['end']],
-				'end': ['>=', filters['start']],
+				'start': ['<=', filters.end],
+				'end': ['>=', filters.start],
 				},
 			['name', 'employee']
 			)
 	tss = frappe.db.get_all(
 			'Timesheet',
 			{
-				'start_date': ['<=', filters['end']],
-				'end_date': ['>=', filters['start']],
+				'start_date': ['<=', filters.end],
+				'end_date': ['>=', filters.start],
 				},
 			['name', 'employee']
 			)
@@ -75,9 +75,10 @@ def get_sales_orders(filters=None):
 	sos = frappe.db.get_all(
 			'Sales Order',
 			{
-				'delivery_date': ['between', [filters['start'], filters['end']]],
+				'delivery_date': ['between', [filters.start, filters.end]],
 				'docstatus': ['<', 2],
 				},
+			)
 	for so in sos:
 	items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
 	res.append({'name': 'Sales Order', 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': 3})
