@@ -80,8 +80,8 @@ def get_sales_orders(filters=None):
 				},
 			)
 	for so in sos:
-	items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
-	res.append({'name': 'Sales Order', 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': 3})
-	for item in items:
-		res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),
+		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
+		res.append({'name': 'Sales Order', 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': 3})
+			for item in items:
+			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),
 	return res
