@@ -68,14 +68,15 @@ def get_avaibilities(filters=None):
 		emps.append({'name': frappe.db.get_value('Employee', emp, 'employee_name'), 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
 			if shift_av:
-				shift_av = shift_av
+				shift_ave = shift_av['employee']
+				shift_avn = shift_av['name']
 			if shift_rq:
-				shift_rq = shift_rq
+				shift_rqn = shift_rq['name']
 			if shift_as:
-				shift_as = shift_as
+				shift_asn = shift_as['name']
 			if ts:
-				ts = ts
-			emps.append({'employee': shift_av['employee'], 'shift_avaibilities': shift_av['name'], 'shift_requests': shift_rq['name'], 'shift_assignments': shift_as['name'], 'timesheets': ts['name'], 'indent': 2})
+				tsn = ts['name']
+			emps.append({'employee': shift_ave, 'shift_avaibilities': shift_avn, 'shift_requests': shift_rqn, 'shift_assignments': shift_asn, 'timesheets': tsn, 'indent': 2})
 	return emps
 
 def get_sales_orders(filters=None):
