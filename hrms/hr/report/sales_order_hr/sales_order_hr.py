@@ -6,8 +6,23 @@ import itertools
 
 
 def execute(filters=None):
-	avs = get_avaibilities()
+	columns = [
+		{'fieldname' : 'name', 'label': 'Name', 'fieldtype': 'Data'},
+		{'fieldname' : 'sales_order', 'label': 'Sales Order', 'fieldtype': 'Link', 'options': 'Sales Order'},
+		{'fieldname' : 'delivery_date', 'label': 'Delivery Date', 'fieldtype': 'Datetime'},
+		{'fieldname' : 'human_needs', 'label': 'Human Needs', 'fieldtype': 'Data'},
+		{'fieldname' : 'qty_needed', 'label': 'Quantity Needed', 'fieldtype': 'Data'},
+		{'fieldname' : 'uom', 'label': 'UoM', 'fieldtype': 'Data'},
+		{'fieldname' : 'description', 'label': 'Description', 'fieldtype': 'Text Editor'},
+		{'fieldname' : 'employee', 'label': 'Employee', 'fieldtype': 'Link', 'options': 'Employee'},
+		{'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
+		{'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},
+		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Data'},
+		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Data'},
+	]
+	avs = get_avaibilities(filters)
 	columns, data = [], []
+	data += avs
 	return columns, data
 
 def get_avaibilities(filters=None):
