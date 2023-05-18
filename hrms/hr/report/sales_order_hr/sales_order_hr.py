@@ -21,8 +21,10 @@ def execute(filters=None):
 		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Data'},
 	]
 	avs = get_avaibilities(filters)
+	sos = get_sales_orders(filters)
 	columns, data = [], []
 	data += avs
+	data += sos
 	return columns, data
 
 def get_avaibilities(filters=None):
@@ -67,3 +69,18 @@ def get_avaibilities(filters=None):
 		for shift_av, shift_rq, shift_as in itertools.zip_longest(shift_avs, shift_rqs, shift_ass):
 			emps.append({'employee': shift_av['employee'], 'shift_avaibilities': shift_av['name'], 'shift_requests': shift_rq['name'], 'shift_assignments': shift_as['name'] , 'indent': 2})
 	return emps
+
+def get_sales_orders(filters=None):
+	res = []
+	sos = frappe.db.get_all(
+			'Sales Order',
+			{
+				'delivery_date': ['between', [filters['start'], filters['end']]],
+				'docstatus': ['<', 2],
+				},
+	for so in sos:
+	items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
+	res.append({'name': 'Sales Order', 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': 3})
+	for item in items:
+		res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),
+	return res

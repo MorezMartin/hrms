@@ -4,6 +4,15 @@
 
 frappe.query_reports["Sales Order HR"] = {
 	"filters": [
-
+		{
+			fieldname: 'end',
+			label: __('Start'),
+			options: 'Company',
+		},
+		{
+			fieldname: 'end',
+			label: __('End'),
+			options: 'Company',
+		}
 	]
 };
