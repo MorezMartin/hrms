@@ -67,7 +67,7 @@ def get_avaibilities(filters=None):
 	for emp in employees:
 		emps.append({'name': frappe.db.get_value('Employee', emp, 'employee_name'), 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
-			shift_ave, shift_avn, shift_rqn, shift_asn = None, None, None, None
+			shift_ave, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None
 			if shift_av:
 				shift_ave = shift_av['employee']
 				shift_avn = shift_av['name']
@@ -88,6 +88,7 @@ def get_sales_orders(filters=None):
 				'delivery_date': ['between', [filters.start, filters.end]],
 				'docstatus': ['<', 2],
 				},
+			['name', 'delivery_date']
 			)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
