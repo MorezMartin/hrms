@@ -76,7 +76,7 @@ def get_avaibilities(filters=None):
 				shift_asn = shift_as['name']
 			if ts:
 				tsn = ts['name']
-			emps.append({'employee': shift_ave, 'shift_avaibilities': shift_avn, 'shift_requests': shift_rqn, 'shift_assignments': shift_asn, 'timesheets': tsn, 'indent': 2})
+			emps.append({'employee': shift_ave or None, 'shift_avaibilities': shift_avn or None, 'shift_requests': shift_rqn or None, 'shift_assignments': shift_asn or None, 'timesheets': tsn or None, 'indent': 2})
 	return emps
 
 def get_sales_orders(filters=None):
