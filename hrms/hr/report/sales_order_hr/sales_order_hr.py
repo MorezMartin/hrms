@@ -6,6 +6,9 @@ import itertools
 
 
 def execute(filters=None):
+	avs = get_avaibilities(filters)
+	sos = get_sales_orders(filters)
+	data = []
 	columns = [
 		{'fieldname' : 'name', 'label': 'Name', 'fieldtype': 'Data'},
 		{'fieldname' : 'sales_order', 'label': 'Sales Order', 'fieldtype': 'Link', 'options': 'Sales Order'},
@@ -20,9 +23,6 @@ def execute(filters=None):
 		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Data'},
 		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Data'},
 	]
-	avs = get_avaibilities(filters)
-	sos = get_sales_orders(filters)
-	columns, data = [], []
 	data += avs
 	data += sos
 	return columns, data
