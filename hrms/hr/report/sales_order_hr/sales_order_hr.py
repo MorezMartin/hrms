@@ -18,6 +18,7 @@ def execute(filters=None):
 		{'fieldname' : 'uom', 'label': 'UoM', 'fieldtype': 'Data'},
 		{'fieldname' : 'description', 'label': 'Description', 'fieldtype': 'Text Editor'},
 		{'fieldname' : 'employee', 'label': 'Employee', 'fieldtype': 'Link', 'options': 'Employee'},
+		{'fieldname' : 'employee_name', 'label': 'Employee Name', 'fieldtype': 'Data'},
 		{'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
 		{'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},
 		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Link', 'options': 'Shift Assignment'},
@@ -71,22 +72,23 @@ def get_avaibilities(filters=None):
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		emps.append({'name': emp_name, 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
-			shift_ave, shift_rqe, shift_ase, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None, None, None
+			shift_avn, shift_rqn, shift_asn, tsn, employee = None, None, None, None, None
 			if shift_av:
 				if shift_av['employee'] == emp:
-					shift_ave = shift_av['employee']
 					shift_avn = shift_av['name']
+					employee = emp
 			if shift_rq:
 				if shift_rq['employee'] == emp:
-					shift_rqe = shift_av['employee']
 					shift_rqn = shift_rq['name']
+					employee = emp
 			if shift_as:
 				if shift_as['employee'] == emp:
-					shift_ase = shift_av['employee']
 					shift_asn = shift_as['name']
+					employee = emp
 			if ts:
 				if ts['employee'] == emp:
 					tsn = ts['name']
+					employee = emp
 			emps.append({
 				'employee': emp,
 				'employee_name': emp_name,
