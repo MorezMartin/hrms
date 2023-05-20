@@ -120,7 +120,7 @@ def get_sales_order_links(sales_order=None):
 		if srq:
 			srqn = srq['name']
 		if sas:
-			sasn = sa['name']
+			sasn = sas['name']
 		if ts:
 			tsn = ts['name']
 		sols.append({'timesheets': tsn or None, 'shift_requests': srqn or None, 'shift_assignments': sasn or None, 'indent': 2})
