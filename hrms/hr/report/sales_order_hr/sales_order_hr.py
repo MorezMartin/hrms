@@ -98,12 +98,28 @@ def get_sales_orders(filters=None):
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
 		human_needs = 0
 		for item in items:
-			human_needs += item['qty']
+			qty_needed += item['qty']
 		if so['shipping_address_name']:
 			name = so['customer'] + so['shipping_address_name']
 		else:
 			name = so['customer']
-		res.append({'name': so['customer'] + ' ' + so['shipping_address_name'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': human_needs})
+		res.append({'name': so['customer'] + ' ' + so['shipping_address_name'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'qty_needed': qty_needed, 'indent': 1})
 		for item in items:
-			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),
+			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 2 }),
 	return res
+
+def get_sales_order_links(sales_order=None):
+	sols = []
+	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus' ['<', '2']})
+	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus' ['<', '2']})
+	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus' ['<', '2']})
+	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
+		srqn, sasn, tsn = None, None, None
+		if srq:
+			srqn = srq['name']
+		if sas:
+			sasn = sa['name']
+		if ts:
+			tsn = ts['name']
+		sols.append({'timesheets': tsn or None, 'shift_requests': srqn or None, 'shift_assignments': sasn or None})
+
