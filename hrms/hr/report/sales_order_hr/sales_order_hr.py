@@ -107,7 +107,7 @@ def get_sales_orders(filters=None):
 		for item in items:
 			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 2 }),
 		sols = get_sales_order_links(so['name'])
-		res.append(sols)
+		res += sols
 	return res
 
 def get_sales_order_links(sales_order=None):
