@@ -69,17 +69,17 @@ def get_avaibilities(filters=None):
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
 			shift_ave, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None
 			if shift_av:
-				if shift_av['employee'] == emp
+				if shift_av['employee'] == emp:
 					shift_ave = shift_av['employee']
 					shift_avn = shift_av['name']
 			if shift_rq:
-				if shift_rq['employee'] == emp
+				if shift_rq['employee'] == emp:
 					shift_rqn = shift_rq['name']
 			if shift_as:
-				if shift_as['employee'] == emp
+				if shift_as['employee'] == emp:
 					shift_asn = shift_as['name']
 			if ts:
-				if ts['employee'] == emp
+				if ts['employee'] == emp:
 					tsn = ts['name']
 			emps.append({'employee': shift_ave or None, 'shift_avaibilities': shift_avn or None, 'shift_requests': shift_rqn or None, 'shift_assignments': shift_asn or None, 'timesheets': tsn, 'indent': 2})
 	return emps
@@ -92,14 +92,18 @@ def get_sales_orders(filters=None):
 				'delivery_date': ['between', [filters.start, filters.end]],
 				'docstatus': ['<', 2],
 				},
-			['name', 'delivery_date', 'customer', 'shipping_address']
+			['name', 'delivery_date', 'customer', 'shipping_address_name']
 			)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
 		human_needs = 0
 		for item in items:
 			human_needs += item['qty']
-		res.append({'name': so['customer'] + ' ' + so['shipping_address'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': human_needs})
+		if so['shipping_address_name']:
+			name = so['customer'] + so['shipping_address_name']
+		else:
+			name = so['customer']
+		res.append({'name': so['customer'] + ' ' + so['shipping_address_name'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': human_needs})
 		for item in items:
 			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),
 	return res
