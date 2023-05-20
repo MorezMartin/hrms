@@ -77,21 +77,24 @@ def get_avaibilities(filters=None):
 				if shift_av['employee'] == emp:
 					shift_avn = shift_av['name']
 					employee = emp
+					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			if shift_rq:
 				if shift_rq['employee'] == emp:
 					shift_rqn = shift_rq['name']
 					employee = emp
+					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			if shift_as:
 				if shift_as['employee'] == emp:
 					shift_asn = shift_as['name']
 					employee = emp
+					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			if ts:
 				if ts['employee'] == emp:
 					tsn = ts['name']
 					employee = emp
 			emps.append({
-				'employee': emp,
-				'employee_name': emp_name,
+				'employee': employee,
+				'employee_name': employee_name,
 				'shift_avaibilities': shift_avn,
 				'shift_requests': shift_rqn,
 				'shift_assignments': shift_asn,
