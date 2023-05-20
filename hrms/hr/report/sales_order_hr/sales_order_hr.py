@@ -106,6 +106,8 @@ def get_sales_orders(filters=None):
 		res.append({'name': so['customer'] + ' ' + so['shipping_address_name'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'qty_needed': qty_needed, 'indent': 1})
 		for item in items:
 			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 2 }),
+		sols = get_sales_order_links(so['name'])
+		res.append(sols)
 	return res
 
 def get_sales_order_links(sales_order=None):
@@ -121,5 +123,5 @@ def get_sales_order_links(sales_order=None):
 			sasn = sa['name']
 		if ts:
 			tsn = ts['name']
-		sols.append({'timesheets': tsn or None, 'shift_requests': srqn or None, 'shift_assignments': sasn or None})
-
+		sols.append({'timesheets': tsn or None, 'shift_requests': srqn or None, 'shift_assignments': sasn or None, 'indent': 2})
+	return sols
