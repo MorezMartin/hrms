@@ -40,6 +40,7 @@ def get_avaibilities(filters=None):
 	shift_rqs = frappe.db.get_all(
 			'Shift Request',
 			{
+				'docstatus': ['<', 2],
 				'from_date': ['<=', filters.end],
 				'to_date': ['>=', filters.start],
 				},
@@ -48,6 +49,7 @@ def get_avaibilities(filters=None):
 	shift_ass = frappe.db.get_all(
 			'Shift Assignment',
 			{
+				'docstatus': ['<', 2],
 				'start_date': ['<=', filters.end],
 				'end_date': ['>=', filters.start],
 				},
@@ -56,6 +58,7 @@ def get_avaibilities(filters=None):
 	tss = frappe.db.get_all(
 			'Timesheet',
 			{
+				'docstatus': ['<', 2],
 				'start_date': ['<=', filters.end],
 				'end_date': ['>=', filters.start],
 				},
@@ -65,23 +68,33 @@ def get_avaibilities(filters=None):
 	employees = set(employees)
 	emps = [{'name': 'Employees', 'indent': 0}]
 	for emp in employees:
-		emps.append({'name': frappe.db.get_value('Employee', emp, 'employee_name'), 'employee': emp, 'indent': 1})
+		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+		emps.append({'name': emp_name, 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
-			shift_ave, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None
+			shift_ave, shift_rqe, shift_ase, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None
 			if shift_av:
 				if shift_av['employee'] == emp:
 					shift_ave = shift_av['employee']
 					shift_avn = shift_av['name']
 			if shift_rq:
 				if shift_rq['employee'] == emp:
+					shift_rqe = shift_av['employee']
 					shift_rqn = shift_rq['name']
 			if shift_as:
 				if shift_as['employee'] == emp:
+					shift_ase = shift_av['employee']
 					shift_asn = shift_as['name']
 			if ts:
 				if ts['employee'] == emp:
 					tsn = ts['name']
-			emps.append({'employee': shift_ave or None, 'shift_avaibilities': shift_avn or None, 'shift_requests': shift_rqn or None, 'shift_assignments': shift_asn or None, 'timesheets': tsn, 'indent': 2})
+			emps.append({
+				'employee': emp,
+				'employee_name': emp_name,
+				'shift_avaibilities': shift_avn or None,
+				'shift_requests': shift_rqn or None,
+				'shift_assignments': shift_asn or None,
+				'timesheets': tsn, 'indent': 2
+				})
 	return emps
 
 def get_sales_orders(filters=None):
@@ -103,9 +116,21 @@ def get_sales_orders(filters=None):
 			name = so['customer'] + so['shipping_address_name']
 		else:
 			name = so['customer']
-		res.append({'name': so['customer'] + ' ' + so['shipping_address_name'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'qty_needed': qty_needed, 'indent': 1})
+		res.append({
+			'name': name,
+			'sales_order': so['name'],
+			'delivery_date': so['delivery_date'],
+			'qty_needed': qty_needed,
+			'indent': 1
+			})
 		for item in items:
-			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 2 }),
+			res.append({
+				'human_needs': item['item_code'],
+				'qty_needed': item['qty'],
+				'uom': item['uom'],
+				'description': item['description'],
+				'indent': 2,
+				})
 		sols = get_sales_order_links(so['name'])
 		res += sols
 	return res
@@ -119,9 +144,22 @@ def get_sales_order_links(sales_order=None):
 		srqn, sasn, tsn = None, None, None
 		if srq:
 			srqn = srq['name']
+			emp = frappe.db.get_value('Shift Request', srqn, 'employee')
+			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		if sas:
 			sasn = sas['name']
+			emp = frappe.db.get_value('Shift Request', sasn, 'employee')
+			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		if ts:
 			tsn = ts['name']
-		sols.append({'timesheets': tsn or None, 'shift_requests': srqn or None, 'shift_assignments': sasn or None, 'indent': 2})
+			emp = frappe.db.get_value('Shift Request', tsn, 'employee')
+			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+		sols.append({
+			'employee': emp or None,
+			'employee_name': emp_name or None,
+			'timesheets': tsn or None,
+			'shift_requests': srqn or None,
+			'shift_assignments': sasn or None,
+			'indent': 2,
+			})
 	return sols
