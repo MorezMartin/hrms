@@ -20,8 +20,8 @@ def execute(filters=None):
 		{'fieldname' : 'employee', 'label': 'Employee', 'fieldtype': 'Link', 'options': 'Employee'},
 		{'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
 		{'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},
-		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Data'},
-		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Data'},
+		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Link', 'options': 'Shift Assignment'},
+		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Link', 'options': 'Timesheet'},
 	]
 	data += avs
 	data += sos
@@ -63,36 +63,43 @@ def get_avaibilities(filters=None):
 			)
 	employees = [av['employee'] for av in shift_avs]
 	employees = set(employees)
-	emps = []
+	emps = [{'name': 'Employees', 'indent': 0}]
 	for emp in employees:
 		emps.append({'name': frappe.db.get_value('Employee', emp, 'employee_name'), 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
 			shift_ave, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None
 			if shift_av:
-				shift_ave = shift_av['employee']
-				shift_avn = shift_av['name']
+				if shift_av['employee'] == emp
+					shift_ave = shift_av['employee']
+					shift_avn = shift_av['name']
 			if shift_rq:
-				shift_rqn = shift_rq['name']
+				if shift_rq['employee'] == emp
+					shift_rqn = shift_rq['name']
 			if shift_as:
-				shift_asn = shift_as['name']
+				if shift_as['employee'] == emp
+					shift_asn = shift_as['name']
 			if ts:
-				tsn = ts['name']
+				if ts['employee'] == emp
+					tsn = ts['name']
 			emps.append({'employee': shift_ave or None, 'shift_avaibilities': shift_avn or None, 'shift_requests': shift_rqn or None, 'shift_assignments': shift_asn or None, 'timesheets': tsn, 'indent': 2})
 	return emps
 
 def get_sales_orders(filters=None):
-	res = []
+	res = [{'name': 'Sales Order', 'indent': 0}]
 	sos = frappe.db.get_all(
 			'Sales Order',
 			{
 				'delivery_date': ['between', [filters.start, filters.end]],
 				'docstatus': ['<', 2],
 				},
-			['name', 'delivery_date']
+			['name', 'delivery_date', 'customer', 'shipping_address']
 			)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
-		res.append({'name': 'Sales Order', 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': 3})
+		human_needs = 0
+		for item in items:
+			human_needs += item['qty']
+		res.append({'name': so['customer'] + ' ' + so['shipping_address'], 'sales_order': so['name'], 'delivery_date': so['delivery_date'], 'human_needs': human_needs})
 		for item in items:
 			res.append({'human_needs': item['item_code'], 'qty_needed': item['qty'], 'uom': item['uom'], 'description': item['description'], 'indent': 1 }),
 	return res
