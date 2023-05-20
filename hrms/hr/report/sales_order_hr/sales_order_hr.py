@@ -71,7 +71,7 @@ def get_avaibilities(filters=None):
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		emps.append({'name': emp_name, 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
-			shift_ave, shift_rqe, shift_ase, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None
+			shift_ave, shift_rqe, shift_ase, shift_avn, shift_rqn, shift_asn, tsn = None, None, None, None, None, None, None
 			if shift_av:
 				if shift_av['employee'] == emp:
 					shift_ave = shift_av['employee']
@@ -90,9 +90,9 @@ def get_avaibilities(filters=None):
 			emps.append({
 				'employee': emp,
 				'employee_name': emp_name,
-				'shift_avaibilities': shift_avn or None,
-				'shift_requests': shift_rqn or None,
-				'shift_assignments': shift_asn or None,
+				'shift_avaibilities': shift_avn,
+				'shift_requests': shift_rqn,
+				'shift_assignments': shift_asn,
 				'timesheets': tsn, 'indent': 2
 				})
 	return emps
@@ -157,9 +157,9 @@ def get_sales_order_links(sales_order=None):
 		sols.append({
 			'employee': emp or None,
 			'employee_name': emp_name or None,
-			'timesheets': tsn or None,
-			'shift_requests': srqn or None,
-			'shift_assignments': sasn or None,
+			'timesheets': tsn,
+			'shift_requests': srqn,
+			'shift_assignments': sasn,
 			'indent': 2,
 			})
 	return sols
