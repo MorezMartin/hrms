@@ -96,7 +96,7 @@ def get_sales_orders(filters=None):
 			)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
-		human_needs = 0
+		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
 		if so['shipping_address_name']:
@@ -112,9 +112,9 @@ def get_sales_orders(filters=None):
 
 def get_sales_order_links(sales_order=None):
 	sols = []
-	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus' ['<', '2']})
-	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus' ['<', '2']})
-	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus' ['<', '2']})
+	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus': ['<', '2']})
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
 		srqn, sasn, tsn = None, None, None
 		if srq:
