@@ -146,7 +146,7 @@ def get_sales_order_links(sales_order=None):
 	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']})
 	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus': ['<', '2']})
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
-		srqn, sasn, tsn, emp, emp_name = None, None, None
+		srqn, sasn, tsn, emp, emp_name = None, None, None, None, None
 		if srq:
 			srqn = srq['name']
 			emp = frappe.db.get_value('Shift Request', srqn, 'employee')
