@@ -72,7 +72,7 @@ def get_avaibilities(filters=None):
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		emps.append({'name': emp_name, 'employee': emp, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
-			shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name = None, None, None, None, None
+			shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name = None, None, None, None, None, None
 			if shift_av:
 				if shift_av['employee'] == emp:
 					shift_avn = shift_av['name']
@@ -142,9 +142,9 @@ def get_sales_orders(filters=None):
 
 def get_sales_order_links(sales_order=None):
 	sols = []
-	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']})
-	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']})
-	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
+	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
+	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
 		srqn, sasn, tsn, emp, emp_name = None, None, None, None, None
 		if srq:
