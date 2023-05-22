@@ -149,15 +149,15 @@ def get_sales_order_links(sales_order=None):
 		srqn, sasn, tsn, emp, emp_name = None, None, None, None, None
 		if srq:
 			srqn = srq['name']
-			emp = frappe.db.get_value('Shift Request', srqn, 'employee')
+			emp = srq['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		if sas:
 			sasn = sas['name']
-			emp = frappe.db.get_value('Shift Request', sasn, 'employee')
+			emp = sasn['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		if ts:
 			tsn = ts['name']
-			emp = frappe.db.get_value('Shift Request', tsn, 'employee')
+			emp = tsn['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		sols.append({
 			'employee': emp,
