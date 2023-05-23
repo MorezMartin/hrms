@@ -68,7 +68,7 @@ def get_avaibilities(filters=None):
 	employees = [av['employee'] for av in shift_avs]
 	employees += [rq['employee'] for rq in shift_rqs]
 	employees += [aas['employee'] for aas in shift_ass]
-	employees += [ts['employee'] for ts in shift_tss]
+	employees += [ts['employee'] for ts in tss]
 	employees = set(employees)
 	emps = [{'name': 'Employees', 'indent': 0}]
 	for emp in employees:
