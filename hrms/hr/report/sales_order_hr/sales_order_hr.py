@@ -145,8 +145,11 @@ def get_sales_orders(filters=None):
 				})
 		sols = get_sales_order_links(so['name'])
 		res2 = []
-		for r, sol in res, sols:
-			r.update(sol)
+		for r, sol in itertools.zip_longest(res, sols):
+			if r and sol:
+				r = r.update(sol)
+			elif sol:
+				r = sol
 			res2.append(r)
 	return res2
 
