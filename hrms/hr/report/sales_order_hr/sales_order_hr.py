@@ -62,6 +62,7 @@ def get_avaibilities(filters=None):
 				'docstatus': ['<', 2],
 				'start_date': ['<=', filters.end],
 				'end_date': ['>=', filters.start],
+				'employee': ['!=', ''],
 				},
 			['name', 'employee']
 			)
@@ -143,14 +144,17 @@ def get_sales_orders(filters=None):
 				'indent': 2,
 				})
 		sols = get_sales_order_links(so['name'])
-		res += sols
-	return res
+		res2 = []
+		for r, sol in res, sols:
+			r.update(sol)
+			res2.append(r)
+	return res2
 
 def get_sales_order_links(sales_order=None):
 	sols = []
 	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
 	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
-	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
+	tss = frappe.get_all('Timesheet', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'employee' : ['!=', '']}, ['name', 'employee'])
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
 		srqn, sasn, tsn, emp, emp_name = None, None, None, None, None
 		if srq:
@@ -165,12 +169,15 @@ def get_sales_order_links(sales_order=None):
 			tsn = ts['name']
 			emp = ts['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
-		sols.append({
-			'employee': emp,
-			'employee_name': emp_name,
-			'timesheets': tsn,
-			'shift_requests': srqn,
-			'shift_assignments': sasn,
-			'indent': 2,
-			})
+		if (srqn, sasn, tsn) == None:
+			continue
+		else:
+			sols.append({
+				'employee': emp,
+				'employee_name': emp_name,
+				'timesheets': tsn,
+				'shift_requests': srqn,
+				'shift_assignments': sasn,
+				'indent': 2,
+				})
 	return sols
