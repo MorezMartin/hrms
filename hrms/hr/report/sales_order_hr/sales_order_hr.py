@@ -66,6 +66,9 @@ def get_avaibilities(filters=None):
 			['name', 'employee']
 			)
 	employees = [av['employee'] for av in shift_avs]
+	employees += [rq['employee'] for rq in shift_rqs]
+	employees += [aas['employee'] for aas in shift_ass]
+	employees += [ts['employee'] for ts in shift_tss]
 	employees = set(employees)
 	emps = [{'name': 'Employees', 'indent': 0}]
 	for emp in employees:
@@ -76,22 +79,23 @@ def get_avaibilities(filters=None):
 			if shift_av:
 				if shift_av['employee'] == emp:
 					shift_avn = shift_av['name']
-					employee = emp
-					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
+					employee = shift_av['employee']
+					employee_name = frappe.db.get_value('Employee', employee, 'employee_name')
 			if shift_rq:
 				if shift_rq['employee'] == emp:
 					shift_rqn = shift_rq['name']
-					employee = emp
+					employee = shift_rq['employee']
 					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			if shift_as:
 				if shift_as['employee'] == emp:
 					shift_asn = shift_as['name']
-					employee = emp
+					employee = shift_as['employee']
 					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			if ts:
 				if ts['employee'] == emp:
 					tsn = ts['name']
-					employee = emp
+					employee = ts['employee']
+					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			if (shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name) == (None, None, None, None, None, None):
 				continue
 			else:
