@@ -73,7 +73,7 @@ def get_avaibilities(filters=None):
 	emps = [{'name': 'Employees', 'indent': 0}]
 	for emp in employees:
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
-		emps.append({'name': emp_name, 'employee': emp, 'indent': 1})
+		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})
 		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
 			shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name = None, None, None, None, None, None
 			if shift_av:
@@ -100,7 +100,6 @@ def get_avaibilities(filters=None):
 				continue
 			else:
 				emps.append({
-					'employee': employee,
 					'employee_name': employee_name,
 					'shift_avaibilities': shift_avn,
 					'shift_requests': shift_rqn,
