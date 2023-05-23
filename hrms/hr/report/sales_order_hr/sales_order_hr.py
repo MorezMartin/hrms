@@ -153,11 +153,11 @@ def get_sales_order_links(sales_order=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		if sas:
 			sasn = sas['name']
-			emp = sasn['employee']
+			emp = sas['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		if ts:
 			tsn = ts['name']
-			emp = tsn['employee']
+			emp = ts['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		sols.append({
 			'employee': emp,
