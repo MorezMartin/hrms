@@ -92,14 +92,17 @@ def get_avaibilities(filters=None):
 				if ts['employee'] == emp:
 					tsn = ts['name']
 					employee = emp
-			emps.append({
-				'employee': employee,
-				'employee_name': employee_name,
-				'shift_avaibilities': shift_avn,
-				'shift_requests': shift_rqn,
-				'shift_assignments': shift_asn,
-				'timesheets': tsn, 'indent': 2
-				})
+			if (shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name) == (None, None, None, None, None, None):
+				continue
+			else:
+				emps.append({
+					'employee': employee,
+					'employee_name': employee_name,
+					'shift_avaibilities': shift_avn,
+					'shift_requests': shift_rqn,
+					'shift_assignments': shift_asn,
+					'timesheets': tsn, 'indent': 2
+					})
 	return emps
 
 def get_sales_orders(filters=None):
