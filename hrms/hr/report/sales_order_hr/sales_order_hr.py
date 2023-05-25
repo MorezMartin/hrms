@@ -149,6 +149,8 @@ def get_sales_orders(filters=None):
 					r.update(sol)
 			elif sol:
 				r = sol
+			else:
+				continue
 			res.append(r)
 	return res
 
