@@ -110,7 +110,7 @@ def get_avaibilities(filters=None):
 	return emps
 
 def get_sales_orders(filters=None):
-	res = [{'name': 'Sales Order', 'indent': 0}]
+	res = []
 	sos = frappe.db.get_all(
 			'Sales Order',
 			{
@@ -144,7 +144,7 @@ def get_sales_orders(filters=None):
 				'indent': 2,
 				})
 		sols = get_sales_order_links(so['name'])
-		res2 = []
+		res2 = [{'name': 'Sales Order', 'indent': 0}]
 		for r, sol in itertools.zip_longest(res, sols):
 			if r and sol:
 				r = r.update(sol)
