@@ -110,7 +110,7 @@ def get_avaibilities(filters=None):
 	return emps
 
 def get_sales_orders(filters=None):
-	res = []
+	res = [{'name': 'Sales Order', 'indent': 0}]
 	sos = frappe.db.get_all(
 			'Sales Order',
 			{
@@ -135,23 +135,22 @@ def get_sales_orders(filters=None):
 			'qty_needed': qty_needed,
 			'indent': 1
 			})
-		for item in items:
-			res.append({
-				'human_needs': item['item_code'],
-				'qty_needed': item['qty'],
-				'uom': item['uom'],
-				'description': item['description'],
-				'indent': 2,
-				})
 		sols = get_sales_order_links(so['name'])
-		res2 = [{'name': 'Sales Order', 'indent': 0}]
-    for r, sol in itertools.zip_longest(res, sols):
-        if r and sol:
-            r = r.update(sol)
-        elif sol:
-            r = sol
-        res2.append(r)
-	return res2
+		for item, sol in itertools.zip_longest(items, sols):
+			if item:
+				r = {
+						'human_needs': item['item_code'],
+						'qty_needed': item['qty'],
+						'uom': item['uom'],
+						'description': item['description'],
+						'indent': 2,
+						}
+				if sol:
+					r.update(sol)
+			elif sol:
+				r = sol
+			res.append(r)
+	return res
 
 def get_sales_order_links(sales_order=None):
 	sols = []
