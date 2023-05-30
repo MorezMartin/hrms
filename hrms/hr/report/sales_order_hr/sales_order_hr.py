@@ -3,6 +3,7 @@
 
 import frappe
 import itertools
+from erpnext.setup.doctype.item_group import item_group
 
 
 def execute(filters=None):
@@ -112,12 +113,7 @@ def get_avaibilities(filters=None):
 def get_sales_orders(filters=None):
 	res = [{'name': 'Sales Order', 'indent': 0}]
 	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
-	wigs = []
-	wigs.append(wigp)
-	for wig in wigs:
-		wigp = frappe.db.get_value('Item Group', wig, 'parent_item_group')
-		if wigp:
-			wigs.append(wigp)
+	wigs = item_group.get_child_item_groups(wigp)
 	sos = frappe.db.get_all(
 			'Sales Order',
 			{
