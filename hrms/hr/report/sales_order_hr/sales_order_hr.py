@@ -127,7 +127,7 @@ def get_sales_orders(filters=None):
 			['name', 'delivery_date', 'customer', 'shipping_address_name']
 			)
 	for so in sos:
-		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_group': ['in', 'wigs']}, ['item_code', 'qty', 'uom', 'description'])
+		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_group': ['in', wigs]}, ['item_code', 'qty', 'uom', 'description'])
 		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
