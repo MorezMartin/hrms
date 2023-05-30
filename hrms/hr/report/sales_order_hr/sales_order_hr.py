@@ -111,6 +111,13 @@ def get_avaibilities(filters=None):
 
 def get_sales_orders(filters=None):
 	res = [{'name': 'Sales Order', 'indent': 0}]
+	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
+	wigs = []
+	wigs.append(wigp)
+	for wig in wigs:
+		wigp = frappe.db.get_value('Item Group', wig, 'parent_item_group')
+		if wigp:
+			wigs.append(wigp)
 	sos = frappe.db.get_all(
 			'Sales Order',
 			{
@@ -120,7 +127,7 @@ def get_sales_orders(filters=None):
 			['name', 'delivery_date', 'customer', 'shipping_address_name']
 			)
 	for so in sos:
-		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
+		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_group': ['in', 'wigs']}, ['item_code', 'qty', 'uom', 'description'])
 		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
