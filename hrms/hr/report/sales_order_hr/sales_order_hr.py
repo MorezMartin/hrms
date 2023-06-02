@@ -23,7 +23,10 @@ def execute(filters=None):
 		{'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
 		{'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},
 		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Link', 'options': 'Shift Assignment'},
+		{'fieldname' : 'shift_type', 'label': 'Shift Type', 'fieldtype': 'Link', 'options': 'Shift Type'},
 		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Link', 'options': 'Timesheet'},
+		{'fieldname' : 'from_time', 'label': 'From Time', 'fieldtype': 'Data'},
+		{'fieldname' : 'to_time', 'label': 'To Time', 'fieldtype': 'Data'},
 	]
 	data += avs
 	data += sos
@@ -160,25 +163,35 @@ def get_sales_orders(filters=None):
 def get_sales_order_links(sales_order=None):
 	sols = []
 	tss = []
-	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
-	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee'])
+	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type'])
+	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type'])
 	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], ['parent']})
 	for tl in tls:
-		tss.append(frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee']))
+		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])
+		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time'])
+		tss.append(ts)
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
-		srqn, sasn, tsn, emp, emp_name = None, None, None, None, None
+		srqn, sasn, tsn, emp, emp_name, shift_type, from_time, to_time = None, None, None, None, None, None, None, None
 		if srq:
 			srqn = srq['name']
 			emp = srq['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+			shift_type = srq['shift_type']
+			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
 		if sas:
 			sasn = sas['name']
 			emp = sas['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+			shift_type = sas['shift_type']
+			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
 		if ts:
 			tsn = ts['name']
 			emp = ts['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+			from_time = ts['from_time']
+			to_time = ts['to_time']
 		if (srqn, sasn, tsn) == None:
 			continue
 		else:
