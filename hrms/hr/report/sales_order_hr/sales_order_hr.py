@@ -165,10 +165,10 @@ def get_sales_order_links(sales_order=None):
 	tss = []
 	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type'])
 	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type'])
-	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], ['parent']})
+	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent'])
 	for tl in tls:
-		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])
-		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time'])
+		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])[0]
+		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time']})
 		tss.append(ts)
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
 		srqn, sasn, tsn, emp, emp_name, shift_type, from_time, to_time = None, None, None, None, None, None, None, None
