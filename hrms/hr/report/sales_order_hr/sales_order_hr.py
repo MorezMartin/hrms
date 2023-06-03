@@ -252,7 +252,7 @@ def get_summary(filters=None):
 		]
 	return res
 
-def get_chart(filters=None)
+def get_chart(filters=None):
 	pass
 
 def get_indicator(value, ref):
