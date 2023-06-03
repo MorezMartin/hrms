@@ -238,27 +238,27 @@ def get_summary(filters=None):
 				},
 			['name']
 			)
-    lsos = len(sos)
+	lsos = len(sos)
 	srqs, sass, tls = 0, 0, 0
 	for so in sos:
-		srqs += frappe.db.count('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']})
-		sass += frappe.db.count('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']})
-		tls += frappe.db.count('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+		srqs += frappe.db.count('Shift Request', {'sales_order': so, 'docstatus': ['<', '2']})
+		sass += frappe.db.count('Shift Assignment', {'sales_order': so, 'docstatus': ['<', '2']})
+		tls += frappe.db.count('Timesheet Detail', {'sales_order': so, 'docstatus': ['<', '2']}
 	res = [
-        {'label': 'Sales Orders', 'value': lsos, 'indicator': 'Blue'}
-        {'label': 'Shift Requests', 'value': get_indicator(srqs, lsos), 'indicator': 'Blue'}
-        {'label': 'Shift Assignments', 'value': get_indicator(sass, lsos), 'indicator': 'Blue'}
-        {'label': 'Timesheet Log', 'value': get_indicator(tls, lsos), 'indicator': 'Blue'}
-        ]
+		{'label': 'Sales Orders', 'value': lsos, 'indicator': 'Blue'},
+		{'label': 'Shift Requests', 'value': get_indicator(srqs, lsos), 'indicator': 'Blue'},
+		{'label': 'Shift Assignments', 'value': get_indicator(sass, lsos), 'indicator': 'Blue'},
+		{'label': 'Timesheet Log', 'value': get_indicator(tls, lsos), 'indicator': 'Blue'},
+		]
 	return res
 
 def get_chart(filters=None)
 	pass
 
 def get_indicator(value, ref):
-    if value >= ref:
-        color = 'Green'
-    elif value >= 0,75 * ref:
-        color = 'Orange'
-    else:
-        color = 'Red'
+	if value >= ref:
+		color = 'Green'
+	elif value >= 0.75 * ref:
+		color = 'Orange'
+	else:
+		color = 'Red'
