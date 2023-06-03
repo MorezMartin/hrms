@@ -194,6 +194,7 @@ def get_sales_order_links(sales_order=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			from_time = ts['from_time']
 			to_time = ts['to_time']
+			activity_type = ts['activity_type']
 		if (srqn, sasn, tsn) == None:
 			continue
 		else:
