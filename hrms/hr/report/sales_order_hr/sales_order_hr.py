@@ -241,9 +241,9 @@ def get_summary(filters=None):
 	lsos = len(sos)
 	srqs, sass, tls = 0, 0, 0
 	for so in sos:
-		srqs += frappe.db.count('Shift Request', {'sales_order': so, 'docstatus': ['<', '2']})
-		sass += frappe.db.count('Shift Assignment', {'sales_order': so, 'docstatus': ['<', '2']})
-		tls += frappe.db.count('Timesheet Detail', {'sales_order': so, 'docstatus': ['<', '2']})
+		srqs += len(frappe.get_all('Shift Request', {'sales_order': so, 'docstatus': ['<', '2']}))
+		sass += len(frappe.get_all('Shift Assignment', {'sales_order': so, 'docstatus': ['<', '2']}))
+		tls += len(frappe.get_all('Timesheet Detail', {'sales_order': so, 'docstatus': ['<', '2']}))
 	res = [
 		{'label': 'Sales Orders', 'value': lsos, 'indicator': 'Blue'},
 		{'label': 'Shift Requests', 'value': get_indicator(srqs, lsos), 'indicator': 'Blue'},
