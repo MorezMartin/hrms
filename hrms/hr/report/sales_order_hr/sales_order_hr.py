@@ -168,7 +168,7 @@ def get_sales_order_links(sales_order=None):
 	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent','activity_type', 'from_time', 'to_time'])
 	for tl in tls:
 		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])[0]
-		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time']})
+		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time'], 'activity_type': tl['activity_type']})
 		tss.append(ts)
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
 		srqn, sasn, tsn, emp, emp_name, shift_type, activity_type, from_time, to_time = None, None, None, None, None, None, None, None, None
@@ -177,6 +177,7 @@ def get_sales_order_links(sales_order=None):
 			emp = srq['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = srq['shift_type']
+			activity_type = srq['activity_type']
 			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
 		if sas:
@@ -184,6 +185,7 @@ def get_sales_order_links(sales_order=None):
 			emp = sas['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = sas['shift_type']
+			activity_type = sas['activity_type']
 			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
 		if ts:
