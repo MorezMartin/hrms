@@ -23,7 +23,8 @@ def execute(filters=None):
 		{'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
 		{'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},
 		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Link', 'options': 'Shift Assignment'},
-		{'fieldname' : 'shift_type', 'label': 'Shift Type', 'fieldtype': 'Link', 'options': 'Shift Type'},
+		{'fieldname' : 'shift_type', 'label': 'Shift Type', 'fieldtype': 'Data'},
+		{'fieldname' : 'activity_type', 'label': 'Activity Type', 'fieldtype': 'Data'},
 		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Link', 'options': 'Timesheet'},
 		{'fieldname' : 'from_time', 'label': 'From Time', 'fieldtype': 'Data'},
 		{'fieldname' : 'to_time', 'label': 'To Time', 'fieldtype': 'Data'},
@@ -162,29 +163,29 @@ def get_sales_orders(filters=None):
 def get_sales_order_links(sales_order=None):
 	sols = []
 	tss = []
-	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type'])
-	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type'])
-	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent', 'from_time', 'to_time'])
+	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
+	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
+	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent','activity_type', 'from_time', 'to_time'])
 	for tl in tls:
 		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])[0]
 		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time']})
 		tss.append(ts)
 	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
-		srqn, sasn, tsn, emp, emp_name, shift_type, from_time, to_time = None, None, None, None, None, None, None, None
+		srqn, sasn, tsn, emp, emp_name, shift_type, activity_type, from_time, to_time = None, None, None, None, None, None, None, None, None
 		if srq:
 			srqn = srq['name']
 			emp = srq['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = srq['shift_type']
 			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
 		if sas:
 			sasn = sas['name']
 			emp = sas['employee']
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = sas['shift_type']
 			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
 		if ts:
 			tsn = ts['name']
 			emp = ts['employee']
@@ -201,6 +202,7 @@ def get_sales_order_links(sales_order=None):
 				'shift_requests': srqn,
 				'shift_assignments': sasn,
 				'shift_type': shift_type,
+				'activity_type': activity_type,
 				'from_time': from_time,
 				'to_time': to_time,
 				'indent': 2,
