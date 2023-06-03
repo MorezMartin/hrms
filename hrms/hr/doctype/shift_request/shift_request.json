@@ -19,6 +19,7 @@
   "from_date",
   "to_date",
   "sales_order",
+  "activity_type",
   "amended_from"
  ],
  "fields": [
@@ -107,6 +108,12 @@
    "fieldtype": "Link",
    "label": "Sales Order",
    "options": "Sales Order"
+  },
+  {
+   "fieldname": "activity_type",
+   "fieldtype": "Link",
+   "label": "Activity Type",
+   "options": "Activity Type"
   }
  ],
  "icon": "calendar-clock",

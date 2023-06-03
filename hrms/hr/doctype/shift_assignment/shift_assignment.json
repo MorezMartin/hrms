@@ -23,6 +23,7 @@
   "start_date",
   "end_date",
   "sales_order",
+  "activity_type",
   "shift_request",
   "shift_schedule_assignment",
   "amended_from"
@@ -152,6 +153,12 @@
    "fieldtype": "Link",
    "label": "Sales Order",
    "options": "Sales Order"
+  },
+  {
+   "fieldname": "activity_type",
+   "fieldtype": "Link",
+   "label": "Activity Type",
+   "options": "Activity Type"
   }
  ],
  "icon": "user-check",
