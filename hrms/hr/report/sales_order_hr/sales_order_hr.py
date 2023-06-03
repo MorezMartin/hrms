@@ -130,10 +130,9 @@ def get_sales_orders(filters=None):
 		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
+		name = so['customer']
 		if so['shipping_address_name']:
-			name = so['customer'] + so['shipping_address_name']
-		else:
-			name = so['customer']
+			name += ' ' + so['shipping_address_name']
 		res.append({
 			'name': name,
 			'sales_order': so['name'],
@@ -201,6 +200,9 @@ def get_sales_order_links(sales_order=None):
 				'timesheets': tsn,
 				'shift_requests': srqn,
 				'shift_assignments': sasn,
+				'shift_type': shift_type,
+				'from_time': from_time,
+				'to_time': to_time,
 				'indent': 2,
 				})
 	return sols
