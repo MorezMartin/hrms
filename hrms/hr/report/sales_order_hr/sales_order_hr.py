@@ -141,10 +141,10 @@ def get_sales_orders(filters=None):
 			'sales_order': so['name'],
 			'delivery_date': so['delivery_date'],
 			'qty_needed': qty_needed,
-			'shift_requests': sols_qties['shift_requests']
-			'shift_assignments': sols_qties['shift_assignment']
-			'timesheets': sols_qties['timesheets']
-			'indent': 1
+			'shift_requests': sols_qties['shift_requests'],
+			'shift_assignments': sols_qties['shift_assignments'],
+			'timesheets': sols_qties['timesheets'],
+			'indent': 1,
 			})
 		for item, sol in itertools.zip_longest(items, sols):
 			if item:
