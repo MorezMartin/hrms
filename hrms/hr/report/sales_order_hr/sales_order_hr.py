@@ -128,6 +128,8 @@ def get_sales_orders(filters=None):
 			)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_group': ['in', wigs]}, ['item_code', 'qty', 'uom', 'description'])
+		sols = get_sales_order_links(so['name'])['sols']
+		sols_qties = get_sales_order_links(so['name'])['qties']
 		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
@@ -139,9 +141,11 @@ def get_sales_orders(filters=None):
 			'sales_order': so['name'],
 			'delivery_date': so['delivery_date'],
 			'qty_needed': qty_needed,
+			'shift_requests': sols_qties['shift_requests']
+			'shift_assignments': sols_qties['shift_assignment']
+			'timesheets': sols_qties['timesheets']
 			'indent': 1
 			})
-		sols = get_sales_order_links(so['name'])
 		for item, sol in itertools.zip_longest(items, sols):
 			if item:
 				r = {
@@ -163,9 +167,11 @@ def get_sales_orders(filters=None):
 def get_sales_order_links(sales_order=None):
 	sols = []
 	tss = []
+	qties = {}
 	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
 	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
 	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent','activity_type', 'from_time', 'to_time'])
+	srq_qty, sas_qty, ts_qty = 0, 0, 0
 	for tl in tls:
 		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])[0]
 		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time'], 'activity_type': tl['activity_type']})
@@ -180,6 +186,7 @@ def get_sales_order_links(sales_order=None):
 			activity_type = srq['activity_type']
 			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			srq_qty += 1
 		if sas:
 			sasn = sas['name']
 			emp = sas['employee']
@@ -188,6 +195,7 @@ def get_sales_order_links(sales_order=None):
 			activity_type = sas['activity_type']
 			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			sas_qty += 1
 		if ts:
 			tsn = ts['name']
 			emp = ts['employee']
@@ -195,6 +203,7 @@ def get_sales_order_links(sales_order=None):
 			from_time = ts['from_time']
 			to_time = ts['to_time']
 			activity_type = ts['activity_type']
+			ts_qty += 1
 		if (srqn, sasn, tsn) == None:
 			continue
 		else:
@@ -210,4 +219,5 @@ def get_sales_order_links(sales_order=None):
 				'to_time': to_time,
 				'indent': 2,
 				})
-	return sols
+			qties.update({'shift_requests': srq_qty, 'shift_assignments': sas_qty, 'timesheets': ts_qty})
+	return { 'sols': sols, 'qties': qties }
