@@ -7,9 +7,18 @@ from erpnext.setup.doctype.item_group import item_group
 
 
 def execute(filters=None):
+	columns = get_columns()
 	avs = get_avaibilities(filters)
 	sos = get_sales_orders(filters)
+	message = None
+	chart = get_chart(filters)
+	report_summary = get_summary(filters)
 	data = []
+	data += avs
+	data += sos
+	return columns, data, message, chart, report_summary
+
+def get_columns():
 	columns = [
 		{'fieldname' : 'name', 'label': 'Name', 'fieldtype': 'Data'},
 		{'fieldname' : 'sales_order', 'label': 'Sales Order', 'fieldtype': 'Link', 'options': 'Sales Order'},
@@ -29,9 +38,7 @@ def execute(filters=None):
 		{'fieldname' : 'from_time', 'label': 'From Time', 'fieldtype': 'Data'},
 		{'fieldname' : 'to_time', 'label': 'To Time', 'fieldtype': 'Data'},
 	]
-	data += avs
-	data += sos
-	return columns, data
+	return columns
 
 def get_avaibilities(filters=None):
 	shift_avs = frappe.db.get_all(
@@ -221,3 +228,37 @@ def get_sales_order_links(sales_order=None):
 				})
 			qties.update({'shift_requests': srq_qty, 'shift_assignments': sas_qty, 'timesheets': ts_qty})
 	return { 'sols': sols, 'qties': qties }
+
+def get_summary(filters=None):
+	sos = frappe.db.get_all(
+			'Sales Order',
+			{
+				'delivery_date': ['between', [filters.start, filters.end]],
+				'docstatus': ['<', 2],
+				},
+			['name']
+			)
+    lsos = len(sos)
+	srqs, sass, tls = 0, 0, 0
+	for so in sos:
+		srqs += frappe.db.count('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+		sass += frappe.db.count('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+		tls += frappe.db.count('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']})
+	res = [
+        {'label': 'Sales Orders', 'value': lsos, 'indicator': 'Blue'}
+        {'label': 'Shift Requests', 'value': get_indicator(srqs, lsos), 'indicator': 'Blue'}
+        {'label': 'Shift Assignments', 'value': get_indicator(sass, lsos), 'indicator': 'Blue'}
+        {'label': 'Timesheet Log', 'value': get_indicator(tls, lsos), 'indicator': 'Blue'}
+        ]
+	return res
+
+def get_chart(filters=None)
+	pass
+
+def get_indicator(value, ref):
+    if value >= ref:
+        color = 'Green'
+    elif value >= 0,75 * ref:
+        color = 'Orange'
+    else:
+        color = 'Red'
