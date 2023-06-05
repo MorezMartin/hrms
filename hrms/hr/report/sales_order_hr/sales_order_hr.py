@@ -178,7 +178,7 @@ def get_sales_order_links(sales_order=None):
 	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
 	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent','activity_type', 'from_time', 'to_time'])
 	srq_qty, sas_qty, ts_qty = 0, 0, 0
-	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0})
+	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0}
 	for tl in tls:
 		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])[0]
 		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time'], 'activity_type': tl['activity_type']})
@@ -239,16 +239,20 @@ def get_summary(filters=None):
 			['name']
 			)
 	lsos = len(sos)
-	srqs, sass, tls = 0, 0, 0
+	srqs, sass, tls, items = 0, 0, 0, 0
+	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
+	wigs = item_group.get_child_item_groups(wigp)
 	for so in sos:
+		items += frappe.db.count('Sales Order Item', {'parent': so['name'], 'item_group': ['in', wigs]})
 		srqs += frappe.db.count('Shift Request', {'sales_order': so['name'], 'docstatus': ['<', '2']})
 		sass += frappe.db.count('Shift Assignment', {'sales_order': so['name'], 'docstatus': ['<', '2']})
 		tls += frappe.db.count('Timesheet Detail', {'sales_order': so['name'], 'docstatus': ['<', '2']})
 	res = [
 		{'label': 'Sales Orders', 'value': lsos, 'indicator': 'Blue'},
-		{'label': 'Shift Requests', 'value': get_indicator(srqs, lsos), 'indicator': 'Blue'},
-		{'label': 'Shift Assignments', 'value': get_indicator(sass, lsos), 'indicator': 'Blue'},
-		{'label': 'Timesheet Log', 'value': get_indicator(tls, lsos), 'indicator': 'Blue'},
+		{'label': 'Human Needs', 'value': items, 'indicator': 'Blue'},
+		{'label': 'Shift Requests', 'value': srqs, 'indicator': get_indicator(srqs, lsos)},
+		{'label': 'Shift Assignments', 'value': sass, 'indicator': get_indicator(sass, lsos)},
+		{'label': 'Timesheet Log', 'value': tls, 'indicator': get_indicator(tls, lsos)},
 		]
 	return res
 
