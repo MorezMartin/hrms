@@ -252,7 +252,7 @@ def get_summary(filters=None):
 		tls += frappe.db.count('Timesheet Detail', {'sales_order': so['name'], 'docstatus': ['<', '2']})
 	res = [
 		{'label': 'Sales Orders', 'value': lsos, 'indicator': 'Blue'},
-		{'label': 'Human Needs', 'value': items, 'indicator': 'Blue'},
+		{'label': 'Human Needs', 'value': human_needs, 'indicator': 'Blue'},
 		{'label': 'Shift Requests', 'value': srqs, 'indicator': get_indicator(srqs, lsos)},
 		{'label': 'Shift Assignments', 'value': sass, 'indicator': get_indicator(sass, lsos)},
 		{'label': 'Timesheet Log', 'value': tls, 'indicator': get_indicator(tls, lsos)},
