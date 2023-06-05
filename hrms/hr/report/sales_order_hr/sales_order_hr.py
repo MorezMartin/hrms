@@ -242,8 +242,11 @@ def get_summary(filters=None):
 	srqs, sass, tls, items = 0, 0, 0, 0
 	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
 	wigs = item_group.get_child_item_groups(wigp)
+	items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_group': ['in', wigs], ['qty']})
+	human_needs = 0
+	for item in items:
+		human_needs += item['qty']
 	for so in sos:
-		items += frappe.db.count('Sales Order Item', {'parent': so['name'], 'item_group': ['in', wigs]})
 		srqs += frappe.db.count('Shift Request', {'sales_order': so['name'], 'docstatus': ['<', '2']})
 		sass += frappe.db.count('Shift Assignment', {'sales_order': so['name'], 'docstatus': ['<', '2']})
 		tls += frappe.db.count('Timesheet Detail', {'sales_order': so['name'], 'docstatus': ['<', '2']})
