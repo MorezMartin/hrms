@@ -266,3 +266,4 @@ def get_indicator(value, ref):
 		color = 'Orange'
 	else:
 		color = 'Red'
+	return color
