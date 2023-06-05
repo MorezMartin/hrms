@@ -226,7 +226,7 @@ def get_sales_order_links(sales_order=None):
 				'to_time': to_time,
 				'indent': 2,
 				})
-			qties.update({'shift_requests': srq_qty, 'shift_assignments': sas_qty, 'timesheets': ts_qty})
+		qties.update({'shift_requests': srq_qty, 'shift_assignments': sas_qty, 'timesheets': ts_qty})
 	return { 'sols': sols, 'qties': qties }
 
 def get_summary(filters=None):
