@@ -10,14 +10,14 @@ frappe.query_reports["Sales Order HR"] = {
 			fieldname: 'start',
 			label: __('Start'),
 			fieldtype: 'Date',
-			options: 'Company',
 			reqd: '1',
 		},
 		{
 			fieldname: 'end',
 			label: __('End'),
 			fieldtype: 'Date',
-			options: 'Company',
+			reqd: '1',
+		},
 		},
 		{
 			fieldname: 'items',
