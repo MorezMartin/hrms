@@ -273,5 +273,5 @@ def get_indicator(value, ref):
 def get_working_items():
 	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
 	wigs = item_group.get_child_item_groups(wigp)
-	items = frappe.db.get_all('Item', {'item_group': ['in', wigs]})
+	items = [item['name'] for item in frappe.db.get_all('Item', {'item_group': ['in', wigs]})]
 	return items
