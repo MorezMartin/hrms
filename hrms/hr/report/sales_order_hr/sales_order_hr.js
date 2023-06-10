@@ -18,7 +18,6 @@ frappe.query_reports["Sales Order HR"] = {
 			fieldtype: 'Date',
 			reqd: '1',
 		},
-		},
 		{
 			fieldname: 'items',
 			label: __('Items'),

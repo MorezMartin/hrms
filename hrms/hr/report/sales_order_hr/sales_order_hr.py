@@ -133,12 +133,8 @@ def get_sales_orders(filters=None):
 				},
 			['name', 'delivery_date', 'customer', 'shipping_address_name']
 			)
-	if filters.get("items"):
-		filters.items = frappe.parse_json(filters.get("items"))
-	else:
-		filters.items = []
 	for so in sos:
-		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.items]}, ['item_code', 'qty', 'uom', 'description'])
+		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['item_code', 'qty', 'uom', 'description'])
 		sols = get_sales_order_links(so['name'])['sols']
 		sols_qties = get_sales_order_links(so['name'])['qties']
 		qty_needed = 0
