@@ -23,7 +23,7 @@ frappe.query_reports["Sales Order HR"] = {
 			value = "<span style='color:blue!important;font-weight:bold'>" + value + "</span>";
 	}
 	if (columnDef.id == "Shift Requests" && dataContext["Quantity Needed"] > 0 && dataContext["Shift Requests"] < dataContext["Quantity Needed"] ) {
-		if (dataContext["Shift Requests"] >= 0.75 $ dataContext["Quantity Needed"] ) {
+		if (dataContext["Shift Requests"] >= 0.75 && dataContext["Quantity Needed"] ) {
 				value = "<span style='color:orange!important;font-weight:bold'>" + value + "</span>";
 		}
 		else {
