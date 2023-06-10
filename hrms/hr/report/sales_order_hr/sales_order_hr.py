@@ -240,11 +240,9 @@ def get_summary(filters=None):
 			)
 	lsos = len(sos)
 	srqs, sass, tls, items = 0, 0, 0, 0
-	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
-	wigs = item_group.get_child_item_groups(wigp)
 	human_needs = 0
 	for so in sos:
-		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_group': ['in', wigs]}, ['qty'])
+		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'name': ['in', filters.items]}, ['qty'])
 		for item in items:
 			human_needs += item['qty']
 		srqs += frappe.db.count('Shift Request', {'sales_order': so['name'], 'docstatus': ['<', '2']})
@@ -270,3 +268,10 @@ def get_indicator(value, ref):
 	else:
 		color = 'Red'
 	return color
+
+@frappe.whitelist()
+def get_working_items():
+	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
+	wigs = item_group.get_child_item_groups(wigp)
+	items = frappe.db.get_all('Item', {'item_group': ['in', wigs]})
+	return items
