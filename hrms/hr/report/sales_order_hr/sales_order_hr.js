@@ -17,22 +17,30 @@ frappe.query_reports["Sales Order HR"] = {
 			options: 'Company',
 		}
 	],
- 	"formatter": function(row, cell, value, columnDef, dataContext, default_formatter) {
-		value = default_formatter(row, cell, value, columnDef, dataContext);
-	if (columnDef.id == "Quantity Needed" && dataContext["Quantity Needed"] > 0) {
-			value = "<span style='color:blue!important;font-weight:bold'>" + value + "</span>";
-	}
-	if (columnDef.id == "Shift Requests" && dataContext["Quantity Needed"] > 0 && dataContext["Shift Requests"] < dataContext["Quantity Needed"] ) {
-		if (dataContext["Shift Requests"] >= 0.75 && dataContext["Quantity Needed"] ) {
-				value = "<span style='color:orange!important;font-weight:bold'>" + value + "</span>";
+	formatter (value, row, column, data, default_formatter) {
+		value = default_formatter(value, row, column, data);
+
+		if (column.id == 'qty_needed' && data['qty_needed'] > 0) {
+				value = "<div style='font-weight:bold'>" + value + "</div>";
 		}
-		else {
-				value = "<span style='color:red!important;font-weight:bold'>" + value + "</span>";
+
+		let ha = ['shift_requests', 'shift_assignments', 'timesheets'];
+		ha.forEach(format);
+		function format(h) {
+			if (column.id == h && data[h] > 0 && data['qty_needed'] > 0) {
+				if (data[h] < data['qty_needed']) {
+					if (data[h] >= 0.75 * data["qty_needed"] ) {
+							value = "<div style='background-color:orange!important;font-weight:bold;width:100%'>" + value + "</div>";
+					}
+					else {
+							value = "<div style='background-color:red!important;font-weight:bold;width:100%'>" + value + "</div>";
+					}
+				}
+				else {
+					value = "<div style='background-color:green!important;font-weight:bold;width:100%'>" + value + "</div>";
+				}
+			}
 		}
-	}
-	else {
-				value = "<span style='color:green!important;font-weight:bold'>" + value + "</span>";
-	}
 	return value;
- }
+	}
 };
