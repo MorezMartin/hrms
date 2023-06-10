@@ -17,7 +17,7 @@ frappe.query_reports["Sales Order HR"] = {
 			options: 'Company',
 		}
 	],
- 	"formatter":function (row, cell, value, columnDef, dataContext, default_formatter) {
+ 	"formatter": function(row, cell, value, columnDef, dataContext, default_formatter) {
 		value = default_formatter(row, cell, value, columnDef, dataContext);
 	if (columnDef.id == "Quantity Needed" && dataContext["Quantity Needed"] > 0) {
 			value = "<span style='color:blue!important;font-weight:bold'>" + value + "</span>";
