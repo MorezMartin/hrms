@@ -241,7 +241,7 @@ def get_summary(filters=None):
 	lsos = len(sos)
 	srqs, sass, tls, items = 0, 0, 0, 0
 	human_needs = 0
-	for elt in filters.items:
+	for elt in filters.get('items'):
 		frappe.msgprint(elt)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name']}, ['qty'])
