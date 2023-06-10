@@ -3,6 +3,7 @@
 /* eslint-disable */
 
 
+let n = [];
 frappe.query_reports["Sales Order HR"] = {
 	"filters": [
 		{
@@ -24,7 +25,6 @@ frappe.query_reports["Sales Order HR"] = {
 			fieldtype: 'MultiSelectList',
 			options: 'Item',
 			get_data: function(txt) {
-				let n = []
 				frappe.call({
 					type: 'GET',
 					method: 'hrms.hr.report.sales_order_hr.sales_order_hr.get_working_items',
