@@ -27,7 +27,7 @@ frappe.query_reports["Sales Order HR"] = {
 			fieldtype: 'MultiSelectList',
 			options: 'Item',
 			get_data: function(txt) {
-				return frappe.db.get_link_options('Item', txt, {name: n})
+				return frappe.db.get_link_options('Item', txt, {name: ['in', n]})
 			}
 		},
 	],

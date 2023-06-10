@@ -242,7 +242,7 @@ def get_summary(filters=None):
 	srqs, sass, tls, items = 0, 0, 0, 0
 	human_needs = 0
 	for so in sos:
-		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'name': ['in', filters.items]}, ['qty'])
+		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.items]}, ['qty'])
 		for item in items:
 			human_needs += item['qty']
 		srqs += frappe.db.count('Shift Request', {'sales_order': so['name'], 'docstatus': ['<', '2']})
