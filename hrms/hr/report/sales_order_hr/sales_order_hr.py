@@ -135,6 +135,8 @@ def get_sales_orders(filters=None):
 			)
 	if filters.get("items"):
 		filters.items = frappe.parse_json(filters.get("items"))
+	else:
+		filters.items = []
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.items]}, ['item_code', 'qty', 'uom', 'description'])
 		sols = get_sales_order_links(so['name'])['sols']
@@ -245,6 +247,8 @@ def get_summary(filters=None):
 	human_needs = 0
 	if filters.get("items"):
 		filters.items = frappe.parse_json(filters.get("items"))
+	else:
+		filters.items = []
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.items]}, ['qty'])
 		for item in items:
