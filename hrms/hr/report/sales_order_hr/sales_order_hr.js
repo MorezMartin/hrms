@@ -9,13 +9,22 @@ frappe.query_reports["Sales Order HR"] = {
 			label: __('Start'),
 			fieldtype: 'Date',
 			options: 'Company',
+			reqd: '1',
 		},
 		{
 			fieldname: 'end',
 			label: __('End'),
 			fieldtype: 'Date',
 			options: 'Company',
-		}
+		},
+		{
+			fieldname: 'item',
+			label: __('Item'),
+			fieldtype: 'MultiSelectLit',
+			options: 'Item',
+			get_data: function(txt) {
+			}
+		},
 	],
 	formatter (value, row, column, data, default_formatter) {
 		value = default_formatter(value, row, column, data);
