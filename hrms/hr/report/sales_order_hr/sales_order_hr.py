@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 import itertools
 from erpnext.setup.doctype.item_group import item_group
 
@@ -20,23 +21,23 @@ def execute(filters=None):
 
 def get_columns():
 	columns = [
-		{'fieldname' : 'name', 'label': 'Name', 'fieldtype': 'Data'},
-		{'fieldname' : 'sales_order', 'label': 'Sales Order', 'fieldtype': 'Link', 'options': 'Sales Order'},
-		{'fieldname' : 'delivery_date', 'label': 'Delivery Date', 'fieldtype': 'Datetime'},
-		{'fieldname' : 'human_needs', 'label': 'Human Needs', 'fieldtype': 'Data'},
-		{'fieldname' : 'qty_needed', 'label': 'Quantity Needed', 'fieldtype': 'Data'},
-		{'fieldname' : 'uom', 'label': 'UoM', 'fieldtype': 'Data'},
-		{'fieldname' : 'description', 'label': 'Description', 'fieldtype': 'Text Editor'},
-		{'fieldname' : 'employee', 'label': 'Employee', 'fieldtype': 'Link', 'options': 'Employee'},
-		{'fieldname' : 'employee_name', 'label': 'Employee Name', 'fieldtype': 'Data'},
-		{'fieldname' : 'shift_avaibilities', 'label': 'Shift Avaibilities', 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
-		{'fieldname' : 'shift_requests', 'label': 'Shift Requests', 'fieldtype': 'Link', 'options': 'Shift Request'},
-		{'fieldname' : 'shift_assignments', 'label': 'Shift Assignments', 'fieldtype': 'Link', 'options': 'Shift Assignment'},
-		{'fieldname' : 'shift_type', 'label': 'Shift Type', 'fieldtype': 'Data'},
-		{'fieldname' : 'activity_type', 'label': 'Activity Type', 'fieldtype': 'Data'},
-		{'fieldname' : 'timesheets', 'label': 'Timesheets', 'fieldtype': 'Link', 'options': 'Timesheet'},
-		{'fieldname' : 'from_time', 'label': 'From Time', 'fieldtype': 'Data'},
-		{'fieldname' : 'to_time', 'label': 'To Time', 'fieldtype': 'Data'},
+		{'fieldname' : 'name', 'label': _('Name'), 'fieldtype': 'Data'},
+		{'fieldname' : 'sales_order', 'label': _('Sales Order'), 'fieldtype': 'Link', 'options': 'Sales Order'},
+		{'fieldname' : 'delivery_date', 'label': _('Delivery Date'), 'fieldtype': 'Datetime'},
+		{'fieldname' : 'human_needs', 'label': _('Human Needs'), 'fieldtype': 'Data'},
+		{'fieldname' : 'qty_needed', 'label': _('Quantity Needed'), 'fieldtype': 'Data'},
+		{'fieldname' : 'uom', 'label': _('UoM'), 'fieldtype': 'Data'},
+		{'fieldname' : 'description', 'label': _('Description'), 'fieldtype': 'Text Editor'},
+		{'fieldname' : 'employee', 'label': _('Employee'), 'fieldtype': 'Link', 'options': 'Employee'},
+		{'fieldname' : 'employee_name', 'label': _('Employee Name'), 'fieldtype': 'Data'},
+		{'fieldname' : 'shift_avaibilities', 'label': _('Shift Avaibilities'), 'fieldtype': 'Link', 'options': 'Shift Avaibility'},
+		{'fieldname' : 'shift_requests', 'label': _('Shift Requests'), 'fieldtype': 'Link', 'options': 'Shift Request'},
+		{'fieldname' : 'shift_assignments', 'label': _('Shift Assignments'), 'fieldtype': 'Link', 'options': 'Shift Assignment'},
+		{'fieldname' : 'shift_type', 'label': _('Shift Type'), 'fieldtype': 'Data'},
+		{'fieldname' : 'activity_type', 'label': _('Activity Type'), 'fieldtype': 'Data'},
+		{'fieldname' : 'timesheets', 'label': _('Timesheets'), 'fieldtype': 'Link', 'options': 'Timesheet'},
+		{'fieldname' : 'from_time', 'label': _('From Time'), 'fieldtype': 'Data'},
+		{'fieldname' : 'to_time', 'label': _('To Time'), 'fieldtype': 'Data'},
 	]
 	return columns
 
@@ -83,7 +84,7 @@ def get_avaibilities(filters=None):
 	employees += [aas['employee'] for aas in shift_ass]
 	employees += [ts['employee'] for ts in tss]
 	employees = set(employees)
-	emps = [{'name': 'Employees', 'indent': 0}]
+	emps = [{'name': _('Employees'), 'indent': 0}]
 	for emp in employees:
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})
@@ -122,7 +123,7 @@ def get_avaibilities(filters=None):
 	return emps
 
 def get_sales_orders(filters=None):
-	res = [{'name': 'Sales Order', 'indent': 0}]
+	res = [{'name': _('Sales Order'), 'indent': 0}]
 	wigp = frappe.db.get_single_value('Selling Settings', 'workforce_item_group')
 	wigs = item_group.get_child_item_groups(wigp)
 	sos = frappe.db.get_all(

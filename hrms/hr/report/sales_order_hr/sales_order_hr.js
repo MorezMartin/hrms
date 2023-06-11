@@ -4,7 +4,6 @@
 
 
 let n = [];
-let a = []
 frappe.query_reports["Sales Order HR"] = {
 	"filters": [
 		{
