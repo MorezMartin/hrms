@@ -4,6 +4,7 @@
 
 
 let n = [];
+let a = []
 frappe.query_reports["Sales Order HR"] = {
 	"filters": [
 		{
@@ -31,6 +32,15 @@ frappe.query_reports["Sales Order HR"] = {
 					freeze: true,
 				});
 				return frappe.db.get_link_options('Item', txt, {name: ['in', n]})
+			}
+		},
+		{
+			fieldname: 'activity_type',
+			label: __('Activity Type'),
+			fieldtype: 'MultiSelectList',
+			options: 'Activity Type',
+			get_data: function(txt) {
+				return frappe.db.get_link_options('Activity Type', txt)
 			}
 		},
 	],
