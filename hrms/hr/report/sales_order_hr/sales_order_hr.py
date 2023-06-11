@@ -134,7 +134,10 @@ def get_sales_orders(filters=None):
 			['name', 'delivery_date', 'customer', 'shipping_address_name']
 			)
 	for so in sos:
-		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.get('items')]}, ['item_code', 'qty', 'uom', 'description'])
+		if filters.get('items'):
+			items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.get('items')]}, ['item_code', 'qty', 'uom', 'description'])
+		else:
+			items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', get_working_items()]}, ['item_code', 'qty', 'uom', 'description'])
 		sols_dict = get_sales_order_links(so['name'], filters)
 		sols = sols_dict['sols']
 		sols_qties = sols_dict['qties']
@@ -175,9 +178,14 @@ def get_sales_orders(filters=None):
 def get_sales_order_links(sales_order=None, filters=None):
 	sols = []
 	tss = []
-	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
-	sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
-	tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['parent', 'activity_type', 'from_time', 'to_time'])
+	if filters.get('activity_type'):
+		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
+		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
+		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['parent', 'activity_type', 'from_time', 'to_time'])
+	else:
+		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
+		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
+		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent', 'activity_type', 'from_time', 'to_time'])
 	srq_qty, sas_qty, ts_qty = 0, 0, 0
 	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0}
 	for tl in tls:
