@@ -135,8 +135,9 @@ def get_sales_orders(filters=None):
 			)
 	for so in sos:
 		items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.get('items')]}, ['item_code', 'qty', 'uom', 'description'])
-		sols = get_sales_order_links(so['name'])['sols']
-		sols_qties = get_sales_order_links(so['name'])['qties']
+		sols_dict = get_sales_order_links(so['name'], filters)
+		sols = sols_dict['sols']
+		sols_qties = sols_dict['qties']
 		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
@@ -171,7 +172,7 @@ def get_sales_orders(filters=None):
 			res.append(r)
 	return res
 
-def get_sales_order_links(sales_order=None):
+def get_sales_order_links(sales_order=None, filters=None):
 	sols = []
 	tss = []
 	srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
