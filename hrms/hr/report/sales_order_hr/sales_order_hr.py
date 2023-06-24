@@ -10,9 +10,9 @@ from erpnext.setup.doctype.item_group import item_group
 def execute(filters=None):
 	columns = get_columns()
 	avs = get_avaibilities(filters)
-	sos = get_sales_orders(filters)
+	sos = get_sales_orders(filters)['data']
 	message = None
-	chart = get_chart(filters)
+	chart = get_chart(filters, sos['sos'], sos['needed_qties'], sos['sols_qties_list'])
 	report_summary = get_summary(filters)
 	data = []
 	data += avs
@@ -134,6 +134,8 @@ def get_sales_orders(filters=None):
 				},
 			['name', 'delivery_date', 'customer', 'shipping_address_name']
 			)
+	needed_qties = []
+	sols_qties_list = []
 	for so in sos:
 		if filters.get('items'):
 			items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.get('items')]}, ['item_code', 'qty', 'uom', 'description'])
@@ -145,6 +147,8 @@ def get_sales_orders(filters=None):
 		qty_needed = 0
 		for item in items:
 			qty_needed += item['qty']
+		needed_qties.append(qty_needed)
+		sols_qties_list.append(sols_qties)
 		name = so['customer']
 		if so['shipping_address_name']:
 			name += ' ' + so['shipping_address_name']
@@ -174,7 +178,7 @@ def get_sales_orders(filters=None):
 			else:
 				continue
 			res.append(r)
-	return res
+	return {'data': res, 'sos': sos, 'needed_qties': needed_qties, 'sols_qties_list': sols_qties_list}
 
 def get_sales_order_links(sales_order=None, filters=None):
 	sols = []
@@ -201,8 +205,8 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = srq['shift_type']
 			activity_type = srq['activity_type']
-			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			from_time = frappe.db.get_value('Shift Type', shift_type, 'from_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = frappe.db.get_value('Shift Type', shift_type, 'to_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			srq_qty += 1
 		if sas:
 			sasn = sas['name']
@@ -210,8 +214,8 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = sas['shift_type']
 			activity_type = sas['activity_type']
-			from_time = frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			from_time = frappe.db.get_value('Shift Type', shift_type, 'from_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = frappe.db.get_value('Shift Type', shift_type, 'to_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			sas_qty += 1
 		if ts:
 			tsn = ts['name']
@@ -270,8 +274,21 @@ def get_summary(filters=None):
 		]
 	return res
 
-def get_chart(filters=None):
-	pass
+def get_chart(filters=None, sos, needed_qties, sols_qties_list):
+	so_labels = [so.name + ' ' so.delivery_date + '\n' + so.customer + ' ' + so.shipping_address_name for so in sos]
+	chart = {
+		'data': {
+			'labels': so_labels,
+			'datasets': [
+				{'name': _('Qty Needed', 'values': needed_qties},
+				{'name': _('Shift Requests', 'values': sols_qties_list['shift_requests']},
+				{'name': _('Shift Assignments', 'values': sols_qties_list['shift_assignments']},
+				{'name': _('Timesheets', 'values': sols_qties_list['timesheets']},
+			]
+		}
+		'type': bar
+	}
+	return chart
 
 def get_indicator(value, ref):
 	if value >= ref:
