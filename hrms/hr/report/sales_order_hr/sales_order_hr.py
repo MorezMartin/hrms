@@ -188,8 +188,8 @@ def get_sales_order_links(sales_order=None, filters=None):
 		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
 		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['parent', 'activity_type', 'from_time', 'to_time'])
 	else:
-		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
-		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type'])
+		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
+		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
 		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent', 'activity_type', 'from_time', 'to_time'])
 	srq_qty, sas_qty, ts_qty = 0, 0, 0
 	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0}
@@ -205,8 +205,8 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = srq['shift_type']
 			activity_type = srq['activity_type']
-			from_time = frappe.db.get_value('Shift Type', shift_type, 'from_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = frappe.db.get_value('Shift Type', shift_type, 'to_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			from_time = srq['from_date'] + ' ' + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = srq['to_date'] + ' ' + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			srq_qty += 1
 		if sas:
 			sasn = sas['name']
@@ -214,8 +214,8 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = sas['shift_type']
 			activity_type = sas['activity_type']
-			from_time = frappe.db.get_value('Shift Type', shift_type, 'from_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = frappe.db.get_value('Shift Type', shift_type, 'to_date') + ' ' + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			from_time = sas['from_date'] + ' ' + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = sas['to_date'] + ' ' + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			sas_qty += 1
 		if ts:
 			tsn = ts['name']
@@ -288,7 +288,7 @@ def get_chart(sos, needed_qties, sols_qties_list, filters=None):
 				{'name': _('Shift Assignments'), 'values': sols_qties_list['shift_assignments']},
 				{'name': _('Timesheets'), 'values': sols_qties_list['timesheets']},
 			]
-		}
+		},
 		'type': bar
 	}
 	return chart
