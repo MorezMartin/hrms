@@ -12,7 +12,7 @@ def execute(filters=None):
 	avs = get_avaibilities(filters)
 	sos = get_sales_orders(filters)['data']
 	message = None
-	chart = get_chart(filters, sos['sos'], sos['needed_qties'], sos['sols_qties_list'])
+	chart = get_chart(sos['sos'], sos['needed_qties'], sos['sols_qties_list'], filters)
 	report_summary = get_summary(filters)
 	data = []
 	data += avs
@@ -274,16 +274,20 @@ def get_summary(filters=None):
 		]
 	return res
 
-def get_chart(filters=None, sos, needed_qties, sols_qties_list):
-	so_labels = [so.name + ' ' so.delivery_date + '\n' + so.customer + ' ' + so.shipping_address_name for so in sos]
+def get_chart(sos, needed_qties, sols_qties_list, filters=None):
+	so_labels = []
+	for so in sos:
+		desc = so.name + ' ' so.delivery_date + '\n' + so.customer + ' ' + so.shipping_address_name
+		so_labels.append(desc)
+	so_labels = [(so.name + ' ' so.delivery_date + '\n' + so.customer + ' ' + so.shipping_address_name) for so in sos]
 	chart = {
 		'data': {
 			'labels': so_labels,
 			'datasets': [
-				{'name': _('Qty Needed', 'values': needed_qties},
-				{'name': _('Shift Requests', 'values': sols_qties_list['shift_requests']},
-				{'name': _('Shift Assignments', 'values': sols_qties_list['shift_assignments']},
-				{'name': _('Timesheets', 'values': sols_qties_list['timesheets']},
+				{'name': _('Qty Needed'), 'values': needed_qties},
+				{'name': _('Shift Requests'), 'values': sols_qties_list['shift_requests']},
+				{'name': _('Shift Assignments'), 'values': sols_qties_list['shift_assignments']},
+				{'name': _('Timesheets'), 'values': sols_qties_list['timesheets']},
 			]
 		}
 		'type': bar
