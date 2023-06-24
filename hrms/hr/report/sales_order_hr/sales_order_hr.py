@@ -214,8 +214,8 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = sas['shift_type']
 			activity_type = sas['activity_type']
-			from_time = sas['from_date'] + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = sas['to_date'] + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			from_time = sas['start_date'] + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = sas['end_date'] + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			sas_qty += 1
 		if ts:
 			tsn = ts['name']
