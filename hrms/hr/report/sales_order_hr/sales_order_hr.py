@@ -10,13 +10,13 @@ from erpnext.setup.doctype.item_group import item_group
 def execute(filters=None):
 	columns = get_columns()
 	avs = get_avaibilities(filters)
-	sos = get_sales_orders(filters)['data']
+	sos = get_sales_orders(filters)
 	message = None
 	chart = get_chart(sos['sos'], sos['needed_qties'], sos['sols_qties_list'], filters)
 	report_summary = get_summary(filters)
 	data = []
 	data += avs
-	data += sos
+	data += sos['data']
 	return columns, data, message, chart, report_summary
 
 def get_columns():
