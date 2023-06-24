@@ -189,7 +189,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['parent', 'activity_type', 'from_time', 'to_time'])
 	else:
 		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
-		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
+		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'])
 		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent', 'activity_type', 'from_time', 'to_time'])
 	srq_qty, sas_qty, ts_qty = 0, 0, 0
 	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0}
