@@ -292,7 +292,7 @@ def get_chart(sos, needed_qties, sols_qties_list, filters=None):
 				{'name': _('Timesheets'), 'values': tss},
 			]
 		},
-		'type': bar
+		'type': 'bar'
 	}
 	return chart
 
