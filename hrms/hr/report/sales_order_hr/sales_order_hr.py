@@ -3,6 +3,7 @@
 
 import frappe
 from frappe import _
+from datetime import date, datetime, timedelta
 import itertools
 from erpnext.setup.doctype.item_group import item_group
 
@@ -205,8 +206,10 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = srq['shift_type']
 			activity_type = srq['activity_type']
-			from_time = srq['from_date'] + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = srq['to_date'] + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			sd = srq['from_date']
+			ed = srq['to_date']
+			from_time = datetime(year=sd.year, month=sd.month, day=sd.day) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = datetime(year=ed.year, month=ed.month, day=ed.day) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			srq_qty += 1
 		if sas:
 			sasn = sas['name']
@@ -214,8 +217,10 @@ def get_sales_order_links(sales_order=None, filters=None):
 			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 			shift_type = sas['shift_type']
 			activity_type = sas['activity_type']
-			from_time = sas['start_date'] + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = sas['end_date'] + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			sd = sas['start_date']
+			ed = sas['end_date']
+			from_time = datetime(year=sd.year, month=sd.month, day=sd.day) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			to_time = datetime(year=ed.year, month=ed.month, day=ed.day) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			sas_qty += 1
 		if ts:
 			tsn = ts['name']
