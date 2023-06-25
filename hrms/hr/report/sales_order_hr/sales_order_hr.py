@@ -279,14 +279,17 @@ def get_chart(sos, needed_qties, sols_qties_list, filters=None):
 	for so in sos:
 		desc = so.name + ' ' + str(so.delivery_date) + '\n' + so.customer + ' ' + so.shipping_address_name
 		so_labels.append(desc)
+	srs = [qty['shift_requests'] for qty in sols_qties_list]
+	sas = [qty['shift_assignments'] for qty in sols_qties_list]
+	tss = [qty['timesheets'] for qty in sols_qties_list]
 	chart = {
 		'data': {
 			'labels': so_labels,
 			'datasets': [
 				{'name': _('Qty Needed'), 'values': needed_qties},
-				{'name': _('Shift Requests'), 'values': sols_qties_list['shift_requests']},
-				{'name': _('Shift Assignments'), 'values': sols_qties_list['shift_assignments']},
-				{'name': _('Timesheets'), 'values': sols_qties_list['timesheets']},
+				{'name': _('Shift Requests'), 'values': srs},
+				{'name': _('Shift Assignments'), 'values': sas},
+				{'name': _('Timesheets'), 'values': tss},
 			]
 		},
 		'type': bar
