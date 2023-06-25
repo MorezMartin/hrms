@@ -277,7 +277,7 @@ def get_summary(filters=None):
 def get_chart(sos, needed_qties, sols_qties_list, filters=None):
 	so_labels = []
 	for so in sos:
-		desc = so.name + ' ' + so.delivery_date + '\n' + so.customer + ' ' + so.shipping_address_name
+		desc = so.name + ' ' + str(so.delivery_date) + '\n' + so.customer + ' ' + so.shipping_address_name
 		so_labels.append(desc)
 	chart = {
 		'data': {
