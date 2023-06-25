@@ -39,6 +39,7 @@ class ShiftRequest(Document):
 			assignment_doc.employee = self.employee
 			assignment_doc.start_date = self.from_date
 			assignment_doc.sales_order = self.sales_order
+			assignment_doc.ignore_avaibility = self.ignore_avaibility
 			if self.to_date:
 				assignment_doc.end_date = self.to_date
 			assignment_doc.shift_request = self.name
