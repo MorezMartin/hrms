@@ -19,7 +19,8 @@
   "to_date",
   "sales_order",
   "activity_type",
-  "amended_from"
+  "amended_from",
+  "ignore_avaibility"
  ],
  "fields": [
   {
@@ -113,11 +114,17 @@
    "fieldtype": "Link",
    "label": "Activity Type",
    "options": "Activity Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_avaibility",
+   "fieldtype": "Check",
+   "label": "Ignore Avaibility"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2023-06-03 16:30:15.736252",
+ "modified": "2023-06-25 03:27:35.790940",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Shift Request",

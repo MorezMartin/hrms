@@ -19,7 +19,8 @@
   "shift_request",
   "activity_type",
   "department",
-  "amended_from"
+  "amended_from",
+  "ignore_avaibility"
  ],
  "fields": [
   {
@@ -112,11 +113,17 @@
    "fieldtype": "Link",
    "label": "Activity Type",
    "options": "Activity Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_avaibility",
+   "fieldtype": "Check",
+   "label": "Ignore Avaibility"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2023-06-03 16:30:31.163444",
+ "modified": "2023-06-25 03:27:22.307977",
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Shift Assignment",
