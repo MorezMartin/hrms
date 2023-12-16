@@ -92,6 +92,12 @@ hrms.PerformanceFeedback = class PerformanceFeedback {
 		const dialog = new frappe.ui.Dialog({
 			title: __("Add Feedback"),
 			fields: me.get_feedback_dialog_fields(criteria_data),
+<<<<<<< HEAD
+=======
+			size: "large",
+			minimizable: true,
+			primary_action_label: __("Submit"),
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 			primary_action: function() {
 				const data = dialog.get_values();
 
@@ -119,7 +125,10 @@ hrms.PerformanceFeedback = class PerformanceFeedback {
 					}
 				});
 			},
+<<<<<<< HEAD
 			primary_action_label: __("Submit")
+=======
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		});
 
 		dialog.show();

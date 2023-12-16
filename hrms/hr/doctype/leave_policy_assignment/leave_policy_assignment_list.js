@@ -1,7 +1,7 @@
 frappe.listview_settings['Leave Policy Assignment'] = {
 	onload: function (list_view) {
-		let me = this;
 		list_view.page.add_inner_button(__("Bulk Leave Policy Assignment"), function () {
+<<<<<<< HEAD
 			me.dialog = new frappe.ui.form.MultiSelectDialog({
 				doctype: "Employee",
 				target: cur_list,
@@ -101,17 +101,9 @@ frappe.listview_settings['Leave Policy Assignment'] = {
 					cur_dialog.hide();
 				}
 			});
+=======
+			frappe.set_route("Form", "Leave Control Panel")
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		});
 	},
-
-	set_effective_date: function () {
-		if (cur_dialog.fields_dict.assignment_based_on.value === "Leave Period" && cur_dialog.fields_dict.leave_period.value) {
-			frappe.model.with_doc("Leave Period", cur_dialog.fields_dict.leave_period.value, function () {
-				let from_date = frappe.model.get_value("Leave Period", cur_dialog.fields_dict.leave_period.value, "from_date");
-				let to_date = frappe.model.get_value("Leave Period", cur_dialog.fields_dict.leave_period.value, "to_date");
-				cur_dialog.set_value("effective_from", from_date);
-				cur_dialog.set_value("effective_to", to_date);
-			});
-		}
-	}
 };

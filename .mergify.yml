@@ -2,10 +2,19 @@ pull_request_rules:
   - name: Auto-close PRs on stable branch
     conditions:
       - and:
+<<<<<<< HEAD
+=======
+        - and:
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
           - author!=ruchamahabal
           - author!=saurabh6790
           - author!=frappe-pr-bot
           - author!=mergify[bot]
+<<<<<<< HEAD
+=======
+        - or:
+          - base=version-15
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
           - base=version-14
     actions:
       close:

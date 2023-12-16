@@ -136,7 +136,11 @@ frappe.ui.form.on("Employee Attendance Tool", {
 			{
 				name: "employee",
 				id: "employee",
+<<<<<<< HEAD
 				content: `${__("Employee")}`,
+=======
+				content: __("Employee"),
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 				editable: false,
 				sortable: false,
 				focusable: false,
@@ -147,7 +151,11 @@ frappe.ui.form.on("Employee Attendance Tool", {
 			{
 				name: "status",
 				id: "status",
+<<<<<<< HEAD
 				content: `${__("Status")}`,
+=======
+				content: __("Status"),
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 				editable: false,
 				sortable: false,
 				focusable: false,

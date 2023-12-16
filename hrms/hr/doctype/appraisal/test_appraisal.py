@@ -1,11 +1,15 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors and Contributors
 # See license.txt
 
-import unittest
-
 import frappe
 from frappe.tests.utils import FrappeTestCase
 
+<<<<<<< HEAD
+import frappe
+from frappe.tests.utils import FrappeTestCase
+
+=======
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 from erpnext.setup.doctype.designation.test_designation import create_designation
 from erpnext.setup.doctype.employee.test_employee import make_employee
 

@@ -4,7 +4,8 @@ app_publisher = "Frappe Technologies Pvt. Ltd."
 app_description = "Modern HR and Payroll Software"
 app_email = "contact@frappe.io"
 app_license = "GNU General Public License (v3)"
-required_apps = ["erpnext"]
+required_apps = ["frappe/erpnext"]
+source_link = "http://github.com/frappe/hrms"
 
 
 # Includes in <head>
@@ -42,7 +43,11 @@ doctype_js = {
 	"Timesheet": "public/js/erpnext/timesheet.js",
 	"Payment Entry": "public/js/erpnext/payment_entry.js",
 	"Journal Entry": "public/js/erpnext/journal_entry.js",
+<<<<<<< HEAD
 	"Delivery Trip": "public/js/erpnext/deliver_trip.js",
+=======
+	"Delivery Trip": "public/js/erpnext/delivery_trip.js",
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	"Bank Transaction": "public/js/erpnext/bank_transaction.js",
 }
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
@@ -60,6 +65,8 @@ doctype_js = {
 # 	"Role": "home_page"
 # }
 
+calendars = ["Leave Application"]
+
 # Generators
 # ----------
 
@@ -68,6 +75,7 @@ website_generators = ["Job Opening"]
 
 website_route_rules = [
 	{"from_route": "/jobs", "to_route": "Job Opening"},
+	{"from_route": "/hrms/<path:app_path>", "to_route": "hrms"},
 ]
 # Jinja
 # ----------
@@ -91,6 +99,22 @@ after_migrate = "hrms.setup.update_select_perm_after_install"
 
 before_uninstall = "hrms.uninstall.before_uninstall"
 # after_uninstall = "hrms.uninstall.after_uninstall"
+
+# Integration Setup
+# ------------------
+# To set up dependencies/integrations with other apps
+# Name of the app being installed is passed as an argument
+
+# before_app_install = "hrms.utils.before_app_install"
+after_app_install = "hrms.setup.after_app_install"
+
+# Integration Cleanup
+# -------------------
+# To clean up dependencies/integrations with other apps
+# Name of the app being uninstalled is passed as an argument
+
+before_app_uninstall = "hrms.setup.before_app_uninstall"
+# after_app_uninstall = "hrms.utils.after_app_uninstall"
 
 # Desk Notifications
 # ------------------
@@ -141,6 +165,10 @@ doc_events = {
 			"hrms.overrides.company.set_default_hr_accounts",
 		],
 	},
+	"Holiday List": {
+		"on_update": "hrms.utils.holiday_list.invalidate_cache",
+		"on_trash": "hrms.utils.holiday_list.invalidate_cache",
+	},
 	"Timesheet": {"validate": "hrms.hr.utils.validate_active_employee"},
 	"Payment Entry": {
 		"on_submit": "hrms.hr.doctype.expense_claim.expense_claim.update_payment_for_expense_claim",
@@ -164,6 +192,7 @@ doc_events = {
 	"Employee": {
 		"validate": "hrms.overrides.employee_master.validate_onboarding_process",
 		"on_update": "hrms.overrides.employee_master.update_approver_role",
+		"after_insert": "hrms.overrides.employee_master.update_job_applicant_and_offer",
 		"on_trash": "hrms.overrides.employee_master.update_employee_transfer",
 	},
 	"Project": {
@@ -218,7 +247,7 @@ bank_reconciliation_doctypes = ["Expense Claim"]
 # Testing
 # -------
 
-before_tests = "hrms.utils.before_tests"
+before_tests = "hrms.tests.test_utils.before_tests"
 
 # Overriding Methods
 # -----------------------------

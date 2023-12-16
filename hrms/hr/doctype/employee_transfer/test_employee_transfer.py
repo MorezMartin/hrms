@@ -1,16 +1,18 @@
 # Copyright (c) 2018, Frappe Technologies Pvt. Ltd. and Contributors
 # See license.txt
 
-import unittest
-
 import frappe
+<<<<<<< HEAD
 from frappe.tests.utils import change_settings
+=======
+from frappe.tests.utils import FrappeTestCase, change_settings
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 from frappe.utils import add_days, getdate
 
 from erpnext.setup.doctype.employee.test_employee import make_employee
 
 
-class TestEmployeeTransfer(unittest.TestCase):
+class TestEmployeeTransfer(FrappeTestCase):
 	def setUp(self):
 		create_company()
 

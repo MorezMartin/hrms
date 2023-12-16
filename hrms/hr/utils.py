@@ -41,6 +41,9 @@ def set_employee_name(doc):
 
 
 def update_employee_work_history(employee, details, date=None, cancel=False):
+	if not details:
+		return employee
+
 	if not employee.internal_work_history and not cancel:
 		employee.append(
 			"internal_work_history",
@@ -143,17 +146,25 @@ def update_to_date_in_work_history(employee, cancel):
 
 @frappe.whitelist()
 def get_employee_field_property(employee, fieldname):
-	if employee and fieldname:
-		field = frappe.get_meta("Employee").get_field(fieldname)
-		value = frappe.db.get_value("Employee", employee, fieldname)
-		options = field.options
-		if field.fieldtype == "Date":
-			value = formatdate(value)
-		elif field.fieldtype == "Datetime":
-			value = format_datetime(value)
-		return {"value": value, "datatype": field.fieldtype, "label": field.label, "options": options}
-	else:
-		return False
+	if not (employee and fieldname):
+		return
+
+	field = frappe.get_meta("Employee").get_field(fieldname)
+	if not field:
+		return
+
+	value = frappe.db.get_value("Employee", employee, fieldname)
+	if field.fieldtype == "Date":
+		value = formatdate(value)
+	elif field.fieldtype == "Datetime":
+		value = format_datetime(value)
+
+	return {
+		"value": value,
+		"datatype": field.fieldtype,
+		"label": field.label,
+		"options": field.options,
+	}
 
 
 def validate_dates(doc, from_date, to_date):
@@ -365,7 +376,14 @@ def update_previous_leave_allocation(allocation, annual_allocation, e_leave_type
 	annual_allocation = flt(annual_allocation, allocation.precision("total_leaves_allocated"))
 
 	earned_leaves = get_monthly_earned_leave(
+<<<<<<< HEAD
 		date_of_joining, annual_allocation, e_leave_type.earned_leave_frequency, e_leave_type.rounding
+=======
+		date_of_joining,
+		annual_allocation,
+		e_leave_type.earned_leave_frequency,
+		e_leave_type.rounding,
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	)
 
 	new_allocation = flt(allocation.total_leaves_allocated) + flt(earned_leaves)
@@ -404,12 +422,17 @@ def get_monthly_earned_leave(
 	rounding,
 	period_start_date=None,
 	period_end_date=None,
+<<<<<<< HEAD
+=======
+	pro_rated=True,
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 ):
 	earned_leaves = 0.0
 	divide_by_frequency = {"Yearly": 1, "Half-Yearly": 2, "Quarterly": 4, "Monthly": 12}
 	if annual_leaves:
 		earned_leaves = flt(annual_leaves) / divide_by_frequency[frequency]
 
+<<<<<<< HEAD
 		if not (period_start_date or period_end_date):
 			today_date = frappe.flags.current_date or getdate()
 			period_end_date = get_last_day(today_date)
@@ -418,6 +441,18 @@ def get_monthly_earned_leave(
 		earned_leaves = calculate_pro_rated_leaves(
 			earned_leaves, date_of_joining, period_start_date, period_end_date, is_earned_leave=True
 		)
+=======
+		if pro_rated:
+			if not (period_start_date or period_end_date):
+				today_date = frappe.flags.current_date or getdate()
+				period_end_date = get_last_day(today_date)
+				period_start_date = get_first_day(today_date)
+
+			earned_leaves = calculate_pro_rated_leaves(
+				earned_leaves, date_of_joining, period_start_date, period_end_date, is_earned_leave=True
+			)
+
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		earned_leaves = round_earned_leaves(earned_leaves, rounding)
 
 	return earned_leaves
@@ -626,6 +661,9 @@ def get_previous_claimed_amount(employee, payroll_period, non_pro_rata=False, co
 
 
 def share_doc_with_approver(doc, user):
+	if not user:
+		return
+
 	# if approver does not have permissions, share
 	if not frappe.has_permission(doc=doc, ptype="submit", user=user):
 		frappe.share.add_docshare(
@@ -693,7 +731,7 @@ def get_matching_queries(
 	company,
 	transaction,
 	document_types,
-	amount_condition,
+	exact_match,
 	account_from_to=None,
 	from_date=None,
 	to_date=None,
@@ -706,14 +744,14 @@ def get_matching_queries(
 	if transaction.withdrawal > 0:
 		if "expense_claim" in document_types:
 			ec_amount_matching = get_ec_matching_query(
-				bank_account, company, amount_condition, from_date, to_date
+				bank_account, company, exact_match, from_date, to_date
 			)
 			queries.extend([ec_amount_matching])
 
 	return queries
 
 
-def get_ec_matching_query(bank_account, company, amount_condition, from_date=None, to_date=None):
+def get_ec_matching_query(bank_account, company, exact_match, from_date=None, to_date=None):
 	# get matching Expense Claim query
 	mode_of_payments = [
 		x["parent"]
@@ -746,7 +784,7 @@ def get_ec_matching_query(bank_account, company, amount_condition, from_date=Non
 		FROM
 			`tabExpense Claim`
 		WHERE
-			total_sanctioned_amount {amount_condition} %(amount)s
+			total_sanctioned_amount {'= %(amount)s' if exact_match else '> 0.0'}
 			AND docstatus = 1
 			AND is_paid = 1
 			AND ifnull(clearance_date, '') = ""

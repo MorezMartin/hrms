@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
 	"branches": ["version-14"],
+=======
+	"branches": ["version-15"],
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	"plugins": [
 		"@semantic-release/commit-analyzer", {
 			"preset": "angular",
@@ -10,7 +14,11 @@
 		"@semantic-release/release-notes-generator",
 		[
 			"@semantic-release/exec", {
+<<<<<<< HEAD
 				"prepareCmd": 'sed -ir "s/[0-9]*\.[0-9]*\.[0-9]*/${nextRelease.version}/" hrms/__init__.py'
+=======
+				"prepareCmd": 'sed -ir -E "s/\"[0-9]+\.[0-9]+\.[0-9]+\"/\"${nextRelease.version}\"/" hrms/__init__.py'
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 			}
 		],
 		[

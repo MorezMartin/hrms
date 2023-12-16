@@ -13,12 +13,14 @@
   "column_break_9",
   "retirement_age",
   "reminders_section",
-  "send_birthday_reminders",
   "column_break_11",
   "send_work_anniversary_reminders",
-  "column_break_18",
+  "send_birthday_reminders",
   "send_holiday_reminders",
   "frequency",
+  "column_break_hyec",
+  "sender",
+  "sender_email",
   "leave_and_expense_claim_settings",
   "send_leave_notification",
   "leave_approval_notification_template",
@@ -71,10 +73,6 @@
    "fieldname": "expense_approver_mandatory_in_expense_claim",
    "fieldtype": "Check",
    "label": "Expense Approver Mandatory In Expense Claim"
-  },
-  {
-   "fieldname": "column_break_18",
-   "fieldtype": "Column Break"
   },
   {
    "default": "1",
@@ -254,17 +252,40 @@
    "fieldtype": "Column Break"
   },
   {
+<<<<<<< HEAD
    "default": "0",
    "fieldname": "check_shift_avaibility",
    "fieldtype": "Check",
    "label": "Check for Shift Avaibility"
+=======
+   "fieldname": "sender",
+   "fieldtype": "Link",
+   "label": "Sender",
+   "options": "Email Account"
+  },
+  {
+   "depends_on": "eval:doc.sender",
+   "fetch_from": "sender.email_id",
+   "fieldname": "sender_email",
+   "fieldtype": "Data",
+   "label": "Sender Email",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hyec",
+   "fieldtype": "Column Break"
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
+<<<<<<< HEAD
  "modified": "2023-05-06 22:57:50.588485",
+=======
+ "modified": "2023-11-01 11:06:31.329718",
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

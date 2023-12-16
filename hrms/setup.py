@@ -13,17 +13,23 @@ from hrms.overrides.company import delete_company_fixtures
 
 def after_install():
 	create_custom_fields(get_custom_fields())
+	create_salary_slip_loan_fields()
 	make_fixtures()
 	setup_notifications()
 	update_hr_defaults()
 	add_non_standard_user_types()
 	set_single_defaults()
 	update_erpnext_access()
+<<<<<<< HEAD
+=======
+	create_default_role_profiles()
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	run_post_install_patches()
 
 
 def before_uninstall():
 	delete_custom_fields(get_custom_fields())
+	delete_custom_fields(SALARY_SLIP_LOAN_FIELDS)
 	delete_company_fixtures()
 
 
@@ -290,36 +296,30 @@ def get_custom_fields():
 				"insert_after": "buying",
 			},
 		],
-		"Loan": [
-			{
-				"default": "0",
-				"depends_on": 'eval:doc.applicant_type=="Employee"',
-				"fieldname": "repay_from_salary",
-				"fieldtype": "Check",
-				"label": "Repay From Salary",
-				"insert_after": "status",
-			},
-		],
-		"Loan Repayment": [
-			{
-				"default": "0",
-				"fetch_from": "against_loan.repay_from_salary",
-				"fieldname": "repay_from_salary",
-				"fieldtype": "Check",
-				"label": "Repay From Salary",
-				"insert_after": "is_term_loan",
-			},
-			{
-				"depends_on": "eval:doc.repay_from_salary",
-				"fieldname": "payroll_payable_account",
-				"fieldtype": "Link",
-				"label": "Payroll Payable Account",
-				"mandatory_depends_on": "eval:doc.repay_from_salary",
-				"options": "Account",
-				"insert_after": "rate_of_interest",
-			},
-		],
 	}
+
+
+def create_salary_slip_loan_fields():
+	if "lending" in frappe.get_installed_apps():
+		create_custom_fields(SALARY_SLIP_LOAN_FIELDS)
+
+
+def after_app_install(app_name):
+	"""Set up loan integration with payroll"""
+	if app_name != "lending":
+		return
+
+	print("Updating payroll setup for loans")
+	create_custom_fields(SALARY_SLIP_LOAN_FIELDS)
+
+
+def before_app_uninstall(app_name):
+	"""Clean up loan integration with payroll"""
+	if app_name != "lending":
+		return
+
+	print("Updating payroll setup for loans")
+	delete_custom_fields(SALARY_SLIP_LOAN_FIELDS)
 
 
 def make_fixtures():
@@ -330,6 +330,13 @@ def make_fixtures():
 		{"doctype": "Expense Claim Type", "name": _("Medical"), "expense_type": _("Medical")},
 		{"doctype": "Expense Claim Type", "name": _("Others"), "expense_type": _("Others")},
 		{"doctype": "Expense Claim Type", "name": _("Travel"), "expense_type": _("Travel")},
+		# vehicle service item
+		{"doctype": "Vehicle Service Item", "service_item": "Brake Oil"},
+		{"doctype": "Vehicle Service Item", "service_item": "Brake Pad"},
+		{"doctype": "Vehicle Service Item", "service_item": "Clutch Plate"},
+		{"doctype": "Vehicle Service Item", "service_item": "Engine Oil"},
+		{"doctype": "Vehicle Service Item", "service_item": "Oil Change"},
+		{"doctype": "Vehicle Service Item", "service_item": "Wheels"},
 		# leave type
 		{
 			"doctype": "Leave Type",
@@ -499,7 +506,7 @@ def add_non_standard_user_types():
 
 	user_type_limit = {}
 	for user_type, data in user_types.items():
-		user_type_limit.setdefault(frappe.scrub(user_type), 20)
+		user_type_limit.setdefault(frappe.scrub(user_type), 30)
 
 	update_site_config("user_type_doctype_limit", user_type_limit)
 
@@ -518,11 +525,13 @@ def get_user_types_data():
 				# masters
 				"Holiday List": ["read"],
 				"Employee": ["read", "write"],
+				"Company": ["read"],
 				# payroll
 				"Salary Slip": ["read"],
 				"Employee Benefit Application": ["read", "write", "create", "delete"],
 				# expenses
 				"Expense Claim": ["read", "write", "create", "delete"],
+				"Expense Claim Type": ["read"],
 				"Employee Advance": ["read", "write", "create", "delete"],
 				# leave and attendance
 				"Leave Application": ["read", "write", "create", "delete"],
@@ -537,6 +546,7 @@ def get_user_types_data():
 				"Training Program": ["read"],
 				"Training Feedback": ["read", "write", "create", "delete", "submit", "cancel", "amend"],
 				# shifts
+				"Employee Checkin": ["read"],
 				"Shift Request": ["read", "write", "create", "delete", "submit", "cancel", "amend"],
 				# misc
 				"Employee Grievance": ["read", "write", "create", "delete"],
@@ -615,8 +625,6 @@ def set_single_defaults():
 			except frappe.ValidationError:
 				pass
 
-	frappe.db.set_default("date_format", "dd-mm-yyyy")
-
 
 def get_post_install_patches():
 	return (
@@ -672,7 +680,10 @@ def run_post_install_patches():
 		frappe.flags.in_patch = False
 
 
-def delete_custom_fields(custom_fields):
+def delete_custom_fields(custom_fields: dict):
+	"""
+	:param custom_fields: a dict like `{'Salary Slip': [{fieldname: 'loans', ...}]}`
+	"""
 	for doctype, fields in custom_fields.items():
 		frappe.db.delete(
 			"Custom Field",
@@ -683,3 +694,121 @@ def delete_custom_fields(custom_fields):
 		)
 
 		frappe.clear_cache(doctype=doctype)
+
+
+def create_default_role_profiles():
+	for role_profile_name, roles in DEFAULT_ROLE_PROFILES.items():
+		if frappe.db.exists("Role Profile", role_profile_name):
+			continue
+
+		role_profile = frappe.new_doc("Role Profile")
+		role_profile.role_profile = role_profile_name
+		for role in roles:
+			role_profile.append("roles", {"role": role})
+
+		role_profile.insert(ignore_permissions=True)
+
+
+DEFAULT_ROLE_PROFILES = {
+	"HR": [
+		"HR User",
+		"HR Manager",
+		"Leave Approver",
+		"Expense Approver",
+	],
+}
+
+SALARY_SLIP_LOAN_FIELDS = {
+	"Salary Slip": [
+		{
+			"fieldname": "loan_repayment_sb_1",
+			"fieldtype": "Section Break",
+			"label": "Loan Repayment",
+			"depends_on": "total_loan_repayment",
+			"insert_after": "base_total_deduction",
+		},
+		{
+			"fieldname": "loans",
+			"fieldtype": "Table",
+			"label": "Employee Loan",
+			"options": "Salary Slip Loan",
+			"print_hide": 1,
+			"insert_after": "loan_repayment_sb_1",
+		},
+		{
+			"fieldname": "loan_details_sb_1",
+			"fieldtype": "Section Break",
+			"depends_on": "eval:doc.docstatus != 0",
+			"insert_after": "loans",
+		},
+		{
+			"fieldname": "total_principal_amount",
+			"fieldtype": "Currency",
+			"label": "Total Principal Amount",
+			"default": "0",
+			"options": "Company:company:default_currency",
+			"read_only": 1,
+			"insert_after": "loan_details_sb_1",
+		},
+		{
+			"fieldname": "total_interest_amount",
+			"fieldtype": "Currency",
+			"label": "Total Interest Amount",
+			"default": "0",
+			"options": "Company:company:default_currency",
+			"read_only": 1,
+			"insert_after": "total_principal_amount",
+		},
+		{
+			"fieldname": "loan_cb_1",
+			"fieldtype": "Column Break",
+			"insert_after": "total_interest_amount",
+		},
+		{
+			"fieldname": "total_loan_repayment",
+			"fieldtype": "Currency",
+			"label": "Total Loan Repayment",
+			"default": "0",
+			"options": "Company:company:default_currency",
+			"read_only": 1,
+			"insert_after": "loan_cb_1",
+		},
+	],
+	"Loan": [
+		{
+			"default": "0",
+			"depends_on": 'eval:doc.applicant_type=="Employee"',
+			"fieldname": "repay_from_salary",
+			"fieldtype": "Check",
+			"label": "Repay From Salary",
+			"insert_after": "status",
+		},
+	],
+	"Loan Repayment": [
+		{
+			"default": "0",
+			"fieldname": "repay_from_salary",
+			"fieldtype": "Check",
+			"label": "Repay From Salary",
+			"insert_after": "is_term_loan",
+		},
+		{
+			"depends_on": "eval:doc.repay_from_salary",
+			"fieldname": "payroll_payable_account",
+			"fieldtype": "Link",
+			"label": "Payroll Payable Account",
+			"mandatory_depends_on": "eval:doc.repay_from_salary",
+			"options": "Account",
+			"insert_after": "payment_account",
+		},
+		{
+			"default": "0",
+			"depends_on": 'eval:doc.applicant_type=="Employee"',
+			"fieldname": "process_payroll_accounting_entry_based_on_employee",
+			"hidden": 1,
+			"fieldtype": "Check",
+			"label": "Process Payroll Accounting Entry based on Employee",
+			"insert_after": "repay_from_salary",
+		},
+	],
+}

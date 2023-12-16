@@ -1,8 +1,11 @@
 # Copyright (c) 2018, Frappe Technologies Pvt. Ltd. and Contributors
 # See license.txt
 
+<<<<<<< HEAD
 import unittest
 
+=======
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 import frappe
 from frappe.tests.utils import FrappeTestCase
 from frappe.utils import add_days, add_months, get_year_ending, get_year_start, getdate

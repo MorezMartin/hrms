@@ -3,7 +3,6 @@
 
 
 import json
-from math import ceil
 
 import frappe
 from frappe import _, bold
@@ -19,6 +18,7 @@ from frappe.utils import (
 	get_last_day,
 	get_link_to_form,
 	getdate,
+	rounded,
 )
 
 
@@ -40,25 +40,27 @@ class LeavePolicyAssignment(Document):
 			self.effective_from = frappe.db.get_value("Employee", self.employee, "date_of_joining")
 
 	def validate_policy_assignment_overlap(self):
-		leave_policy_assignments = frappe.get_all(
+		leave_policy_assignment = frappe.db.get_value(
 			"Leave Policy Assignment",
-			filters={
+			{
 				"employee": self.employee,
 				"name": ("!=", self.name),
 				"docstatus": 1,
 				"effective_to": (">=", self.effective_from),
 				"effective_from": ("<=", self.effective_to),
 			},
+			"leave_policy",
 		)
 
-		if len(leave_policy_assignments):
+		if leave_policy_assignment:
 			frappe.throw(
 				_("Leave Policy: {0} already assigned for Employee {1} for period {2} to {3}").format(
-					bold(self.leave_policy),
+					bold(leave_policy_assignment),
 					bold(self.employee),
 					bold(formatdate(self.effective_from)),
 					bold(formatdate(self.effective_to)),
-				)
+				),
+				title=_("Leave Policy Assignment Overlap"),
 			)
 
 	def warn_about_carry_forwarding(self):
@@ -76,7 +78,6 @@ class LeavePolicyAssignment(Document):
 				).format(frappe.bold(get_link_to_form("Leave Type", leave_type.name)))
 				frappe.msgprint(msg, indicator="orange", alert=True)
 
-	@frappe.whitelist()
 	def grant_leave_alloc_for_employee(self):
 		if self.leaves_allocated:
 			frappe.throw(_("Leave already have been assigned for this Leave Policy Assignment"))
@@ -203,6 +204,39 @@ class LeavePolicyAssignment(Document):
 
 			return period_end_date
 
+<<<<<<< HEAD
+=======
+		def _calculate_leaves_for_passed_months(consider_current_month):
+			monthly_earned_leave = get_monthly_earned_leave(
+				date_of_joining,
+				annual_allocation,
+				leave_details.earned_leave_frequency,
+				leave_details.rounding,
+				pro_rated=False,
+			)
+
+			period_end_date = _get_pro_rata_period_end_date(consider_current_month)
+
+			if self.effective_from < date_of_joining <= period_end_date:
+				# if the employee joined within the allocation period in some previous month,
+				# calculate pro-rated leave for that month
+				# and normal monthly earned leave for remaining passed months
+				leaves = get_monthly_earned_leave(
+					date_of_joining,
+					annual_allocation,
+					leave_details.earned_leave_frequency,
+					leave_details.rounding,
+					get_first_day(date_of_joining),
+					get_last_day(date_of_joining),
+				)
+
+				leaves += monthly_earned_leave * (months_passed - 1)
+			else:
+				leaves = monthly_earned_leave * months_passed
+
+			return leaves
+
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		consider_current_month = is_earned_leave_applicable_for_current_month(
 			date_of_joining, leave_details.allocate_on_day
 		)
@@ -210,6 +244,7 @@ class LeavePolicyAssignment(Document):
 		months_passed = _get_months_passed(current_date, from_date, consider_current_month)
 
 		if months_passed > 0:
+<<<<<<< HEAD
 			period_end_date = _get_pro_rata_period_end_date(consider_current_month)
 			monthly_earned_leave = get_monthly_earned_leave(
 				date_of_joining,
@@ -220,6 +255,9 @@ class LeavePolicyAssignment(Document):
 				period_end_date,
 			)
 			new_leaves_allocated = monthly_earned_leave * months_passed
+=======
+			new_leaves_allocated = _calculate_leaves_for_passed_months(consider_current_month)
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		else:
 			new_leaves_allocated = 0
 
@@ -240,7 +278,11 @@ def calculate_pro_rated_leaves(
 
 	if is_earned_leave:
 		return flt(leaves, precision)
+<<<<<<< HEAD
 	return ceil(leaves)
+=======
+	return rounded(leaves)
+>>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 
 def is_earned_leave_applicable_for_current_month(date_of_joining, allocate_on_day):
