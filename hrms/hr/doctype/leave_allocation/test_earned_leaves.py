@@ -374,8 +374,6 @@ class TestLeaveAllocation(FrappeTestCase):
 		leaves_allocated = get_allocated_leaves(leave_policy_assignments[0])
 		self.assertEqual(leaves_allocated, pro_rated_leave + 1)
 
-<<<<<<< HEAD
-=======
 	def test_backdated_pro_rated_allocation(self):
 		# leave period started in Jan
 		start_date = getdate("2023-01-01")
@@ -398,7 +396,6 @@ class TestLeaveAllocation(FrappeTestCase):
 		# and full leaves for the remaining 2 months i.e. Apr and May = 2 leaves
 		self.assertEqual(leaves_allocated, 2.548)
 
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	def test_no_pro_rated_leaves_allocated_before_effective_date(self):
 		start_date = get_first_day(add_months(getdate(), -1))
 		doj = add_days(start_date, 5)

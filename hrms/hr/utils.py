@@ -376,14 +376,7 @@ def update_previous_leave_allocation(allocation, annual_allocation, e_leave_type
 	annual_allocation = flt(annual_allocation, allocation.precision("total_leaves_allocated"))
 
 	earned_leaves = get_monthly_earned_leave(
-<<<<<<< HEAD
 		date_of_joining, annual_allocation, e_leave_type.earned_leave_frequency, e_leave_type.rounding
-=======
-		date_of_joining,
-		annual_allocation,
-		e_leave_type.earned_leave_frequency,
-		e_leave_type.rounding,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	)
 
 	new_allocation = flt(allocation.total_leaves_allocated) + flt(earned_leaves)
@@ -422,26 +415,13 @@ def get_monthly_earned_leave(
 	rounding,
 	period_start_date=None,
 	period_end_date=None,
-<<<<<<< HEAD
-=======
 	pro_rated=True,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 ):
 	earned_leaves = 0.0
 	divide_by_frequency = {"Yearly": 1, "Half-Yearly": 2, "Quarterly": 4, "Monthly": 12}
 	if annual_leaves:
 		earned_leaves = flt(annual_leaves) / divide_by_frequency[frequency]
 
-<<<<<<< HEAD
-		if not (period_start_date or period_end_date):
-			today_date = frappe.flags.current_date or getdate()
-			period_end_date = get_last_day(today_date)
-			period_start_date = get_first_day(today_date)
-
-		earned_leaves = calculate_pro_rated_leaves(
-			earned_leaves, date_of_joining, period_start_date, period_end_date, is_earned_leave=True
-		)
-=======
 		if pro_rated:
 			if not (period_start_date or period_end_date):
 				today_date = frappe.flags.current_date or getdate()
@@ -452,7 +432,6 @@ def get_monthly_earned_leave(
 				earned_leaves, date_of_joining, period_start_date, period_end_date, is_earned_leave=True
 			)
 
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		earned_leaves = round_earned_leaves(earned_leaves, rounding)
 
 	return earned_leaves

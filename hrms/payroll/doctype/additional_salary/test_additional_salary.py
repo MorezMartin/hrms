@@ -47,13 +47,7 @@ class TestAdditionalSalary(FrappeTestCase):
 			"Test Salary Structure Additional Salary", "Monthly", employee=emp_id
 		)
 		add_sal = get_additional_salary(emp_id)
-<<<<<<< HEAD
-		ss = make_employee_salary_slip(
-			"test_additional@salary.com", "Monthly", salary_structure=salary_structure.name
-		)
-=======
 		ss = make_employee_salary_slip(emp_id, "Monthly", salary_structure=salary_structure.name)
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		salary_componets = [earning.salary_component for earning in ss.earnings]
 		self.assertIn("Recurring Salary Component", salary_componets)
 

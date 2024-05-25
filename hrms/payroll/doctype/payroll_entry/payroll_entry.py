@@ -526,70 +526,6 @@ class PayrollEntry(Document):
 			accounting_dimensions = get_accounting_dimensions() or []
 			company_currency = erpnext.get_company_currency(self.company)
 
-<<<<<<< HEAD
-			# Earnings
-			for acc_cc, amount in earnings.items():
-				payable_amount = self.get_accounting_entries_and_payable_amount(
-					acc_cc[0],
-					acc_cc[1] or self.cost_center,
-					amount,
-					currencies,
-					company_currency,
-					payable_amount,
-					accounting_dimensions,
-					precision,
-					entry_type="debit",
-					accounts=accounts,
-				)
-
-			# Deductions
-			for acc_cc, amount in deductions.items():
-				payable_amount = self.get_accounting_entries_and_payable_amount(
-					acc_cc[0],
-					acc_cc[1] or self.cost_center,
-					amount,
-					currencies,
-					company_currency,
-					payable_amount,
-					accounting_dimensions,
-					precision,
-					entry_type="credit",
-					accounts=accounts,
-				)
-
-			# Payable amount
-			if process_payroll_accounting_entry_based_on_employee:
-				"""
-				employee_based_payroll_payable_entries = {
-				        'HR-EMP-00004': {
-				                        'earnings': 83332.0,
-				                        'deductions': 2000.0
-				                },
-				        'HR-EMP-00005': {
-				                'earnings': 50000.0,
-				                'deductions': 2000.0
-				        }
-				}
-				"""
-				for employee, employee_details in self.employee_based_payroll_payable_entries.items():
-					payable_amount = employee_details.get("earnings") - (employee_details.get("deductions") or 0)
-
-					payable_amount = self.get_accounting_entries_and_payable_amount(
-						payroll_payable_account,
-						self.cost_center,
-						payable_amount,
-						currencies,
-						company_currency,
-						0,
-						accounting_dimensions,
-						precision,
-						entry_type="payable",
-						party=employee,
-						accounts=accounts,
-					)
-
-			else:
-=======
 			payable_amount = self.get_payable_amount_for_earnings_and_deductions(
 				accounts,
 				earnings,
@@ -746,7 +682,6 @@ class PayrollEntry(Document):
 			for employee, employee_details in self.employee_based_payroll_payable_entries.items():
 				payable_amount = employee_details.get("earnings") - (employee_details.get("deductions") or 0)
 
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 				payable_amount = self.get_accounting_entries_and_payable_amount(
 					payroll_payable_account,
 					self.cost_center,
@@ -757,28 +692,6 @@ class PayrollEntry(Document):
 					accounting_dimensions,
 					precision,
 					entry_type="payable",
-<<<<<<< HEAD
-					accounts=accounts,
-				)
-
-			journal_entry.set("accounts", accounts)
-			if len(currencies) > 1:
-				multi_currency = 1
-			journal_entry.multi_currency = multi_currency
-			journal_entry.title = payroll_payable_account
-			journal_entry.save()
-
-			try:
-				journal_entry.submit()
-				jv_name = journal_entry.name
-				self.update_salary_slip_status(jv_name=jv_name)
-			except Exception as e:
-				if type(e) in (str, list, tuple):
-					frappe.msgprint(e)
-				raise
-
-		return jv_name
-=======
 					party=employee,
 					accounts=accounts,
 				)
@@ -795,7 +708,6 @@ class PayrollEntry(Document):
 				entry_type="payable",
 				accounts=accounts,
 			)
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 	def get_accounting_entries_and_payable_amount(
 		self,
@@ -810,12 +722,9 @@ class PayrollEntry(Document):
 		entry_type="credit",
 		party=None,
 		accounts=None,
-<<<<<<< HEAD
-=======
 		reference_type=None,
 		reference_name=None,
 		is_advance=None,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	):
 		exchange_rate, amt = self.get_amount_and_exchange_rate_for_journal_entry(
 			account, amount, company_currency, currencies
@@ -940,14 +849,10 @@ class PayrollEntry(Document):
 					else:
 						if employee_wise_accounting_enabled:
 							self.set_employee_based_payroll_payable_entries(
-<<<<<<< HEAD
-								"deductions", salary_slip.employee, sal_detail.amount
-=======
 								"earnings",
 								salary_detail.employee,
 								salary_detail.amount,
 								salary_detail.salary_structure,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 							)
 						salary_slip_total += salary_detail.amount
 

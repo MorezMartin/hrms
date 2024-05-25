@@ -38,16 +38,10 @@ class ShiftType(Document):
 
 		for key, group in itertools.groupby(logs, key=lambda x: (x["employee"], x["shift_start"])):
 			single_shift_logs = list(group)
-<<<<<<< HEAD
-			attendance_date = single_shift_logs[0].shift_actual_start.date()
-
-			if not self.should_mark_attendance(key[0], attendance_date):
-=======
 			attendance_date = key[1].date()
 			employee = key[0]
 
 			if not self.should_mark_attendance(employee, attendance_date):
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 				continue
 
 			(
@@ -152,16 +146,6 @@ class ShiftType(Document):
 		"""Marks Absents for the given employee on working days in this shift that have no attendance marked.
 		The Absent status is marked starting from 'process_attendance_after' or employee creation date.
 		"""
-<<<<<<< HEAD
-		start_date, end_date = self.get_start_and_end_dates(employee)
-
-		# no shift assignment found, no need to process absent attendance records
-		if start_date is None:
-			return
-
-		holiday_list_name = self.get_holiday_list(employee)
-=======
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		start_time = get_time(self.start_time)
 		dates = self.get_dates_for_attendance(employee)
 

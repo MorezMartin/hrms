@@ -252,12 +252,11 @@
    "fieldtype": "Column Break"
   },
   {
-<<<<<<< HEAD
    "default": "0",
    "fieldname": "check_shift_avaibility",
    "fieldtype": "Check",
    "label": "Check for Shift Avaibility"
-=======
+  },
    "fieldname": "sender",
    "fieldtype": "Link",
    "label": "Sender",
@@ -274,18 +273,13 @@
   {
    "fieldname": "column_break_hyec",
    "fieldtype": "Column Break"
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
   }
  ],
  "icon": "fa fa-cog",
  "idx": 1,
  "issingle": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2023-05-06 22:57:50.588485",
-=======
  "modified": "2023-11-01 11:06:31.329718",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
  "modified_by": "Administrator",
  "module": "HR",
  "name": "HR Settings",

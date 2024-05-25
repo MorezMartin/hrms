@@ -287,8 +287,6 @@ class TestEmployeeCheckin(FrappeTestCase):
 		next_day = add_days(date, 1)
 		prev_day = add_days(date, -1)
 
-<<<<<<< HEAD
-=======
 		# shift assigned for a single day
 		make_shift_assignment(shift_type.name, employee, date, date)
 
@@ -445,7 +443,6 @@ class TestEmployeeCheckin(FrappeTestCase):
 			self.assertEqual(log.shift_actual_start, start_timestamp)
 			self.assertEqual(log.shift_actual_end, end_timestamp)
 
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	def test_consecutive_shift_assignments_overlapping_within_grace_period(self):
 		# test adjustment for start and end times if they are overlapping
 		# within "begin_check_in_before_shift_start_time" and "allow_check_out_after_shift_end_time" periods

@@ -2,11 +2,7 @@
 # See license.txt
 
 import frappe
-<<<<<<< HEAD
-from frappe.tests.utils import change_settings
-=======
 from frappe.tests.utils import FrappeTestCase, change_settings
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 from frappe.utils import add_days, getdate
 
 from erpnext.setup.doctype.employee.test_employee import make_employee

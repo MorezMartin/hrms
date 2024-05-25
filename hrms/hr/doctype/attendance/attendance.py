@@ -74,11 +74,7 @@ class Attendance(Document):
 				_("Attendance for employee {0} is already marked for the date {1}: {2}").format(
 					frappe.bold(self.employee),
 					frappe.bold(format_date(self.attendance_date)),
-<<<<<<< HEAD
-					get_link_to_form("Attendance", duplicate[0].name),
-=======
 					get_link_to_form("Attendance", duplicate),
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 				),
 				title=_("Duplicate Attendance"),
 				exc=DuplicateAttendanceError,

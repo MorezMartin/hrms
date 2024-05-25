@@ -86,21 +86,9 @@ def get_columns() -> list[dict]:
 def get_data(filters: Filters) -> list:
 	leave_types = get_leave_types()
 	active_employees = get_employees(filters)
-
-<<<<<<< HEAD
-	user = frappe.session.user
-	department_approver_map = get_department_leave_approver_map(filters.department)
-
-	active_employees = frappe.get_list(
-		"Employee",
-		filters=conditions,
-		fields=["name", "employee_name", "department", "user_id", "leave_approver"],
-	)
-=======
 	precision = cint(frappe.db.get_single_value("System Settings", "float_precision"))
 	consolidate_leave_types = len(active_employees) > 1 and filters.consolidate_leave_types
 	row = None
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 	precision = cint(frappe.db.get_single_value("System Settings", "float_precision", cache=True))
 	consolidate_leave_types = len(active_employees) > 1 and filters.consolidate_leave_types
@@ -115,13 +103,6 @@ def get_data(filters: Filters) -> list:
 			row = frappe._dict({"leave_type": leave_type})
 
 		for employee in active_employees:
-<<<<<<< HEAD
-			leave_approvers = department_approver_map.get(employee.department_name, []).append(
-				employee.leave_approver
-			)
-
-=======
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 			if consolidate_leave_types:
 				row = frappe._dict()
 			else:
@@ -204,51 +185,6 @@ def get_opening_balance(
 	return opening_balance
 
 
-<<<<<<< HEAD
-def get_conditions(filters: Filters) -> Dict:
-	conditions = {}
-
-	if filters.employee:
-		conditions["name"] = filters.employee
-
-	if filters.company:
-		conditions["company"] = filters.company
-
-	if filters.department:
-		conditions["department"] = filters.department
-
-	if filters.employee_status:
-		conditions["status"] = filters.employee_status
-
-	return conditions
-
-
-def get_department_leave_approver_map(department: Optional[str] = None):
-	# get current department and all its child
-	department_list = frappe.get_list(
-		"Department",
-		filters={"disabled": 0},
-		or_filters={"name": department, "parent_department": department},
-		pluck="name",
-	)
-	# retrieve approvers list from current department and from its subsequent child departments
-	approver_list = frappe.get_all(
-		"Department Approver",
-		filters={"parentfield": "leave_approvers", "parent": ("in", department_list)},
-		fields=["parent", "approver"],
-		as_list=True,
-	)
-
-	approvers = {}
-
-	for k, v in approver_list:
-		approvers.setdefault(k, []).append(v)
-
-	return approvers
-
-
-=======
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 def get_allocated_and_expired_leaves(
 	from_date: str, to_date: str, employee: str, leave_type: str
 ) -> tuple[float, float, float]:
@@ -310,12 +246,7 @@ def get_leave_ledger_entries(
 	).run(as_dict=True)
 
 
-<<<<<<< HEAD
-
-def get_chart_data(data: List, filters: Filters) -> Dict:
-=======
 def get_chart_data(data: list, filters: Filters) -> dict:
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	labels = []
 	datasets = []
 	employee_data = data

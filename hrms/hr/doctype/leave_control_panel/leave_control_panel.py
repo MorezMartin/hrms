@@ -11,28 +11,6 @@ from erpnext import get_default_company
 
 
 class LeaveControlPanel(Document):
-<<<<<<< HEAD
-	def get_employees(self):
-		conditions, values = [], []
-		for field in [
-			"company",
-			"employment_type",
-			"branch",
-			"designation",
-			"department",
-			"employee",
-			"employee_grade",
-		]:
-			if self.get(field):
-				if field == "employee":
-					conditions.append("name=%s")
-				elif field == "employee_grade":
-					conditions.append("grade=%s")
-				else:
-					conditions.append("{0}=%s".format(field))
-
-				values.append(self.get(field))
-=======
 	def validate_fields(self, employees: list):
 		fields = []
 		if self.dates_based_on == "Leave Period":
@@ -42,7 +20,6 @@ class LeaveControlPanel(Document):
 		else:
 			self.validate_from_to_dates("from_date", "to_date")
 			fields.extend(["from_date", "to_date"])
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 		if self.allocate_based_on_leave_policy:
 			fields.append("leave_policy")

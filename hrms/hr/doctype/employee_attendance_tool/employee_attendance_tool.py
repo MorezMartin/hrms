@@ -60,13 +60,8 @@ def mark_employee_attendance(
 	date: str | datetime.date,
 	leave_type: str = None,
 	company: str = None,
-<<<<<<< HEAD
-	late_entry: str = None,
-	early_exit: str = None,
-=======
 	late_entry: int = None,
 	early_exit: int = None,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	shift: str = None,
 ) -> None:
 	if isinstance(employee_list, str):

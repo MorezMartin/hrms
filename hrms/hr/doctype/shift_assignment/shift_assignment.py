@@ -9,17 +9,11 @@ import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.query_builder import Criterion
-<<<<<<< HEAD
-from frappe.utils import cstr, get_datetime, get_link_to_form, get_time, getdate, now_datetime
-
-from hrms.hr.utils import validate_active_employee
-from hrms.hr.doctype.shift_avaibility.shift_avaibility import check_avaibility
-=======
-from frappe.utils import add_days, cstr, get_link_to_form, get_time, getdate, now_datetime
+from frappe.utils import add_days, get_datetime, cstr, get_link_to_form, get_time, getdate, now_datetime
 
 from hrms.hr.utils import validate_active_employee
 from hrms.utils import generate_date_range
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
+from hrms.hr.doctype.shift_avaibility.shift_avaibility import check_avaibility
 
 
 class OverlappingShiftError(frappe.ValidationError):

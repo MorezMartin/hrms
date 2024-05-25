@@ -69,32 +69,18 @@ def get_first_day_for_prev_month():
 	return prev_month_first
 
 
-<<<<<<< HEAD
-def create_company(name=None):
-	company_name = name or "Test Company"
-
-	if frappe.db.exists("Company", company_name):
-		return frappe.get_doc("Company", company_name)
-=======
 def create_company(name: str = "_Test Company"):
 	if frappe.db.exists("Company", name):
 		return frappe.get_doc("Company", name)
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 	return frappe.get_doc(
 		{
 			"doctype": "Company",
-<<<<<<< HEAD
-			"company_name": company_name,
-=======
 			"company_name": name,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 			"default_currency": "INR",
 			"country": "India",
 		}
 	).insert()
-<<<<<<< HEAD
-=======
 
 
 def create_department(name: str, company: str = "_Test Company") -> str:
@@ -129,4 +115,3 @@ def create_job_applicant(**args):
 	job_applicant.update(filters)
 	job_applicant.save()
 	return job_applicant
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6

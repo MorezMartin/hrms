@@ -20,10 +20,7 @@ def after_install():
 	add_non_standard_user_types()
 	set_single_defaults()
 	update_erpnext_access()
-<<<<<<< HEAD
-=======
 	create_default_role_profiles()
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 	run_post_install_patches()
 
 

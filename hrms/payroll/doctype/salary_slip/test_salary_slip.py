@@ -1199,13 +1199,8 @@ class TestSalarySlip(FrappeTestCase):
 		payroll_period = create_payroll_period(
 			name="_Test Payroll Period for Tax",
 			company="_Test Company",
-<<<<<<< HEAD
-			start_date="2022-04-01",
-			end_date="2023-03-31",
-=======
 			start_date="2023-04-01",
 			end_date="2024-03-31",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 		)
 
 		emp = make_employee(
@@ -1215,16 +1210,12 @@ class TestSalarySlip(FrappeTestCase):
 		)
 		employee_doc = frappe.get_doc("Employee", emp)
 
-<<<<<<< HEAD
-		create_tax_slab(payroll_period, effective_date="2022-04-01", allow_tax_exemption=True)
-=======
 		tax_slab = create_tax_slab(payroll_period, effective_date="2022-04-01", allow_tax_exemption=True)
 
 		effective_date = frappe.db.get_value("Income Tax Slab", tax_slab, "effective_from")
 
 		if effective_date != "2022-04-01":
 			frappe.db.set_value("Income Tax Slab", tax_slab, "effective_from", "2022-04-01")
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 		salary_structure_name = "Test Salary Structure for Opening Balance"
 		if not frappe.db.exists("Salary Structure", salary_structure_name):
@@ -1366,11 +1357,7 @@ class TestSalarySlip(FrappeTestCase):
 		frappe.db.set_value("Employee", emp_id, {"relieving_date": relieving_date, "status": "Left"})
 
 		ss = make_employee_salary_slip(
-<<<<<<< HEAD
-			"test_lwp_based_on_relieving_date@salary.com",
-=======
 			emp_id,
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 			"Monthly",
 			"Test Payment Based On Leave Application",
 		)
@@ -1416,8 +1403,6 @@ class TestSalarySlip(FrappeTestCase):
 		self.assertIn("Arrear", earnings)
 		self.assertEqual(earnings["Arrear"], 0.0)
 		self.assertNotIn("Overtime", earnings)
-<<<<<<< HEAD
-=======
 
 	def test_component_default_amount_against_statistical_component(self):
 		from hrms.payroll.doctype.salary_structure.test_salary_structure import (
@@ -1570,7 +1555,6 @@ def make_income_tax_components():
 		},
 	]
 	make_salary_component(tax_components, False, company_list=[])
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 
 def get_no_of_days():
@@ -2045,15 +2029,9 @@ def setup_test():
 		"Company", erpnext.get_default_company(), "default_holiday_list", "Salary Slip Test Holiday List"
 	)
 
-<<<<<<< HEAD
-	frappe.db.set_value("Payroll Settings", None, "email_salary_slip_to_employee", 0)
-	frappe.db.set_value("HR Settings", None, "leave_status_notification_template", None)
-	frappe.db.set_value("HR Settings", None, "leave_approval_notification_template", None)
-=======
 	frappe.db.set_single_value("Payroll Settings", "email_salary_slip_to_employee", 0)
 	frappe.db.set_single_value("HR Settings", "leave_status_notification_template", None)
 	frappe.db.set_single_value("HR Settings", "leave_approval_notification_template", None)
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 
 def make_payroll_period():
@@ -2312,8 +2290,6 @@ def create_additional_salary_for_non_taxable_component(employee, payroll_period,
 	).insert()
 
 	add_sal.submit()
-<<<<<<< HEAD
-=======
 
 
 def make_salary_structure_for_statistical_component(company):
@@ -2422,4 +2398,3 @@ def clear_cache():
 		TAX_COMPONENTS_BY_COMPANY,
 	]:
 		frappe.cache().delete_value(key)
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6

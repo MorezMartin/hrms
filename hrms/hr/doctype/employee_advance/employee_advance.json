@@ -234,11 +234,7 @@
  ],
  "is_submittable": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2023-03-21 18:24:06.416439",
-=======
  "modified": "2023-08-19 23:40:06.298367",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
  "modified_by": "Administrator",
  "module": "HR",
  "name": "Employee Advance",
