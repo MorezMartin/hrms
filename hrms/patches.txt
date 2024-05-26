@@ -1,17 +1,11 @@
 [pre_model_sync]
-<<<<<<< HEAD
-=======
 hrms.patches.v15_0.check_version_compatibility_with_frappe #2023-06-27
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
 
 [post_model_sync]
 hrms.patches.post_install.set_payroll_entry_status
 hrms.patches.v1_0.rearrange_employee_fields
 hrms.patches.post_install.update_allocate_on_in_leave_type
 hrms.patches.v14_0.create_custom_field_for_appraisal_template
-<<<<<<< HEAD
-hrms.patches.post_install.update_performance_module_changes #2023-04-17
-=======
 hrms.patches.post_install.update_performance_module_changes #2023-04-17
 hrms.patches.v14_0.update_payroll_frequency_to_none_if_salary_slip_is_based_on_timesheet
 hrms.patches.v14_0.update_ess_user_access #2023-08-14
@@ -26,4 +20,3 @@ hrms.patches.v14_0.update_loan_repayment_repay_from_salary
 hrms.patches.v15_0.migrate_loan_type_to_loan_product
 hrms.patches.v15_0.rename_and_update_leave_encashment_fields
 hrms.patches.v14_0.update_title_in_employee_onboarding_and_separation_templates
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6

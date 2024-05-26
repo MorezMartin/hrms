@@ -43,19 +43,20 @@ frappe.query_reports["Sales Order HR"] = {
 			}
 		},
 	],
-	formatter (value, row, column, data, default_formatter) {
+	formatter:function (value, row, column, data, default_formatter) {
 		value = default_formatter(value, row, column, data);
 
-		if (column.id == 'qty_needed' && data['qty_needed'] > 0) {
+		if (column.id == 'qty_needed' && value > 0) {
+			console.log(value)
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 		}
 
 		let ha = ['shift_requests', 'shift_assignments', 'timesheets'];
 		ha.forEach(format);
 		function format(h) {
-			if (column.id == h && data[h] > 0 && data['qty_needed'] > 0) {
-				if (data[h] < data['qty_needed']) {
-					if (data[h] >= 0.75 * data["qty_needed"] ) {
+			if (column.id == h && value > 0 && data['qty_needed'] > 0) {
+				if (value < data['qty_needed']) {
+					if (value >= 0.75 * data["qty_needed"] ) {
 							value = "<div style='background-color:orange!important;font-weight:bold;width:100%'>" + value + "</div>";
 					}
 					else {

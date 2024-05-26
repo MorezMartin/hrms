@@ -41,11 +41,8 @@
   "column_break_geio",
   "absent_days",
   "payment_days",
-<<<<<<< HEAD
-=======
   "help_section",
   "payment_days_calculation_help",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
   "earnings_and_deductions_tab",
   "timesheets_section",
   "timesheets",
@@ -53,11 +50,7 @@
   "total_working_hours",
   "hour_rate",
   "base_hour_rate",
-<<<<<<< HEAD
-  "earning_deduction",
-=======
   "earning_deduction_sb",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
   "earnings",
   "column_break_k1jz",
   "deductions",
@@ -318,14 +311,6 @@
    "label": "Deduct Tax For Unsubmitted Tax Exemption Proof"
   },
   {
-<<<<<<< HEAD
-   "fieldname": "earning_deduction",
-   "fieldtype": "Section Break",
-   "oldfieldtype": "Section Break"
-  },
-  {
-=======
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "fieldname": "earnings",
    "fieldtype": "Table",
    "label": "Earnings",
@@ -359,55 +344,6 @@
    "fieldtype": "Column Break"
   },
   {
-<<<<<<< HEAD
-   "depends_on": "total_loan_repayment",
-   "fieldname": "loan_repayment",
-   "fieldtype": "Section Break",
-   "label": "Loan Repayment"
-  },
-  {
-   "fieldname": "loans",
-   "fieldtype": "Table",
-   "label": "Employee Loan",
-   "options": "Salary Slip Loan",
-   "print_hide": 1
-  },
-  {
-   "depends_on": "eval:doc.docstatus != 0",
-   "fieldname": "section_break_43",
-   "fieldtype": "Section Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "total_principal_amount",
-   "fieldtype": "Currency",
-   "label": "Total Principal Amount",
-   "options": "Company:company:default_currency",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "total_interest_amount",
-   "fieldtype": "Currency",
-   "label": "Total Interest Amount",
-   "options": "Company:company:default_currency",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_45",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "0",
-   "fieldname": "total_loan_repayment",
-   "fieldtype": "Currency",
-   "label": "Total Loan Repayment",
-   "options": "Company:company:default_currency",
-   "read_only": 1
-  },
-  {
-=======
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "fieldname": "net_pay_info",
    "fieldtype": "Tab Break",
    "label": "Net Pay Info"
@@ -609,12 +545,8 @@
   },
   {
    "fieldname": "section_break_6",
-<<<<<<< HEAD
-   "fieldtype": "Section Break"
-=======
    "fieldtype": "Section Break",
    "label": "Employee Info"
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
   },
   {
    "fieldname": "section_break_gsts",
@@ -660,40 +592,28 @@
    "fieldname": "ctc",
    "fieldtype": "Currency",
    "label": "CTC",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "income_from_other_sources",
    "fieldtype": "Currency",
    "label": "Income from Other Sources",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "total_earnings",
    "fieldtype": "Currency",
    "label": "Total Earnings",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "non_taxable_earnings",
    "fieldtype": "Currency",
    "label": "Non Taxable Earnings",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
@@ -704,50 +624,35 @@
    "fieldname": "deductions_before_tax_calculation",
    "fieldtype": "Currency",
    "label": "Deductions before tax calculation",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "tax_exemption_declaration",
    "fieldtype": "Currency",
    "label": "Tax Exemption Declaration",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "standard_tax_exemption_amount",
    "fieldtype": "Currency",
    "label": "Standard Tax Exemption Amount",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "annual_taxable_amount",
    "fieldtype": "Currency",
    "label": "Annual Taxable Amount",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "income_tax_deducted_till_date",
    "fieldtype": "Currency",
    "label": "Income Tax Deducted Till Date",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
@@ -763,10 +668,7 @@
    "fieldname": "future_income_tax_deductions",
    "fieldtype": "Currency",
    "label": "Future Income Tax",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
@@ -778,20 +680,14 @@
    "fieldname": "current_month_income_tax",
    "fieldtype": "Currency",
    "label": "Current Month Income Tax",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
    "fieldname": "total_income_tax",
    "fieldtype": "Currency",
    "label": "Total Income Tax",
-<<<<<<< HEAD
-=======
    "options": "currency",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
    "read_only": 1
   },
   {
@@ -810,9 +706,6 @@
   {
    "depends_on": "eval:doc.salary_slip_based_on_timesheet",
    "fieldname": "timesheets_section",
-<<<<<<< HEAD
-   "fieldtype": "Section Break"
-=======
    "fieldtype": "Section Break",
    "label": "Timesheet Details"
   },
@@ -829,18 +722,13 @@
    "fieldname": "earning_deduction_sb",
    "fieldtype": "Section Break",
    "oldfieldtype": "Section Break"
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
   }
  ],
  "icon": "fa fa-file-text",
  "idx": 9,
  "is_submittable": 1,
  "links": [],
-<<<<<<< HEAD
- "modified": "2023-02-22 18:23:49.783449",
-=======
  "modified": "2023-11-07 23:05:43.633760",
->>>>>>> f9f2ebf95d00265343aa611850dfd0652dfec9a6
  "modified_by": "Administrator",
  "module": "Payroll",
  "name": "Salary Slip",

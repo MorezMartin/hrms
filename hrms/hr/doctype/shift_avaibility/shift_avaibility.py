@@ -37,6 +37,7 @@ class ShiftAvaibility(Document):
 			frappe.throw(_('Shift Avaibility already exists in this period'))
 
 	def delete_shifts_on_unchecked_days(self):
+        frappe.db.commit
 		if not self.monday:
 			self.monday_avaibility = []
 			frappe.db.commit

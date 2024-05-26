@@ -121,7 +121,8 @@
    "fieldname": "ignore_avaibility",
    "fieldtype": "Check",
    "label": "Ignore Avaibility"
-  },
+  }
+ ],
  "links": [],
  "modified": "2023-06-23 12:08:23.247882",
  "modified_by": "Administrator",

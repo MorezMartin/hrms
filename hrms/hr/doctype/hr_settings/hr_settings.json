@@ -257,6 +257,7 @@
    "fieldtype": "Check",
    "label": "Check for Shift Avaibility"
   },
+  {
    "fieldname": "sender",
    "fieldtype": "Link",
    "label": "Sender",
