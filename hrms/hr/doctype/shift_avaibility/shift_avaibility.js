@@ -3,6 +3,5 @@
 
 frappe.ui.form.on('Shift Avaibility', {
 	// refresh: function(frm) {
-
 	// }
 });

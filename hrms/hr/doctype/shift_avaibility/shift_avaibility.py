@@ -10,6 +10,8 @@ import datetime
 class ShiftAvaibility(Document):
 	def validate(self):
 		self.validate_dates()
+
+	def on_change(self):
 		self.delete_shifts_on_unchecked_days()
 
 	def validate_dates(self):
@@ -32,12 +34,11 @@ class ShiftAvaibility(Document):
 				'employee': self.employee,
 				'from_date': ['<=', self.from_date],
 				'to_date': ['=>', self.to_date],
-                'docstatus': ['!=', 2],
+				'docstatus': ['!=', 2],
 			}):
 			frappe.throw(_('Shift Avaibility already exists in this period'))
 
 	def delete_shifts_on_unchecked_days(self):
-        frappe.db.commit
 		if not self.monday:
 			self.monday_avaibility = []
 			frappe.db.commit
