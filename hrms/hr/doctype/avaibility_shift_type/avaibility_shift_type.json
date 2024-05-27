@@ -14,7 +14,9 @@
    "fieldname": "shift_type",
    "fieldtype": "Link",
    "label": "Shift Type",
-   "options": "Shift Type"
+   "options": "Shift Type",
+   "mandatory": true,
+   "in_list_view": true
   }
  ],
  "index_web_pages_for_search": 1,
