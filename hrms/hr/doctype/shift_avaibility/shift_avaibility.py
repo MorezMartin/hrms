@@ -10,8 +10,6 @@ import datetime
 class ShiftAvaibility(Document):
 	def validate(self):
 		self.validate_dates()
-
-	def on_change(self):
 		self.delete_shifts_on_unchecked_days()
 
 	def validate_dates(self):
