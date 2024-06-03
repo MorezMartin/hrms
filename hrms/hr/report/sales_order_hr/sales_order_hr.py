@@ -22,7 +22,7 @@ def execute(filters=None):
 
 def get_columns():
 	columns = [
-            {'fieldname' : 'name', 'label': _('Name'), 'fieldtype': 'Data', 'width': 80},
+		{'fieldname' : 'name', 'label': _('Name'), 'fieldtype': 'Data', 'width': 80},
 		{'fieldname' : 'sales_order', 'label': _('Sales Order'), 'fieldtype': 'Link', 'options': 'Sales Order', 'width': 80},
 		{'fieldname' : 'delivery_date', 'label': _('Delivery Date'), 'fieldtype': 'Datetime', 'width': 80},
 		{'fieldname' : 'human_needs', 'label': _('Human Needs'), 'fieldtype': 'Data', 'width': 80},
@@ -133,7 +133,8 @@ def get_sales_orders(filters=None):
 				'delivery_date': ['between', [filters.start, filters.end]],
 				'docstatus': ['<', 2],
 				},
-			['name', 'delivery_date', 'customer', 'shipping_address_name']
+			['name', 'delivery_date', 'customer', 'shipping_address_name'],
+			order_by='delivery_date asc'
 			)
 	needed_qties = []
 	sols_qties_list = []
@@ -282,7 +283,7 @@ def get_summary(filters=None):
 def get_chart(sos, needed_qties, sols_qties_list, filters=None):
 	so_labels = []
 	for so in sos:
-		desc = so.name + ' ' + str(so.delivery_date) + '\n' + so.customer + ' ' + so.shipping_address_name
+		desc = str(so.name) + ' ' + str(so.delivery_date) + '\n' + str(so.customer) + ' ' + str(so.shipping_address_name)
 		so_labels.append(desc)
 	srs = [qty['shift_requests'] for qty in sols_qties_list]
 	sas = [qty['shift_assignments'] for qty in sols_qties_list]
