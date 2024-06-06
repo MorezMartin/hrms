@@ -48,7 +48,7 @@
    "fieldtype": "Link",
    "label": "Employee",
    "options": "Employee",
-   "required": true
+   "rqd": 1
   },
   {
    "fieldname": "column_break_kajo2",
