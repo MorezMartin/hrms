@@ -24,13 +24,11 @@ frappe.query_reports["Sales Order HR"] = {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 		}
 
+		console.log(data['qty_needed']);
+
 		let ha = ['shift_requests', 'shift_assignments', 'timesheets'];
 		ha.forEach(format);
 		function format(h) {
-			console.log(h);
-			console.log(column.id)
-			console.log(value);
-			console.log(data['qty_needed']);
 			if (column.id == h && value > 0 && data['qty_needed'] > 0) {
 				if (value < data['qty_needed']) {
 					if (value >= 0.75 * data["qty_needed"] ) {
