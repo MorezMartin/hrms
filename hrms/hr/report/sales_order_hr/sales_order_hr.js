@@ -46,18 +46,14 @@ frappe.query_reports["Sales Order HR"] = {
 	formatter:function (value, row, column, data, default_formatter) {
 		value = default_formatter(value, row, column, data);
 
+		let qty_needed = 0;
 		if (column.id == 'qty_needed' && value > 0) {
+				qty_needed = value;
 				value = "<div style='font-weight:bold'>" + value + "</div>";
-		}
-
-		console.log(data['qty_needed']);
-
-		let ha = ['shift_requests', 'shift_assignments', 'timesheets'];
-		ha.forEach(format);
-		function format(h) {
-			if (column.id == h && value > 0 && data['qty_needed'] > 0) {
-				if (value < data['qty_needed']) {
-					if (value >= 0.75 * data["qty_needed"] ) {
+		};
+		if (column.id == 'shift_requests' && value > 0) {
+				if (value < qty_needed) {
+					if (value >= 0.75 * qty_needed ) {
 							value = "<div style='background-color:orange!important;font-weight:bold;width:100%'>" + value + "</div>";
 					}
 					else {
@@ -67,8 +63,33 @@ frappe.query_reports["Sales Order HR"] = {
 				else {
 					value = "<div style='background-color:green!important;font-weight:bold;width:100%'>" + value + "</div>";
 				}
-			}
-		}
+		};
+		if (column.id == 'shift_assignments' && value > 0) {
+				if (value < qty_needed) {
+					if (value >= 0.75 * qty_needed ) {
+							value = "<div style='background-color:orange!important;font-weight:bold;width:100%'>" + value + "</div>";
+					}
+					else {
+							value = "<div style='background-color:red!important;font-weight:bold;width:100%'>" + value + "</div>";
+					}
+				}
+				else {
+					value = "<div style='background-color:green!important;font-weight:bold;width:100%'>" + value + "</div>";
+				}
+		};
+		if (column.id == 'timesheets' && value > 0) {
+				if (value < qty_needed) {
+					if (value >= 0.75 * qty_needed ) {
+							value = "<div style='background-color:orange!important;font-weight:bold;width:100%'>" + value + "</div>";
+					}
+					else {
+							value = "<div style='background-color:red!important;font-weight:bold;width:100%'>" + value + "</div>";
+					}
+				}
+				else {
+					value = "<div style='background-color:green!important;font-weight:bold;width:100%'>" + value + "</div>";
+				}
+		};
 	return value;
 	}
 };
