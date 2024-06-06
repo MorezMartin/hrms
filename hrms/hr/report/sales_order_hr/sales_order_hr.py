@@ -22,23 +22,23 @@ def execute(filters=None):
 
 def get_columns():
 	columns = [
-		{'fieldname' : 'name', 'label': _('Name'), 'fieldtype': 'Data', 'width': 80},
-		{'fieldname' : 'sales_order', 'label': _('Sales Order'), 'fieldtype': 'Link', 'options': 'Sales Order', 'width': 80},
-		{'fieldname' : 'delivery_date', 'label': _('Delivery Date'), 'fieldtype': 'Datetime', 'width': 80},
-		{'fieldname' : 'human_needs', 'label': _('Human Needs'), 'fieldtype': 'Data', 'width': 80},
-		{'fieldname' : 'qty_needed', 'label': _('Quantity Needed'), 'fieldtype': 'Data', 'width': 80},
-		{'fieldname' : 'uom', 'label': _('UoM'), 'fieldtype': 'Data', 'width': 80},
-		{'fieldname' : 'description', 'label': _('Description'), 'fieldtype': 'Text Editor', 'width': 80},
+		{'fieldname' : 'name', 'label': _('Name'), 'fieldtype': 'Data', 'width': 200},
+		{'fieldname' : 'sales_order', 'label': _('Sales Order'), 'fieldtype': 'Link', 'options': 'Sales Order', 'width': 200},
+		{'fieldname' : 'delivery_date', 'label': _('Delivery Date'), 'fieldtype': 'Datetime', 'width': 200},
+		{'fieldname' : 'human_needs', 'label': _('Human Needs'), 'fieldtype': 'Data', 'width': 160},
+		{'fieldname' : 'qty_needed', 'label': _('Quantity Needed'), 'fieldtype': 'Data', 'width': 40},
+		{'fieldname' : 'uom', 'label': _('UoM'), 'fieldtype': 'Data', 'width': 60},
+		{'fieldname' : 'description', 'label': _('Description'), 'fieldtype': 'Text Editor', 'width': 300},
 		{'fieldname' : 'employee', 'label': _('Employee'), 'fieldtype': 'Link', 'options': 'Employee', 'width': 80},
-		{'fieldname' : 'employee_name', 'label': _('Employee Name'), 'fieldtype': 'Data', 'width': 80},
+		{'fieldname' : 'employee_name', 'label': _('Employee Name'), 'fieldtype': 'Data', 'width': 160},
 		{'fieldname' : 'shift_avaibilities', 'label': _('Shift Avaibilities'), 'fieldtype': 'Link', 'options': 'Shift Avaibility', 'width': 80},
 		{'fieldname' : 'shift_requests', 'label': _('Shift Requests'), 'fieldtype': 'Link', 'options': 'Shift Request', 'width': 80},
 		{'fieldname' : 'shift_assignments', 'label': _('Shift Assignments'), 'fieldtype': 'Link', 'options': 'Shift Assignment', 'width': 80},
 		{'fieldname' : 'shift_type', 'label': _('Shift Type'), 'fieldtype': 'Data', 'width': 80},
-		{'fieldname' : 'activity_type', 'label': _('Activity Type'), 'fieldtype': 'Data', 'width': 80},
+		{'fieldname' : 'activity_type', 'label': _('Activity Type'), 'fieldtype': 'Data', 'width': 120},
 		{'fieldname' : 'timesheets', 'label': _('Timesheets'), 'fieldtype': 'Link', 'options': 'Timesheet', 'width': 80},
 		{'fieldname' : 'from_time', 'label': _('From Time'), 'fieldtype': 'Data', 'width': 80},
-		{'fieldname' : 'to_time', 'label': _('To Time'), 'fieldtype': 'Data', 'width': 80},
+		{'fieldname' : 'to_time', 'label': _('To Time'), 'fieldtype': 'Data', 'width': 200},
 	]
 	return columns
 
