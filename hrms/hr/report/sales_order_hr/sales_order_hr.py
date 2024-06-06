@@ -37,7 +37,7 @@ def get_columns():
 		{'fieldname' : 'shift_type', 'label': _('Shift Type'), 'fieldtype': 'Data', 'width': 80},
 		{'fieldname' : 'activity_type', 'label': _('Activity Type'), 'fieldtype': 'Data', 'width': 120},
 		{'fieldname' : 'timesheets', 'label': _('Timesheets'), 'fieldtype': 'Link', 'options': 'Timesheet', 'width': 80},
-		{'fieldname' : 'from_time', 'label': _('From Time'), 'fieldtype': 'Data', 'width': 80},
+		{'fieldname' : 'from_time', 'label': _('From Time'), 'fieldtype': 'Data', 'width': 200},
 		{'fieldname' : 'to_time', 'label': _('To Time'), 'fieldtype': 'Data', 'width': 200},
 	]
 	return columns
