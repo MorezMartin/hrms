@@ -3,7 +3,7 @@
 
 import frappe
 from frappe import _
-from datetime import date, datetime, timedelta
+from frappe.utils import get_datetime, datetime
 import itertools
 from erpnext.setup.doctype.item_group import item_group
 
@@ -186,7 +186,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 	sols = []
 	tss = []
 	if filters.get('activity_type'):
-		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
+		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
 		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
 		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['parent', 'activity_type', 'from_time', 'to_time'])
 	else:
@@ -209,8 +209,10 @@ def get_sales_order_links(sales_order=None, filters=None):
 			activity_type = srq['activity_type']
 			sd = srq['from_date']
 			ed = srq['to_date']
-			from_time = datetime(year=sd.year, month=sd.month, day=sd.day) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = datetime(year=ed.year, month=ed.month, day=ed.day) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			if isinstance(sd, datetime.datetime)
+				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			if isinstance(ed, datetime.datetime)
+				to_time = get_datetime(ed) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			srq_qty += 1
 		if sas:
 			sasn = sas['name']
@@ -220,8 +222,10 @@ def get_sales_order_links(sales_order=None, filters=None):
 			activity_type = sas['activity_type']
 			sd = sas['start_date']
 			ed = sas['end_date']
-			from_time = datetime(year=sd.year, month=sd.month, day=sd.day) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			to_time = datetime(year=ed.year, month=ed.month, day=ed.day) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			if isinstance(sd, datetime.datetime)
+				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			if isinstance(ed, datetime.datetime)
+				to_time = get_datetime(ed) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
 			sas_qty += 1
 		if ts:
 			tsn = ts['name']
