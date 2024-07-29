@@ -209,6 +209,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 			activity_type = srq['activity_type']
 			sd = srq['from_date']
 			ed = srq['to_date']
+			from_time, to_time = None, None
 			if isinstance(sd, datetime.datetime):
 				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			if isinstance(ed, datetime.datetime):
@@ -222,6 +223,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 			activity_type = sas['activity_type']
 			sd = sas['start_date']
 			ed = sas['end_date']
+			from_time, to_time = None, None
 			if isinstance(sd, datetime.datetime):
 				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			if isinstance(ed, datetime.datetime):
