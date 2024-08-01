@@ -206,14 +206,14 @@ def get_sales_order_links(sales_order=None, filters=None):
 				['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
 				order_by='shift_type asc'
 				)
-		srqs = sorted(srqs, key=lambda d: d['from_date'])
+		srqs = sorted(srqs, key=lambda, d: d['from_date'])
 		sass = frappe.db.get_all(
 				'Shift Assignment',
 				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
 				['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
 				order_by='shift_type asc'
 				)
-		sass = sorted(sass, key=lambda d: d['start_date'])
+		sass = sorted(sass, key=lambda, d: d['start_date'])
 		tls = frappe.db.get_all(
 				'Timesheet Detail',
 				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
