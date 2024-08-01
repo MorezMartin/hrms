@@ -53,25 +53,23 @@ frappe.query_reports["Sales Order HR"] = {
 			if (value > 0) {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
-			else {
-				console.log(value);
+			else if (value =! "") {
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
 						'doctype': 'Shift Request',
-						'filters': {'name': value},
+						'filters': {'name': value.getAttribute('data-value')},
 						'fieldname': 'status'
 					},
 					callback: function(r) {
-						console.log(r.message);
 						if (r.message.status == 'Draft') {
-							value = "<div style='background-color:orange'>" + value + "</div>";
+							value.setAttribute("style", "background-color:orange")
 						}
 						else if (r.message.status == 'Rejected') {
-							value = "<div style='background-color:red'>" + value + "</div>";
+							value.setAttribute("style", "background-color:red")
 						}
 						else if (r.message.status == 'Approved') {
-							value = "<div style='background-color: green'>" + value + "</div>";
+							value.setAttribute("style", "background-color:green")
 						}
 					}
 				});
@@ -81,22 +79,20 @@ frappe.query_reports["Sales Order HR"] = {
 			if (value > 0) {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
-			else {
-				console.log(value);
+			else if (value =! "") {
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
 						'doctype': 'Shift Assignment',
-						'filters': {'name': value},
+						'filters': {'name': value.getAttribute('data-value')},
 						'fieldname': 'sales_order'
 					},
 					callback: function(r) {
-						console.log(r.message);
 						if (r.message.sales_order != null) {
-							value = "<div style='background-color:green'>" + value + "</div>";
+							value.setAttribute("style", "background-color:green")
 						}
 						else {
-							value = "<div style='background-color:orange'>" + value + "</div>";
+							value.setAttribute("style", "background-color:orange")
 						}
 					}
 				});
