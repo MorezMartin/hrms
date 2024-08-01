@@ -28,6 +28,7 @@ frappe.query_reports["Sales Order HR"] = {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
 			else {
+				console.log(value);
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
@@ -36,6 +37,7 @@ frappe.query_reports["Sales Order HR"] = {
 						'fieldname': 'status'
 					},
 					callback: function(r) {
+						console.log(r.message);
 						if (r.message.status == 'Draft') {
 							value = "<div style='background-color:orange'>" + value + "</div>";
 						}
@@ -54,6 +56,7 @@ frappe.query_reports["Sales Order HR"] = {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
 			else {
+				console.log(value);
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
@@ -62,6 +65,7 @@ frappe.query_reports["Sales Order HR"] = {
 						'fieldname': 'sales_order'
 					},
 					callback: function(r) {
+						console.log(r.message);
 						if (r.message.sales_order != null) {
 							value = "<div style='background-color:green'>" + value + "</div>";
 						}
