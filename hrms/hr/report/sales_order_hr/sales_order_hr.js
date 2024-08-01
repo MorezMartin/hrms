@@ -62,13 +62,13 @@ frappe.query_reports["Sales Order HR"] = {
 						'fieldname': 'status'
 					},
 					callback: function(r) {
-						if r.message.status == 'Draft' {
+						if (r.message.status == 'Draft') {
 							value = "<div style='background-color:orange'>" + value + "</div>";
 						}
-						else if r.message.status == 'Rejected' {
+						else if (r.message.status == 'Rejected') {
 							value = "<div style='background-color:red'>" + value + "</div>";
 						}
-						else if r.message.status == 'Approved' {
+						else if (r.message.status == 'Approved') {
 							value = "<div style='background-color: green'>" + value + "</div>";
 						}
 					}
@@ -88,7 +88,7 @@ frappe.query_reports["Sales Order HR"] = {
 						'fieldname': 'sales_order'
 					},
 					callback: function(r) {
-						if r.message.sales_order != null {
+						if (r.message.sales_order != null) {
 							value = "<div style='background-color:green'>" + value + "</div>";
 						}
 						else {
