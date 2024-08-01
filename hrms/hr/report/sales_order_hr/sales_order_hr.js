@@ -54,6 +54,7 @@ frappe.query_reports["Sales Order HR"] = {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
 			else if (value =! "") {
+				value = $(value)[0];
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
@@ -80,6 +81,7 @@ frappe.query_reports["Sales Order HR"] = {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
 			else if (value =! "") {
+				value = $(value)[0];
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
