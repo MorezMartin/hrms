@@ -140,9 +140,23 @@ def get_sales_orders(filters=None):
 	sols_qties_list = []
 	for so in sos:
 		if filters.get('items'):
-			items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', filters.get('items')]}, ['item_code', 'qty', 'uom', 'description'])
+			items = frappe.db.get_all('Sales Order Item', 
+							 {
+								 'parent': so['name'], 
+								 'item_code': ['in', filters.get('items')]
+								 }, 
+							 ['item_code', 'qty', 'uom', 'description'],
+							 order_by='idx asc'
+							 )
 		else:
-			items = frappe.db.get_all('Sales Order Item', {'parent': so['name'], 'item_code': ['in', get_working_items()]}, ['item_code', 'qty', 'uom', 'description'])
+			items = frappe.db.get_all('Sales Order Item',
+							 {
+								 'parent': so['name'],
+								 'item_code': ['in', get_working_items()]
+								 }, 
+							 ['item_code', 'qty', 'uom', 'description'],
+							 order_by='idx asc'
+							 )
 		sols_dict = get_sales_order_links(so['name'], filters)
 		sols = sols_dict['sols']
 		sols_qties = sols_dict['qties']
@@ -186,13 +200,45 @@ def get_sales_order_links(sales_order=None, filters=None):
 	sols = []
 	tss = []
 	if filters.get('activity_type'):
-		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
-		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['name', 'employee', 'shift_type', 'activity_type'])
-		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}, ['parent', 'activity_type', 'from_time', 'to_time'])
+		srqs = sorted(
+				frappe.get_all('Shift Request',
+						{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
+						['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
+						order_by='shift_type'
+						),
+				key=lambda d: d['from_date'])
+		sass = sorted(
+				frappe.get_all('Shift Assignment',
+						{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
+						['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
+						order_by='shift_type'
+						),
+				key=lambda d: d['start_date'])
+		tls = frappe.db.get_all('Timesheet Detail',
+						  {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
+						  ['parent', 'activity_type', 'from_time', 'to_time'],
+						  order_by='from_time asc'
+						  )
 	else:
-		srqs = frappe.get_all('Shift Request', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'])
-		sass = frappe.get_all('Shift Assignment', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'])
-		tls = frappe.db.get_all('Timesheet Detail', {'sales_order': sales_order, 'docstatus': ['<', '2']}, ['parent', 'activity_type', 'from_time', 'to_time'])
+		srqs = sorted(
+				frappe.get_all('Shift Request',
+						{'sales_order': sales_order, 'docstatus': ['<', '2']},
+						['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
+						order_by='shift_type'
+						)
+				key=lambda d: d['from_date'])
+		sass = sorted(
+				frappe.get_all('Shift Assignment',
+						{'sales_order': sales_order, 'docstatus': ['<', '2']},
+						['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
+						order_by='shift_type'
+						)
+				key=lambda d: d['start_date'])
+		tls = frappe.db.get_all('Timesheet Detail',
+						  {'sales_order': sales_order, 'docstatus': ['<', '2']},
+						  ['parent', 'activity_type', 'from_time', 'to_time'],
+						  order_by='from_time asc'
+						  )
 	srq_qty, sas_qty, ts_qty = 0, 0, 0
 	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0}
 	for tl in tls:
