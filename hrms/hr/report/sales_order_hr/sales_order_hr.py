@@ -200,40 +200,41 @@ def get_sales_order_links(sales_order=None, filters=None):
 	sols = []
 	tss = []
 	if filters.get('activity_type'):
-		srqs = sorted(
-				frappe.get_all('Shift Request',
-						{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
-						['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
-						order_by='shift_type'
-						),
-				key=lambda d: d['from_date'])
-		sass = sorted(
-				frappe.get_all('Shift Assignment',
-						{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
-						['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
-						order_by='shift_type'
-						),
-				key=lambda d: d['start_date'])
-		tls = frappe.db.get_all('Timesheet Detail',
-						  {'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
-						  ['parent', 'activity_type', 'from_time', 'to_time'],
-						  order_by='from_time asc'
-						  )
+		srqs = frappe.db.get_all(
+				'Shift Request',
+				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
+				['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
+				order_by='shift_type asc'
+				)
+		srqs = sorted(srqs key=lambda d: d['from_date'])
+		sass = frappe.db.get_all(
+				'Shift Assignment',
+				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
+				['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
+				order_by='shift_type asc'
+				)
+		sass = sorted(sass key=lambda d: d['start_date'])
+		tls = frappe.db.get_all(
+				'Timesheet Detail',
+				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
+				['parent', 'activity_type', 'from_time', 'to_time'],
+				order_by='from_time asc'
+				)
 	else:
-		srqs = sorted(
-				frappe.get_all('Shift Request',
-						{'sales_order': sales_order, 'docstatus': ['<', '2']},
-						['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
-						order_by='shift_type'
-						)
-				key=lambda d: d['from_date'])
-		sass = sorted(
-				frappe.get_all('Shift Assignment',
-						{'sales_order': sales_order, 'docstatus': ['<', '2']},
-						['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
-						order_by='shift_type'
-						)
-				key=lambda d: d['start_date'])
+		srqs = frappe.db.get_all(
+				'Shift Request',
+				{'sales_order': sales_order, 'docstatus': ['<', '2']},
+				['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
+				order_by='shift_type asc'
+				)
+		srqs = sorted(srqs key=lambda d: d['from_date'])
+		sass = frappe.db.get_all(
+				'Shift Assignment',
+				{'sales_order': sales_order, 'docstatus': ['<', '2']},
+				['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
+				order_by='shift_type asc'
+				)
+		sass = sorted(sass key=lambda d: d['start_date'])
 		tls = frappe.db.get_all('Timesheet Detail',
 						  {'sales_order': sales_order, 'docstatus': ['<', '2']},
 						  ['parent', 'activity_type', 'from_time', 'to_time'],
