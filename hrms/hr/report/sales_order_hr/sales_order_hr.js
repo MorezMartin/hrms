@@ -100,11 +100,12 @@ frappe.query_reports["Sales Order HR"] = {
 					},
 					async: false,
 					callback : (r) => {
-						if (r.message.sales_order != ("" || undefined)) {
+						console.log(typeof r.message.sales_order);
+						if ((r.message.sales_order != "") && (typeof r.message.sales_order != 'undefined')) {
 							v.setAttribute("style", "background-color:green")
 						}
 						else if (r.message.sales_order != undefined) {
-							v.setAttribute("style", "background-color:red")
+							v.setAttribute("style", "background-color:orange")
 						}
 					}
 				})
