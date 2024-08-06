@@ -50,55 +50,66 @@ frappe.query_reports["Sales Order HR"] = {
 			value = "<div style='font-weight:bold'>" + value + "</div>";
 		};
 		if (column.id == 'shift_requests') {
-			if (value > 0) {
-				value = "<div style='font-weight:bold'>" + value + "</div>";
-			}
-			else if (value =! "") {
-				value = $(value)[0];
+			if (value != "") {
+				let v = $(value)[0];
+
+			if (parseInt(v.getAttribute('data-value')) > 0) {
+				v.setAttribute("style", "font-weight: bold");
+				value = v.outerHTML;
+			};
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
 						'doctype': 'Shift Request',
-						'filters': {'name': value.getAttribute('data-value')},
+						'filters': {'name': v.getAttribute('data-value')},
 						'fieldname': 'status'
 					},
-					callback: function(r) {
+					async: false,
+					callback : (r) => {
 						if (r.message.status == 'Draft') {
-							value.setAttribute("style", "background-color:orange")
+							v.setAttribute("style", "background-color:orange")
 						}
 						else if (r.message.status == 'Rejected') {
-							value.setAttribute("style", "background-color:red")
+							v.setAttribute("style", "background-color:red")
 						}
 						else if (r.message.status == 'Approved') {
-							value.setAttribute("style", "background-color:green")
+							v.setAttribute("style", "background-color:green")
 						}
 					}
-				});
-			}
+				})
+				value = v.outerHTML;
+			};
 		};
 		if (column.id == 'shift_assignments') {
 			if (value > 0) {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
-			else if (value =! "") {
-				value = $(value)[0];
+			if (value != "") {
+				let v = $(value)[0];
+
+			if (parseInt(v.getAttribute('data-value')) > 0) {
+				v.setAttribute("style", "font-weight: bold");
+				value = v.outerHTML;
+			};
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
 						'doctype': 'Shift Assignment',
-						'filters': {'name': value.getAttribute('data-value')},
+						'filters': {'name': v.getAttribute('data-value')},
 						'fieldname': 'sales_order'
 					},
-					callback: function(r) {
-						if (r.message.sales_order != null) {
-							value.setAttribute("style", "background-color:green")
+					async: false,
+					callback : (r) => {
+						if (r.message.sales_order != ("" || undefined)) {
+							v.setAttribute("style", "background-color:green")
 						}
-						else {
-							value.setAttribute("style", "background-color:orange")
+						else if (r.message.sales_order != undefined) {
+							v.setAttribute("style", "background-color:red")
 						}
 					}
-				});
-			}
+				})
+				value = v.outerHTML;
+			};
 		};
 		if (column.id == 'timesheets' && value > 0) {
 			value = "<div style='font-weight:bold'>" + value + "</div>";
