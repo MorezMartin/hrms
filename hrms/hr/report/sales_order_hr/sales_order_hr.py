@@ -110,17 +110,17 @@ def get_avaibilities(filters=None):
 		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})
 		for shift_av in shift_avs:
 			savs.append({
-				'employee_name': frappe.db.get_value('Employee', shift_av['employee']),
+				'employee_name': frappe.db.get_value('Employee', shift_av['employee'], 'employee_name'),
 				'shift_avaibilities': shift_av['name'],
 				})
 		for shift_rq in shift_rqs:
 			srqs.append({
-				'employee_name': frappe.db.get_value('Employee', shift_rq['employee']),
+				'employee_name': frappe.db.get_value('Employee', shift_rq['employee'], 'employee_name'),
 				'shift_requests': shift_rq['name'],
 				})
 		for shift_as in shift_ass:
 			sas.append({
-				'employee_name': frappe.db.get_value('Employee', shift_as['employee']),
+				'employee_name': frappe.db.get_value('Employee', shift_as['employee'], 'employee_name'),
 				'shift_assignments': shift_as['name'],
 				})
 		for ts in tss:
