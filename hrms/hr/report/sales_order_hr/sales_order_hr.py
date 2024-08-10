@@ -16,7 +16,7 @@ def execute(filters=None):
 	chart = get_chart(sos['sos'], sos['needed_qties'], sos['sols_qties_list'], filters)
 	report_summary = get_summary(filters)
 	data = []
-    data += avs #except NoneType
+	data += avs
 	data += sos['data']
 	return columns, data, message, chart, report_summary
 
@@ -90,7 +90,7 @@ def get_avaibilities(filters=None):
 				'employee': ['!=', ''],
 				},
 			['name', 'employee'],
-			order_by='from_time'
+			order_by='start_date asc'
 			)
 	if not isinstance(tss, list):
 		tss = [tss]
