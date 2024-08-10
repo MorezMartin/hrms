@@ -16,7 +16,7 @@ def execute(filters=None):
 	chart = get_chart(sos['sos'], sos['needed_qties'], sos['sols_qties_list'], filters)
 	report_summary = get_summary(filters)
 	data = []
-	data += avs
+    data += avs #except NoneType
 	data += sos['data']
 	return columns, data, message, chart, report_summary
 
@@ -51,8 +51,9 @@ def get_avaibilities(filters=None):
 				'to_date': ['>=', filters.start],
 				},
 			['name', 'employee'],
-			order_by='shift_type asc'
 			)
+	if not isinstance(shift_avs, list):
+		shift_avs = [shift_avs]
 	shift_avs = sorted(shift_avs, key=lambda d: d['from_date'])
 	shift_rqs = frappe.db.get_all(
 			'Shift Request',
@@ -64,6 +65,8 @@ def get_avaibilities(filters=None):
 			['name', 'employee'],
 			order_by='shift_type asc'
 			)
+	if not isinstance(shift_rqs, list):
+		shift_rqs = [shift_rqs]
 	shift_rqs = sorted(shift_rqs, key=lambda d: d['from_date'])
 	shift_ass = frappe.db.get_all(
 			'Shift Assignment',
@@ -75,6 +78,8 @@ def get_avaibilities(filters=None):
 			['name', 'employee'],
 			order_by='shift_type asc'
 			)
+	if not isinstance(shift_ass, list):
+		shift_ass = [shift_ass]
 	shift_ass = sorted(shift_ass, key=lambda d: d['start_date'])
 	tss = frappe.db.get_all(
 			'Timesheet',
@@ -84,8 +89,11 @@ def get_avaibilities(filters=None):
 				'end_date': ['>=', filters.start],
 				'employee': ['!=', ''],
 				},
-			['name', 'employee']
+			['name', 'employee'],
+			order_by='from_time'
 			)
+	if not isinstance(tss, list):
+		tss = [tss]
 	employees = [av['employee'] for av in shift_avs]
 	employees += [rq['employee'] for rq in shift_rqs]
 	employees += [aas['employee'] for aas in shift_ass]
@@ -93,16 +101,8 @@ def get_avaibilities(filters=None):
 	employees = set(employees)
 	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', emp, 'employee_name'))
 	emps = [{'name': _('Employees'), 'indent': 0}]
-	if not isinstance(shift_avs, list):
-		shift_avs = [shift_avs]
-	if not isinstance(shift_rqs, list):
-		shift_rqs = [shift_rqs]
-	if not isinstance(shift_ass, list):
-		shift_ass = [shift_ass]
-	if not isinstance(tss, list):
-		tss = [tss]
 	savs = []
-	srqs = []
+	srqs = []
 	sas = []
 	ts_s = []
 	for emp in employees:
