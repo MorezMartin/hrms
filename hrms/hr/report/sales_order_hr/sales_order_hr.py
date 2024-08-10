@@ -128,7 +128,7 @@ def get_avaibilities(filters=None):
 				'employee_name': frappe.db.get_value('Employee', ts['employee']),
 				'timesheets': ts['name']
 				})
-		for sav, srq, sa, ts in savs, srqs, sas, ts_s:
+		for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
 			if sav == None:
 				sav = {}
 			if srq == None:
