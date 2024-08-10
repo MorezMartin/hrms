@@ -51,7 +51,9 @@ def get_avaibilities(filters=None):
 				'to_date': ['>=', filters.start],
 				},
 			['name', 'employee'],
+			order_by='shift_type asc'
 			)
+	shift_avs = sorted(shift_avs, key=lambda d: d['from_date'])
 	shift_rqs = frappe.db.get_all(
 			'Shift Request',
 			{
@@ -59,8 +61,10 @@ def get_avaibilities(filters=None):
 				'from_date': ['<=', filters.end],
 				'to_date': ['>=', filters.start],
 				},
-			['name', 'employee']
+			['name', 'employee'],
+			order_by='shift_type asc'
 			)
+	shift_rqs = sorted(shift_rqs, key=lambda d: d['from_date'])
 	shift_ass = frappe.db.get_all(
 			'Shift Assignment',
 			{
@@ -68,8 +72,10 @@ def get_avaibilities(filters=None):
 				'start_date': ['<=', filters.end],
 				'end_date': ['>=', filters.start],
 				},
-			['name', 'employee']
+			['name', 'employee'],
+			order_by='shift_type asc'
 			)
+	shift_ass = sorted(shift_ass, key=lambda d: d['start_date'])
 	tss = frappe.db.get_all(
 			'Timesheet',
 			{
@@ -85,43 +91,55 @@ def get_avaibilities(filters=None):
 	employees += [aas['employee'] for aas in shift_ass]
 	employees += [ts['employee'] for ts in tss]
 	employees = set(employees)
+	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', emp, 'employee_name'))
 	emps = [{'name': _('Employees'), 'indent': 0}]
+	if not isinstance(shift_avs, list):
+		shift_avs = [shift_avs]
+	if not isinstance(shift_rqs, list):
+		shift_rqs = [shift_rqs]
+	if not isinstance(shift_ass, list):
+		shift_ass = [shift_ass]
+	if not isinstance(tss, list):
+		tss = [tss]
+	savs = []
+	srqs = []
+	sas = []
+	ts_s = []
 	for emp in employees:
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})
-		for shift_av, shift_rq, shift_as, ts in itertools.zip_longest(shift_avs, shift_rqs, shift_ass, tss):
-			shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name = None, None, None, None, None, None
-			if shift_av:
-				if shift_av['employee'] == emp:
-					shift_avn = shift_av['name']
-					employee = shift_av['employee']
-					employee_name = frappe.db.get_value('Employee', employee, 'employee_name')
-			if shift_rq:
-				if shift_rq['employee'] == emp:
-					shift_rqn = shift_rq['name']
-					employee = shift_rq['employee']
-					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
-			if shift_as:
-				if shift_as['employee'] == emp:
-					shift_asn = shift_as['name']
-					employee = shift_as['employee']
-					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
-			if ts:
-				if ts['employee'] == emp:
-					tsn = ts['name']
-					employee = ts['employee']
-					employee_name = frappe.db.get_value('Employee', emp, 'employee_name')
-			if (shift_avn, shift_rqn, shift_asn, tsn, employee, employee_name) == (None, None, None, None, None, None):
-				continue
-			else:
-				emps.append({
-					'employee_name': employee_name,
-					'shift_avaibilities': shift_avn,
-					'shift_requests': shift_rqn,
-					'shift_assignments': shift_asn,
-					'timesheets': tsn, 'indent': 2
-					})
-	return emps
+		for shift_av in shift_avs:
+			savs.append({
+				'employee_name': frappe.db.get_value('Employee', shift_av['employee']),
+				'shift_avaibilities': shift_av['name'],
+				})
+		for shift_rq in shift_rqs:
+			srqs.append({
+				'employee_name': frappe.db.get_value('Employee', shift_rq['employee']),
+				'shift_requests': shift_rq['name'],
+				})
+		for shift_as in shift_ass:
+			sas.append({
+				'employee_name': frappe.db.get_value('Employee', shift_as['employee']),
+				'shift_assignments': shift_as['name'],
+				})
+		for ts in tss:
+			ts_s.append({
+				'employee_name': frappe.db.get_value('Employee', ts['employee']),
+				'timesheets': ts['name']
+				})
+		for sav, srq, sa, ts in savs, srqs, sas, ts_s:
+			if sav == None:
+				sav = {}
+			if srq == None:
+				srq = {}
+			if sa == None:
+				sa = {}
+			if ts == None:
+				ts = {}
+			line = {**sav, **srq, **sa, **ts, 'indent': 2}
+			emps.append(line)
+		return emps
 
 def get_sales_orders(filters=None):
 	res = [{'name': _('Sales Order'), 'indent': 0}]
