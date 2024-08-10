@@ -50,7 +50,7 @@ def get_avaibilities(filters=None):
 				'from_date': ['<=', filters.end],
 				'to_date': ['>=', filters.start],
 				},
-			['name', 'employee'],
+			['name', 'employee', 'from_date'],
 			)
 	if not isinstance(shift_avs, list):
 		shift_avs = [shift_avs]
@@ -62,7 +62,7 @@ def get_avaibilities(filters=None):
 				'from_date': ['<=', filters.end],
 				'to_date': ['>=', filters.start],
 				},
-			['name', 'employee'],
+			['name', 'employee', 'from_date'],
 			order_by='shift_type asc'
 			)
 	if not isinstance(shift_rqs, list):
@@ -75,7 +75,7 @@ def get_avaibilities(filters=None):
 				'start_date': ['<=', filters.end],
 				'end_date': ['>=', filters.start],
 				},
-			['name', 'employee'],
+			['name', 'employee', 'start_date'],
 			order_by='shift_type asc'
 			)
 	if not isinstance(shift_ass, list):
