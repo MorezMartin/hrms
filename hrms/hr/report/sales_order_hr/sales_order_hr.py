@@ -99,7 +99,7 @@ def get_avaibilities(filters=None):
 	employees += [aas['employee'] for aas in shift_ass]
 	employees += [ts['employee'] for ts in tss]
 	employees = set(employees)
-	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', emp, 'employee_name'))
+	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', d, 'employee_name'))
 	emps = [{'name': _('Employees'), 'indent': 0}]
 	savs = []
 	srqs = []
