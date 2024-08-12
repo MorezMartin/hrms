@@ -107,6 +107,7 @@ def get_avaibilities(filters=None):
 	ts_s = []
 	for emp in employees:
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})		
 		for shift_av in shift_avs:
 			savs.append({
 				'employee': emp,
