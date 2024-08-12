@@ -106,26 +106,29 @@ def get_avaibilities(filters=None):
 	sas = []
 	ts_s = []
 	for emp in employees:
-		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
-		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})
+        emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		for shift_av in shift_avs:
 			savs.append({
-				'employee_name': frappe.db.get_value('Employee', shift_av['employee'], 'employee_name'),
+				'employee': emp,
+				'employee_name': emp_name
 				'shift_avaibilities': shift_av['name'],
 				})
 		for shift_rq in shift_rqs:
 			srqs.append({
-				'employee_name': frappe.db.get_value('Employee', shift_rq['employee'], 'employee_name'),
+				'employee': emp,
+				'employee_name': emp_name
 				'shift_requests': shift_rq['name'],
 				})
 		for shift_as in shift_ass:
 			sas.append({
-				'employee_name': frappe.db.get_value('Employee', shift_as['employee'], 'employee_name'),
+				'employee': emp,
+				'employee_name': emp_name
 				'shift_assignments': shift_as['name'],
 				})
 		for ts in tss:
 			ts_s.append({
-				'employee_name': frappe.db.get_value('Employee', ts['employee'], 'employee_name'),
+				'employee': emp,
+				'employee_name': emp_name
 				'timesheets': ts['name']
 				})
 		for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
@@ -137,7 +140,7 @@ def get_avaibilities(filters=None):
 				sa = {}
 			if ts == None:
 				ts = {}
-			line = {**sav, **srq, **sa, **ts, 'indent': 2}
+			line = {**sav, **srq, **sa, **ts, 'indent': 1}
 			emps.append(line)
 		return emps
 
@@ -224,12 +227,20 @@ def get_sales_order_links(sales_order=None, filters=None):
 				['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
 				order_by='shift_type asc'
 				)
+		n_srqs = frappe.db.count(
+				'Shift Request',
+				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}
+				)
 		srqs = sorted(srqs, key=lambda d: d['from_date'])
 		sass = frappe.db.get_all(
 				'Shift Assignment',
 				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]},
 				['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
 				order_by='shift_type asc'
+				)
+		n_sass = frappe.db.count(
+				'Shift Assignment',
+				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}
 				)
 		sass = sorted(sass, key=lambda d: d['start_date'])
 		tls = frappe.db.get_all(
@@ -238,12 +249,20 @@ def get_sales_order_links(sales_order=None, filters=None):
 				['parent', 'activity_type', 'from_time', 'to_time'],
 				order_by='from_time asc'
 				)
+		n_tls = frappe.db.count(
+				'Timesheet Detail',
+				{'sales_order': sales_order, 'docstatus': ['<', '2'], 'activity_type': ['in', filters.get('activity_type')]}
+				)
 	else:
 		srqs = frappe.db.get_all(
 				'Shift Request',
 				{'sales_order': sales_order, 'docstatus': ['<', '2']},
 				['name', 'employee', 'shift_type', 'activity_type', 'from_date', 'to_date'],
 				order_by='shift_type asc'
+				)
+		n_srqs = frappe.db.count(
+				'Shift Request',
+				{'sales_order': sales_order, 'docstatus': ['<', '2']}
 				)
 		srqs = sorted(srqs, key=lambda d: d['from_date'])
 		sass = frappe.db.get_all(
@@ -252,70 +271,92 @@ def get_sales_order_links(sales_order=None, filters=None):
 				['name', 'employee', 'shift_type', 'activity_type', 'start_date', 'end_date'],
 				order_by='shift_type asc'
 				)
+		n_sass = frappe.db.count(
+				'Shift Assignment',
+				{'sales_order': sales_order, 'docstatus': ['<', '2']}
 		sass = sorted(sass, key=lambda d: d['start_date'])
-		tls = frappe.db.get_all('Timesheet Detail',
-						  {'sales_order': sales_order, 'docstatus': ['<', '2']},
-						  ['parent', 'activity_type', 'from_time', 'to_time'],
-						  order_by='from_time asc'
-						  )
-	srq_qty, sas_qty, ts_qty = 0, 0, 0
-	qties = {'shift_requests': 0, 'shift_assignments': 0, 'timesheets': 0}
+		tls = frappe.db.get_all(
+				'Timesheet Detail',
+				{'sales_order': sales_order, 'docstatus': ['<', '2']},
+				['parent', 'activity_type', 'from_time', 'to_time'],
+				order_by='from_time asc'
+				)
+		n_tls = frappe.db.count(
+				'Timesheet Detail',
+				{'sales_order': sales_order, 'docstatus': ['<', '2']}
+				)
+	qties = {'shift_requests': n_srqs, 'shift_assignments': n_sass, 'timesheets': n_tls}
 	for tl in tls:
 		ts = frappe.get_all('Timesheet', {'name': tl['parent'], 'docstatus': ['<', '2']}, ['name', 'employee'])[0]
 		ts.update({'from_time': tl['from_time'], 'to_time': tl['to_time'], 'activity_type': tl['activity_type']})
 		tss.append(ts)
-	for srq, sas, ts in itertools.zip_longest(srqs, sass, tss):
-		srqn, sasn, tsn, emp, emp_name, shift_type, activity_type, from_time, to_time = None, None, None, None, None, None, None, None, None
-		if srq:
-			srqn = srq['name']
-			emp = srq['employee']
-			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+	employees = [rq['employee'] for rq in srqs]
+	employees += [aas['employee'] for aas in sass]
+	employees += [ts['employee'] for ts in tss]
+	employees = set(employees)
+	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', d, 'employee_name'))
+	srq_s = []
+	sa_s = []
+	ts_s = []
+	for emp in employees:
+		for srq in srqs:
 			shift_type = srq['shift_type']
-			activity_type = srq['activity_type']
 			sd = srq['from_date']
 			ed = srq['to_date']
+			from_time = None
+			to_time = None
 			if isinstance(sd, datetime.date):
 				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
 			if isinstance(ed, datetime.date):
 				to_time = get_datetime(ed) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
-			srq_qty += 1
-		if sas:
-			sasn = sas['name']
-			emp = sas['employee']
-			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
-			shift_type = sas['shift_type']
-			activity_type = sas['activity_type']
-			sd = sas['start_date']
-			ed = sas['end_date']
-			if isinstance(sd, datetime.date):
-				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
-			if isinstance(ed, datetime.date):
-				to_time = get_datetime(ed) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
-			sas_qty += 1
-		if ts:
-			tsn = ts['name']
-			emp = ts['employee']
-			emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
-			from_time = ts['from_time']
-			to_time = ts['to_time']
-			activity_type = ts['activity_type']
-			ts_qty += 1
-		if (srqn, sasn, tsn) == None:
-			continue
-		else:
-			sols.append({
+			srq_s.append({
 				'employee': emp,
-				'employee_name': emp_name,
-				'timesheets': tsn,
-				'shift_requests': srqn,
-				'shift_assignments': sasn,
+				'employee_name': frappe.db.get_value('Employee', srq['employee'], 'employee_name'),
+				'shift_requests': srq['name'],
 				'shift_type': shift_type,
-				'activity_type': activity_type,
+				'activity_type': srq['activity_type'],
 				'from_time': from_time,
 				'to_time': to_time,
-				'indent': 2,
 				})
-		qties.update({'shift_requests': srq_qty, 'shift_assignments': sas_qty, 'timesheets': ts_qty})
+		for sas in sass:
+			shift_type = sas['shift_type']
+			sd = sas['start_date']
+			ed = sas['end_date']
+			from_time = None
+			to_time = None
+			if isinstance(sd, datetime.date):
+				from_time = get_datetime(sd) + frappe.db.get_value('Shift Type', shift_type, 'start_time')
+			if isinstance(ed, datetime.date):
+				to_time = get_datetime(ed) + frappe.db.get_value('Shift Type', shift_type, 'end_time')
+			sa_s.append({
+				'employee': emp,
+				'employee_name': frappe.db.get_value('Employee', sas['employee'], 'employee_name'),
+				'shift_assignments': sas['name'],
+				'shift_type': shift_type,
+				'activity_type': srq['activity_type'],
+				'from_time': from_time,
+				'to_time': to_time,
+				})
+		for ts in tss:
+			ts_s.append({
+				'employee': emp,
+				'employee_name': frappe.db.get_value('Employee', ts['employee'], 'employee_name'),
+				'timesheets': ts['name']
+				'activity_type': ts['activity_type'],
+				'from_time': ts['from_time'],
+				'to_time': ts['to_time'],
+				})
+		for srq, sa, ts in itertools.zip_longest(srq_s, sa_s, ts_s):
+			if sav == None:
+				sav = {}
+			if srq == None:
+				srq = {}
+			if sa == None:
+				sa = {}
+			if ts == None:
+				ts = {}
+			line = {**sav, **srq, **sa, **ts, 'indent': 2}
+			sols.append(line)
 	return { 'sols': sols, 'qties': qties }
 
 def get_summary(filters=None):
