@@ -125,7 +125,7 @@ def get_avaibilities(filters=None):
 				})
 		for ts in tss:
 			ts_s.append({
-				'employee_name': frappe.db.get_value('Employee', ts['employee']),
+				'employee_name': frappe.db.get_value('Employee', ts['employee'], 'employee_name'),
 				'timesheets': ts['name']
 				})
 		for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
