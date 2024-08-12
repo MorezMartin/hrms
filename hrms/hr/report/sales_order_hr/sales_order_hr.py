@@ -106,29 +106,29 @@ def get_avaibilities(filters=None):
 	sas = []
 	ts_s = []
 	for emp in employees:
-        emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
+		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
 		for shift_av in shift_avs:
 			savs.append({
 				'employee': emp,
-				'employee_name': emp_name
+				'employee_name': emp_name,
 				'shift_avaibilities': shift_av['name'],
 				})
 		for shift_rq in shift_rqs:
 			srqs.append({
 				'employee': emp,
-				'employee_name': emp_name
+				'employee_name': emp_name,
 				'shift_requests': shift_rq['name'],
 				})
 		for shift_as in shift_ass:
 			sas.append({
 				'employee': emp,
-				'employee_name': emp_name
+				'employee_name': emp_name,
 				'shift_assignments': shift_as['name'],
 				})
 		for ts in tss:
 			ts_s.append({
 				'employee': emp,
-				'employee_name': emp_name
+				'employee_name': emp_name,
 				'timesheets': ts['name']
 				})
 		for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
@@ -274,6 +274,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 		n_sass = frappe.db.count(
 				'Shift Assignment',
 				{'sales_order': sales_order, 'docstatus': ['<', '2']}
+				)
 		sass = sorted(sass, key=lambda d: d['start_date'])
 		tls = frappe.db.get_all(
 				'Timesheet Detail',
@@ -341,21 +342,19 @@ def get_sales_order_links(sales_order=None, filters=None):
 			ts_s.append({
 				'employee': emp,
 				'employee_name': frappe.db.get_value('Employee', ts['employee'], 'employee_name'),
-				'timesheets': ts['name']
+				'timesheets': ts['name'],
 				'activity_type': ts['activity_type'],
 				'from_time': ts['from_time'],
 				'to_time': ts['to_time'],
 				})
 		for srq, sa, ts in itertools.zip_longest(srq_s, sa_s, ts_s):
-			if sav == None:
-				sav = {}
 			if srq == None:
 				srq = {}
 			if sa == None:
 				sa = {}
 			if ts == None:
 				ts = {}
-			line = {**sav, **srq, **sa, **ts, 'indent': 2}
+			line = {**srq, **sa, **ts, 'indent': 2}
 			sols.append(line)
 	return { 'sols': sols, 'qties': qties }
 
