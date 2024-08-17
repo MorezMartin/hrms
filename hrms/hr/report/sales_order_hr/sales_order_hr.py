@@ -301,10 +301,10 @@ def get_sales_order_links(sales_order=None, filters=None):
 	employees += [ts['employee'] for ts in tss]
 	employees = set(employees)
 	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', d, 'employee_name'))
-	srq_s = []
-	sa_s = []
-	ts_s = []
 	for emp in employees:
+		srq_s = []
+		sa_s = []
+		ts_s = []
 		for srq in srqs:
 			if srq['employee'] == emp:
 				shift_type = srq['shift_type']
@@ -364,6 +364,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 				ts = {}
 			line = {**srq, **sa, **ts, 'indent': 2}
 			sols.append(line)
+		sols = sorted(sols, key=lambda d: d['from_time'])
 	return { 'sols': sols, 'qties': qties }
 
 def get_summary(filters=None):
