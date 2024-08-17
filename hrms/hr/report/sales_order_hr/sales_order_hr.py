@@ -136,18 +136,18 @@ def get_avaibilities(filters=None):
 					'employee_name': emp_name,
 					'timesheets': ts['name']
 					})
-		for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
-			if sav == None:
-				sav = {}
-			if srq == None:
-				srq = {}
-			if sa == None:
-				sa = {}
-			if ts == None:
-				ts = {}
-			line = {**sav, **srq, **sa, **ts, 'indent': 2}
-			emps.append(line)
-		return emps
+    for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
+        if sav == None:
+            sav = {}
+        if srq == None:
+            srq = {}
+        if sa == None:
+            sa = {}
+        if ts == None:
+            ts = {}
+        line = {**sav, **srq, **sa, **ts, 'indent': 2}
+        emps.append(line)
+    return emps
 
 def get_sales_orders(filters=None):
 	res = [{'name': _('Sales Order'), 'indent': 0}]
