@@ -101,13 +101,11 @@ def get_avaibilities(filters=None):
 	employees = set(employees)
 	employees = sorted(employees, key=lambda d: frappe.db.get_value('Employee', d, 'employee_name'))
 	emps = [{'name': _('Employees'), 'indent': 0}]
-	savs = []
-	srqs = []
-	sas = []
-	ts_s = []
 	for emp in employees:
+		savs, srqs, sas, ts_s = [], [], [], []
 		emp_name = frappe.db.get_value('Employee', emp, 'employee_name')
-		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})		
+		emp_list = [{'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1}]
+#		emps.append({'name': emp_name, 'employee': emp, 'employee_name': emp_name, 'indent': 1})		
 		for shift_av in shift_avs:
 			if shift_av['employee'] == emp:
 				savs.append({
@@ -136,18 +134,20 @@ def get_avaibilities(filters=None):
 					'employee_name': emp_name,
 					'timesheets': ts['name']
 					})
-    for sav, srq, sa, ts in itertools.zip_longest(savs, srqs, sas, ts_s):
-        if sav == None:
-            sav = {}
-        if srq == None:
-            srq = {}
-        if sa == None:
-            sa = {}
-        if ts == None:
-            ts = {}
-        line = {**sav, **srq, **sa, **ts, 'indent': 2}
-        emps.append(line)
-    return emps
+		for sav, srq, sa, ts, e in itertools.zip_longest(savs, srqs, sas, ts_s, emp_list):
+			if sav == None:
+				sav = {}
+			if srq == None:
+				srq = {}
+			if sa == None:
+				sa = {}
+			if ts == None:
+				ts = {}
+			if e == None:
+				e = {}
+			line = {**sav, **srq, **sa, **ts, 'indent': 2, e}
+		emps.append(line)
+	return emps
 
 def get_sales_orders(filters=None):
 	res = [{'name': _('Sales Order'), 'indent': 0}]
