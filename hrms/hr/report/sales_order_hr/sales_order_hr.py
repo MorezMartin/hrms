@@ -341,7 +341,7 @@ def get_sales_order_links(sales_order=None, filters=None):
 					'employee_name': frappe.db.get_value('Employee', sas['employee'], 'employee_name'),
 					'shift_assignments': sas['name'],
 					'shift_type': shift_type,
-					'activity_type': srq['activity_type'],
+					'activity_type': sas['activity_type'],
 					'from_time': from_time,
 					'to_time': to_time,
 					})
