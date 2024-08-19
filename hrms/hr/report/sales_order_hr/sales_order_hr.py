@@ -143,9 +143,10 @@ def get_avaibilities(filters=None):
 				sa = {}
 			if ts == None:
 				ts = {}
-			if e == None:
-				e = {}
-			line = {**e, **sav, **srq, **sa, **ts, 'indent': 2}
+			if e != None:
+				line = {**e, **sav, **srq, **sa, **ts}
+			else:
+				line = {**sav, **srq, **sa, **ts, 'indent': 2}
 		emps.append(line)
 	return emps
 
