@@ -147,7 +147,7 @@ def get_avaibilities(filters=None):
 				line = {**e, **sav, **srq, **sa, **ts}
 			else:
 				line = {**sav, **srq, **sa, **ts, 'indent': 2}
-		emps.append(line)
+			emps.append(line)
 	return emps
 
 def get_sales_orders(filters=None):
