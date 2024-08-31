@@ -126,7 +126,7 @@ frappe.query_reports["Sales Order HR"] = {
 				frappe.call({
 					method: 'frappe.client.get_value',
 					args: {
-						'doctype': 'Shift Request',
+						'doctype': 'Timesheet',
 						'filters': {'name': v.getAttribute('data-value')},
 						'fieldname': 'status'
 					},
