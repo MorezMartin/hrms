@@ -112,7 +112,7 @@ frappe.query_reports["Sales Order HR"] = {
 				value = v.outerHTML;
 			};
 		};
-		if (column.id == 'timesheets' && value > 0) {
+		if (column.id == 'timesheets') {
 			if (value > 0) {
 				value = "<div style='font-weight:bold'>" + value + "</div>";
 			}
