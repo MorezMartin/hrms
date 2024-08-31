@@ -113,7 +113,38 @@ frappe.query_reports["Sales Order HR"] = {
 			};
 		};
 		if (column.id == 'timesheets' && value > 0) {
-			value = "<div style='font-weight:bold'>" + value + "</div>";
+			if (value > 0) {
+				value = "<div style='font-weight:bold'>" + value + "</div>";
+			}
+			if (value != "") {
+				let v = $(value)[0];
+
+			if (parseInt(v.getAttribute('data-value')) > 0) {
+				v.setAttribute("style", "font-weight: bold");
+				value = v.outerHTML;
+			};
+				frappe.call({
+					method: 'frappe.client.get_value',
+					args: {
+						'doctype': 'Shift Request',
+						'filters': {'name': v.getAttribute('data-value')},
+						'fieldname': 'status'
+					},
+					async: false,
+					callback : (r) => {
+						if (r.message.status == 'Draft') {
+							v.setAttribute("style", "background-color:red")
+						}
+						else if (r.message.status == 'Sent') {
+							v.setAttribute("style", "background-color:orange")
+						}
+						else if (r.message.status == 'Declared') {
+							v.setAttribute("style", "background-color:green")
+						}
+					}
+				})
+				value = v.outerHTML;
+			};
 		};
 	return value;
 	}
