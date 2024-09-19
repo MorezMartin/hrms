@@ -8,7 +8,10 @@ from erpnext.projects.doctype.timesheet.timesheet import Timesheet
 
 class EmployeeTimesheet(Timesheet):
 	def set_status(self):
-		self.status = {"0": "Draft", "1": "Submitted", "2": "Cancelled"}[str(self.docstatus or 0)]
+		if self.docstatus > 0:
+			self.status = {"1": "Submitted", "2": "Cancelled"}[str(self.docstatus)]
+		elif self.status not in ("Sent", "Declared"):
+			self.status = "Draft"
 
 		if flt(self.per_billed, self.precision("per_billed")) >= 100.0:
 			self.status = "Billed"
@@ -19,5 +22,11 @@ class EmployeeTimesheet(Timesheet):
 		if self.salary_slip:
 			self.status = "Payslip"
 
-		if self.sales_invoice and self.salary_slip:
+		if self.status == "Sent":
+			self.status = "Sent"
+
+		if self.status == "Declared":
+			self.status = "Declared"
+
+		if self.sales_invoice:
 			self.status = "Completed"
