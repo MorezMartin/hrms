@@ -8,9 +8,8 @@ class EmployeeTimesheet(Timesheet):
 	def set_status(self):
 		if self.docstatus > 0:
 			self.status = {"1": "Submitted", "2": "Cancelled"}[str(self.docstatus)]
-		elif self.status == "Sent":
-			self.status = "Sent"
-		else:
+
+        if self.status == "Draft":
 			self.status = "Draft"
 
 		if self.per_billed == 100:
@@ -18,6 +17,9 @@ class EmployeeTimesheet(Timesheet):
 
 		if self.status == "Sent":
 			self.status = "Sent"
+
+		if self.status == "Declared":
+			self.status = "Declared"
 
 		if self.sales_invoice:
 			self.status = "Completed"
