@@ -9,7 +9,7 @@ class EmployeeTimesheet(Timesheet):
 		if self.docstatus > 0:
 			self.status = {"1": "Submitted", "2": "Cancelled"}[str(self.docstatus)]
 
-        if self.status == "Draft":
+		if self.status == "Draft":
 			self.status = "Draft"
 
 		if self.per_billed == 100:
