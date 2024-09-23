@@ -41,6 +41,7 @@ class ShiftRequest(Document):
 			assignment_doc.sales_order = self.sales_order
 			assignment_doc.ignore_avaibility = self.ignore_avaibility
 			assignment_doc.activity_type = self.activity_type
+			assignment_doc.sales_order = self.sales_order
 			if self.to_date:
 				assignment_doc.end_date = self.to_date
 			assignment_doc.shift_request = self.name
