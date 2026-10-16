@@ -20,7 +20,8 @@
   "to_date",
   "sales_order",
   "activity_type",
-  "amended_from"
+  "amended_from",
+  "ignore_avaibility"
  ],
  "fields": [
   {
@@ -114,6 +115,12 @@
    "fieldtype": "Link",
    "label": "Activity Type",
    "options": "Activity Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_avaibility",
+   "fieldtype": "Check",
+   "label": "Ignore Avaibility"
   }
  ],
  "icon": "calendar-clock",

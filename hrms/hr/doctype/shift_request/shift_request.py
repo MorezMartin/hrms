@@ -11,7 +11,7 @@ import hrms
 from hrms.hr.doctype.shift_assignment.shift_assignment import has_overlapping_timings
 from hrms.hr.utils import share_doc_with_approver, validate_active_employee
 from hrms.mixins.pwa_notifications import PWANotificationsMixin
-from hrms.hr.doctype.shift_avaibility import check_avaibility
+from hrms.hr.doctype.shift_avaability.shift_avaibility import check_avaibility
 
 
 class OverlappingShiftRequestError(frappe.ValidationError):
@@ -54,6 +54,7 @@ class ShiftRequest(Document, PWANotificationsMixin):
 			assignment_doc.start_date = self.from_date
 			assignment_doc.sales_order = self.sales_order
 			assignment_doc.activity_type = self.activity_type
+			assignment_doc.ignore_avaibility = self.ignore_avaibility
 			assignment_doc.sales_order = self.sales_order
 			if self.to_date:
 				assignment_doc.end_date = self.to_date
@@ -81,8 +82,8 @@ class ShiftRequest(Document, PWANotificationsMixin):
 		self.db_set("status", "Cancelled")
 
 	def validate_shift_avaibility(self):
-		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility'):
-			check_avaibility(self)
+		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility') and not self.ignore_avaibility:
+			check_avaibility(self, self.from_date, self.to_date)
 
 	def validate_default_shift(self):
 		default_shift = frappe.get_value("Employee", self.employee, "default_shift")

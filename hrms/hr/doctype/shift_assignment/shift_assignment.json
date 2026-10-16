@@ -26,7 +26,8 @@
   "activity_type",
   "shift_request",
   "shift_schedule_assignment",
-  "amended_from"
+  "amended_from",
+  "ignore_avaibility"
  ],
  "fields": [
   {
@@ -159,6 +160,12 @@
    "fieldtype": "Link",
    "label": "Activity Type",
    "options": "Activity Type"
+  },
+  {
+   "default": "0",
+   "fieldname": "ignore_avaibility",
+   "fieldtype": "Check",
+   "label": "Ignore Avaibility"
   }
  ],
  "icon": "user-check",

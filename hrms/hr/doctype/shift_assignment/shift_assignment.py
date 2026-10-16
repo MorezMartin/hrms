@@ -11,6 +11,7 @@ from frappe.query_builder import Criterion
 from frappe.utils import add_days, cint, cstr, get_link_to_form, get_time, getdate, now_datetime
 
 from hrms.hr.utils import validate_active_employee
+from hrms.hr.doctype.shift_avaibility.shift_avaibility import check_avaibility
 from hrms.utils import generate_date_range
 
 
@@ -28,6 +29,11 @@ class ShiftAssignment(Document):
 		if self.end_date:
 			self.validate_from_to_dates("start_date", "end_date")
 		self.validate_overlapping_shifts()
+		self.validate_shift_avaibility()
+
+	def validate_shift_avaibility(self):
+		if frappe.db.get_single_value('HR Settings', 'check_shift_avaibility') and not self.ignore_avaibility:
+			check_avaibility(self, self.start_date, self.end_date)
 
 	def on_update_after_submit(self):
 		if self.end_date:
