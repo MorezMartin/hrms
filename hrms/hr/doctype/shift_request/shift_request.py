@@ -11,7 +11,7 @@ import hrms
 from hrms.hr.doctype.shift_assignment.shift_assignment import has_overlapping_timings
 from hrms.hr.utils import share_doc_with_approver, validate_active_employee
 from hrms.mixins.pwa_notifications import PWANotificationsMixin
-from hrms.hr.doctype.shift_avaability.shift_avaibility import check_avaibility
+from hrms.hr.doctype.shift_avaibility.shift_avaibility import check_avaibility
 
 
 class OverlappingShiftRequestError(frappe.ValidationError):
